@@ -36,4 +36,5 @@ https://www.gamefromscratch.com/page/BabylonJS-Tutorial-Series.aspx
 
 - Learn how to use Agisoft Metashape and Blender for photogrammetry and 3D model editing.
 - Learn how to create a backend (probably using Node.js)to deal with the "database aspect" of the project.
+-Learn how to incorporate user interaction to a Babylon project.
 - Continue Babylon.js self-learning and apply changes to project as learning progress continues. 
