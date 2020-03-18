@@ -20,7 +20,7 @@ http-server -p [Desired port]
 
 Running a simple server is necessary as some of the models are only displayed in the website if its hosted on a simple local server. 
 
-## Resources 
+# Resources 
 Some useful tutorials and resources I have relied on along the way:
 - TutorialsPoint : https://www.tutorialspoint.com/babylonjs/index.htm
 
@@ -33,16 +33,16 @@ https://www.gamefromscratch.com/page/BabylonJS-Tutorial-Series.aspx
 - Babylon's sandbox to play around with models: https://sandbox.babylonjs.com/
 
 
-## To do List:
+# To do List:
 
 - Learn how to use Agisoft Metashape and Blender for photogrammetry and 3D model editing.
 - Learn how to create a backend (probably using Node.js)to deal with the "database aspect" of the project.
 -Learn how to incorporate user interaction to a Babylon project.
 - Continue Babylon.js self-learning and apply changes to project as learning progress continues. 
 
-## Team Meetings:
+# Team Meetings:
 
-# March 18, 2020
+## March 18, 2020
 Robert's Comments:     
 - Receive information to add to the website via Google Drive.
 - We will have several different models, each with its own "playground" to interact with.
