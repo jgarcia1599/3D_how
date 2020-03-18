@@ -1,5 +1,5 @@
 # 3D_how
-A project sponsored by the Dhakira Centre of Heritage Studies at NYUAD.
+A project sponsored by the <a href="https://nyuad.nyu.edu/en/research/centers-labs-and-projects/dhakira-center-for-heritage-studies-in-the-uae.html"> Dhakira Centre of Heritage Studies</a> at NYUAD.
 
 
 # Comands 
