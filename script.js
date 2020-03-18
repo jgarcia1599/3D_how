@@ -52,18 +52,18 @@ window.addEventListener('DOMContentLoaded', async function(){
         water.addToRenderList(skybox);
         waterMesh.material = water;
 
-        var newMaterial = new BABYLON.StandardMaterial;
-        newMaterial.name = "newMaterial";
-        newMaterial.diffuseColor = new BABYLON.Color3.Green;
+        // var newMaterial = new BABYLON.StandardMaterial;
+        // newMaterial.name = "newMaterial";
+        // newMaterial.diffuseColor = new BABYLON.Color3.Green;
 
-        var square = BABYLON.MeshBuilder.CreateBox("box", {size:40}, scene);
-        square.material = newMaterial;
+        // var square = BABYLON.MeshBuilder.CreateBox("box", {size:40}, scene);
+        // square.material = newMaterial;
 
-        // sphere positioning
-        console.log(square.position);
-        square.position.y-=5;
-        // square.position.x+=60;
-        console.log(square.position);
+        // // sphere positioning
+        // console.log(square.position);
+        // square.position.y-=5;
+        // // square.position.x+=60;
+        // console.log(square.position);
 
 
         // create a built-in "sphere" shape; its constructor takes 6 params: name, segment, diameter, scene, updatable, sideOrientation 
