@@ -45,8 +45,8 @@ https://www.gamefromscratch.com/page/BabylonJS-Tutorial-Series.aspx
 ## March 18, 2020
 Robert's Comments:     
 - Receive information to add to the website via Google Drive.
-- We will have several different models, each with its own "playground" to interact with.
-- Star working on adding different layers of interaction. Click on things to get information and see videos about the boat. 
+- We will have several different models, each with its own "playground" mode to interact with.
+- Start working on adding different layers of interaction. Click on hotspots to get information and see videos about the boat. 
 - For Later: historical pictures processed in a 3d way, depth of the picture, timeline scroll bar to change background over time. 
 
 
