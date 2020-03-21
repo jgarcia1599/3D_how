@@ -22,6 +22,7 @@ Running a simple server is necessary as some of the models are only displayed in
 
 # Resources 
 Some useful tutorials and resources I have relied on along the way:
+- Babylon's Tutorial: https://doc.babylonjs.com/babylon101/about101
 - TutorialsPoint : https://www.tutorialspoint.com/babylonjs/index.htm
 
 - https://doc.babylonjs.com/how_to/load_from_any_file_type

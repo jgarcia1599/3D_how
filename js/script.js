@@ -1,4 +1,3 @@
-
 // Download the models at: https://www.cgtrader.com/items/1915278/download-page
 window.addEventListener('DOMContentLoaded', async function(){
     // get the canvas DOM element
@@ -79,22 +78,32 @@ window.addEventListener('DOMContentLoaded', async function(){
             //postioning of meshes
             for (mesh in meshes){
                 //mesh positioning
+                var dhow = meshes[mesh];
                 console.log(meshes[mesh].position);
                 meshes[mesh].position.x-=31;
                 meshes[mesh].position.z-=12;
                 meshes[mesh].position.y+=20;
-                console.log(meshes[mesh].position);
+                console.log(meshes[mesh].rotation);
 
-                //mesh rotation
-                var axis = new BABYLON.Vector3(0, 1, 0);
-                var angle = Math.PI / 8;
-                var quaternion = new BABYLON.Quaternion.RotationAxis(axis, angle);
-                
+                //mesh rotatioon
+                // var dhow_local_coords = localAxes(10);
+                // dhow_local_coords.parent = meshes[mesh];
 
-                meshes[mesh].rotationQuaternion = quaternion;
+                //First, Randomly Initialize the rotation Vector
+                meshes[mesh].rotation = new BABYLON.Vector3(null,null,null);
+                console.log(meshes[mesh].rotation);
+                // console.log(meshes[mesh].rotation);
+                //Then, procede to perform desired rotations
+                meshes[mesh].rotation.x = -Math.PI/3;
+                console.log(meshes[mesh].rotation);
+                // meshes[mesh].rotation.y = -Math.PI/6;
+
             }
-            var dhow = meshes[0].getChildMeshes()[0];
-            // camera.target = dhow;
+            // var dhow = meshes[0].getChildMeshes()[0];
+            // console.log(dhow);
+            // var dhow_local_coords = localAxes(10);
+            // dhow_local_coords.parent = dhow;
+
 
 
             // The default camera looks at the back of the asset.
