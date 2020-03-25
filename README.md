@@ -32,6 +32,7 @@ https://www.gamefromscratch.com/page/BabylonJS-Tutorial-Series.aspx
 - https://medium.com/@babylonjs/exporting-3d-content-for-babylon-js-76cb71a2df01
 - Babylon's Medium Page: https://medium.com/@babylonjs
 - Babylon's sandbox to play around with models: https://sandbox.babylonjs.com/
+- Floating Water Example: https://www.babylonjs-playground.com/#L76FB1#49
 
 
 # To do List:
@@ -49,6 +50,7 @@ Robert's Comments:
 - We will have several different models, each with its own "playground" mode to interact with.
 - Start working on adding different layers of interaction. Click on hotspots to get information and see videos about the boat. 
 - For Later: historical pictures processed in a 3d way, depth of the picture, timeline scroll bar to change background over time. 
+
 
 
 
