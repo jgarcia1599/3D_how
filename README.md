@@ -16,7 +16,7 @@ Go to repo:
 cd 3D_how
 
 run simple http-server:   
-http-server -p [Desired port]
+python3 -m http.server [port#]
 
 Running a simple server is necessary as some of the models are only displayed in the website if its hosted on a simple local server. 
 
@@ -33,6 +33,10 @@ https://www.gamefromscratch.com/page/BabylonJS-Tutorial-Series.aspx
 - Babylon's Medium Page: https://medium.com/@babylonjs
 - Babylon's sandbox to play around with models: https://sandbox.babylonjs.com/
 - Floating Water Example: https://www.babylonjs-playground.com/#L76FB1#49
+- Simple Search App in React: https://medium.com/developer-circle-kampala/how-to-create-a-simple-search-app-in-react-df3cf55927f5
+- React Slider: https://sghall.github.io/react-compound-slider/#/getting-started/tutorial
+
+
 
 
 # To do List:
