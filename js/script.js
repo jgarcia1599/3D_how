@@ -1,8 +1,9 @@
 // Download the models at: https://www.cgtrader.com/items/1915278/download-page
+let i =0;
 window.addEventListener('DOMContentLoaded', async function(){
     // get the canvas DOM element
     var canvas = document.getElementById('renderCanvas');
-
+//k
     // load the 3D engine
     var engine = new BABYLON.Engine(canvas, true);
 
@@ -12,8 +13,11 @@ window.addEventListener('DOMContentLoaded', async function(){
         var scene = new BABYLON.Scene(engine);
 
         // Camera
-        var camera = new BABYLON.ArcRotateCamera("Camera", 3 * Math.PI / 2, Math.PI / 2.5, 50, BABYLON.Vector3.Zero(), scene);
+        var camera = new BABYLON.ArcRotateCamera("Camera", 3 * Math.PI / 2, Math.PI / 2.5, 50, new BABYLON.Vector3(30,5,0), scene);
+        camera.lowerRadiusLimit = 1;
+        camera.upperRadiusLimit = 40;
         camera.attachControl(canvas, true);
+        
 
         // create a basic light, aiming 0,1,0 - meaning, to the sky
         var light = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(0,1,0), scene);
@@ -66,16 +70,54 @@ window.addEventListener('DOMContentLoaded', async function(){
                 //mesh positioning
                 var dhow = meshes[mesh];
                 console.log("Dhow position");
-                // meshes[mesh].position.y-=90;
-                
-
-                // //mesh rotatioon
-                // meshes[mesh].rotation = new BABYLON.Vector3(null,null,null);
-                // console.log(meshes[mesh].rotation);
+                console.log(meshes[mesh].position);
                 meshes[mesh].rotation.x = 3*Math.PI/2;
-                // meshes[mesh].rotation.z = -Math.PI/3;
                 console.log(meshes[mesh].position);
                 waterMaterial.addToRenderList(meshes[mesh]);
+              
+              	meshes[mesh].actionManager = new BABYLON.ActionManager(scene);
+              
+
+	              meshes[mesh].actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickUpTrigger, function () {
+		              // alert('Boat Clicked')
+                      // GUI
+                  // console.log(i);
+                  i=1;
+                  console.log(i)
+                  var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+                  
+                // Style
+                  var style = advancedTexture.createStyle();
+                  style.fontSize = 24;
+                  style.fontStyle = "bold";
+                  
+                  
+
+                  //Rectangl;e
+                  var rect1 = new BABYLON.GUI.StackPanel();
+                  rect1.adaptWidthToChildren = true;
+                  rect1.height = "20%";
+                  rect1.width = "200px"
+                  rect1.thickness = 4;
+                  rect1.background = "white";
+                  rect1.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+	                rect1.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+                  advancedTexture.addControl(rect1); 
+                  
+
+                  var text1 = new BABYLON.GUI.TextBlock();
+                  text1.text = "Dhow Boat, U.A.E.";
+                  text1.color = "black";
+                  text1.width = "200px";
+                  text1.fontSize = 18;
+                  text1.fontFamily = "Helvetica Neue";
+                  rect1.addControl(text1);
+                  
+
+	                }));
+                  // Resources: https://www.babylonjs-playground.com/#XCPP9Y#13
+                  
+
               
               ////////// RAY CAST TO FIND WATER HEIGHT ////////////
               //var angle = 0;
@@ -87,7 +129,6 @@ window.addEventListener('DOMContentLoaded', async function(){
                   meshes[mesh].position.y = Math.abs((Math.sin(((x / 0.05) + time * waterMaterial.waveSpeed)) * waterMaterial.waveHeight * waterMaterial.windDirection.x * 5.0) + (Math.cos(((z / 0.05) +  time * waterMaterial.waveSpeed)) * waterMaterial.waveHeight * waterMaterial.windDirection.y * 5.0));
                   //lower the boat as it was floating above the water
                   meshes[mesh].position.y -=35; 
-                  console.log(meshes[mesh].position.y)
       
               });
 
@@ -98,6 +139,7 @@ window.addEventListener('DOMContentLoaded', async function(){
             
 
         });
+    console.log(i)
 
 
 
