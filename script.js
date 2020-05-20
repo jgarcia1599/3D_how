@@ -1,6 +1,5 @@
 // Download the models at: https://www.cgtrader.com/items/1915278/download-page
 let i = 0;
-var state = "beach";
 window.addEventListener("DOMContentLoaded", async function() {
   // get the canvas DOM element
   var canvas = document.getElementById("renderCanvas");
@@ -25,7 +24,6 @@ window.addEventListener("DOMContentLoaded", async function() {
     camera.lowerRadiusLimit = 1;
     camera.upperRadiusLimit = 40;
     camera.attachControl(canvas, true);
-    var renderer = scene.enableDepthRenderer();
 
     // create a basic light, aiming 0,1,0 - meaning, to the sky
     var light = new BABYLON.HemisphericLight(
@@ -59,7 +57,7 @@ window.addEventListener("DOMContentLoaded", async function() {
       scene
     );
     waterMaterial.windForce = -10;
-    waterMaterial.waveHeight = 0.9;
+    waterMaterial.waveHeight = 0.5;
     waterMaterial.bumpHeight = 0.1;
     waterMaterial.waveLength = 0.1;
     waterMaterial.waveSpeed = 50.0;
@@ -70,8 +68,8 @@ window.addEventListener("DOMContentLoaded", async function() {
     // Water mesh
     var waterMesh = BABYLON.Mesh.CreateGround(
       "waterMesh",
-      1024,
-      1024,
+      512,
+      512,
       32,
       scene,
       false
@@ -93,7 +91,7 @@ window.addEventListener("DOMContentLoaded", async function() {
       scene,
       false
     );
-    ground.position.y = 0;
+    ground.position.y = -1;
     ground.material = groundMaterial;
 
     BABYLON.SceneLoader.ImportMesh(null, "dhow/", "dhow_2.obj", scene, function(
@@ -157,15 +155,23 @@ window.addEventListener("DOMContentLoaded", async function() {
         ////////// RAY CAST TO FIND WATER HEIGHT ////////////
         //var angle = 0;
         let i = 0;
-
         scene.registerBeforeRender(function() {
-          var x = meshes[mesh].position.x;
-          var z = meshes[mesh].position.z;
-          var waterHeight = getWaterHeightAtCoordinates(x, z, waterMaterial);
-          meshes[mesh].position.y = waterHeight - 36;
+          let time = waterMaterial._lastTime / 100000;
+          let x = meshes[mesh].position.x;
+          let z = meshes[mesh].position.z;
+          meshes[mesh].position.y = Math.abs(
+            Math.sin(x / 0.05 + time * waterMaterial.waveSpeed) *
+              waterMaterial.waveHeight *
+              waterMaterial.windDirection.x *
+              5.0 +
+              Math.cos(z / 0.05 + time * waterMaterial.waveSpeed) *
+                waterMaterial.waveHeight *
+                waterMaterial.windDirection.y *
+                5.0
+          );
+          //lower the boat as it was floating above the water
+          meshes[mesh].position.y -= 35;
         });
-
-        //lower the boat as it was floating above the water
       }
     });
     console.log(i);
@@ -173,22 +179,6 @@ window.addEventListener("DOMContentLoaded", async function() {
     // Configure water material
     waterMaterial.addToRenderList(ground);
     waterMaterial.addToRenderList(skybox);
-
-    var getWaterHeightAtCoordinates = function(x, z, waterMaterial) {
-      var time = waterMaterial._lastTime / 100000;
-      return (
-        Math.abs(
-          Math.sin(x / 0.05 + time * waterMaterial.waveSpeed) *
-            waterMaterial.waveHeight *
-            waterMaterial.windDirection.x *
-            5.0 +
-            Math.cos(z / 0.05 + time * waterMaterial.waveSpeed) *
-              waterMaterial.waveHeight *
-              waterMaterial.windDirection.y *
-              5.0
-        ) * 0.5
-      );
-    };
 
     // return the created scene
     return scene;
@@ -215,24 +205,3 @@ window.addEventListener("DOMContentLoaded", async function() {
   // For Wateranimation
   // https://www.babylonjs-playground.com/#L76FB1#49
 });
-
-//UI Code: Added By Steven
-$("#min-max-button").click(function() {
-  console.log("clicked");
-  $("#sceneTypesContent").slideToggle();
-  var button = $(this).find("i");
-  if (button.hasClass("fa fa-window-minimize")) {
-    console.log("he");
-    button.removeClass("fas fa-window-minimize");
-    button.addClass("fa fa-window-maximize");
-  } else if (button.hasClass("fa fa-window-maximize")) {
-    button.removeClass("fas fa-window-maximize");
-
-    button.addClass("fa fa-window-minimize");
-  }
-});
-
-function changeRender(sceneName) {
-  console.log(sceneName);
-  state = sceneName;
-}

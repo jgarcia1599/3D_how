@@ -1,0 +1,58 @@
+@font-face {
+  font-family: "Gotham-Light";
+  src: url("./fonts/Gotham-Light.TTF");
+}
+@font-face {
+  font-family: "Gotham-Bold";
+  src: url("./fonts/Gotham-Bold.TTF");
+}
+@font-face {
+  font-family: "Gotham-Medium";
+  src: url("./fonts/Gotham-Medium.TTF");
+}
+body {
+  font-family: "Gotham-Light";
+}
+#sceneTypes {
+  width: 380px;
+  height: 80px;
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  background: #303048;
+  border-radius: 20px;
+  color: white;
+  text-align: center;
+  z-index: 2;
+}
+#sceneTypes h1 {
+}
+#sceneTypesContent {
+  width: 380px;
+  height: 390px;
+  position: absolute;
+  left: 10px;
+  top: 55px;
+  background: #303048;
+  border-radius: 0 0 20px 20px;
+  color: white;
+  text-align: center;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#sceneTypesContent .column {
+  margin-top: 40px;
+  flex: 50%;
+}
+#sceneTypesContent .column img {
+  width: 170px;
+  height: 120px;
+  z-index: 3;
+}
+
+#min-max-button i {
+  position: absolute;
+  left: 12px;
+  top: 12px;
+}
