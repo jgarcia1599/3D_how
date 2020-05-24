@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html" charset="utf-8"/>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+    <link rel="stylesheet" href="css/styles.css" />
     <title>Babylon - Getting Started</title>
+    <script
+      src="https://kit.fontawesome.com/b2ec75c2b7.js"
+      crossorigin="anonymous"
+    ></script>
     <!-- Important Resources and Examples:
 https://www.babylonjs-playground.com/#1SLLOJ#17
 Skybox: https://doc.babylonjs.com/how_to/skybox
@@ -23,30 +28,50 @@ Online tutorial: https://www.youtube.com/watch?v=OXXkyWku2PY -->
     <script src="https://preview.babylonjs.com/loaders/babylonjs.loaders.js"></script>
     <script src="https://preview.babylonjs.com/serializers/babylonjs.serializers.min.js"></script>
     <script src="https://preview.babylonjs.com/gui/babylon.gui.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <style>
-        html, body {
-            overflow: hidden;
-            width   : 100%;
-            height  : 100%;
-            margin  : 0;
-            padding : 0;
-        }
+      html,
+      body {
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
 
-        #renderCanvas {
-            width   : 100%;
-            height  : 100%;
-            touch-action: none;
-        }
+      #renderCanvas {
+        width: 100%;
+        height: 100%;
+        touch-action: none;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
+    <div id="sceneTypes">
+      <div id="min-max-button">
+        <i class="fa fa-window-minimize"></i>
+      </div>
+      <h1>Scenes</h1>
+    </div>
+
+    <div id="sceneTypesContent">
+      <div class="column" onclick="changeRender('beach')">
+        <img src="./img/beach.jpg" />Coastline
+      </div>
+      <div class="column" onclick="changeRender('desert')">
+        <img src="./img/desert.jpg" />Desert
+      </div>
+      <div class="column" onclick="changeRender('seas')">
+        <img src="./img/seas.jpeg" />High Seas
+      </div>
+      <div class="column" onclick="changeRender('museum')">
+        <img src="./img/museum.jpeg" />Museum
+      </div>
+    </div>
     <canvas id="renderCanvas"></canvas>
     <script src="js/babylon_helper.js"></script>
     <script src="js/script.js"></script>
-</body>
-
-
+    <script src="js/beachscene.js"></script>
+  </body>
 </html>
-
-
