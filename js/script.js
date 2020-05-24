@@ -237,7 +237,10 @@ window.addEventListener("DOMContentLoaded", async function() {
       "textures/sandTexture.jpg",
       scene
     );
-    groundMaterial.gloiness = 0;
+
+    groundMaterial.diffuseTexture.uScale = 20.0;
+    groundMaterial.diffuseTexture.vScale = 20.0;
+
     var ground = BABYLON.Mesh.CreateGroundFromHeightMap(
       "ground",
       "heightmap/heightmapBeach.jpg",
@@ -397,9 +400,10 @@ window.addEventListener("DOMContentLoaded", async function() {
       "textures/sandTexture.jpg",
       scene
     );
-    groundMaterial.gloiness = 0;
     groundMaterial.diffuseTexture.uScale = 20.0;
     groundMaterial.diffuseTexture.vScale = 20.0;
+
+
     var ground = BABYLON.Mesh.CreateGroundFromHeightMap(
       "ground",
       "heightmap/sandDuneMap.png",
@@ -411,6 +415,13 @@ window.addEventListener("DOMContentLoaded", async function() {
       scene,
       false
     );
+        //add normal map
+        groundMaterial.bumpTexture = new BABYLON.Texture(
+          "textures/normalSand.png",
+          scene
+        );
+           groundMaterial.bumpTexture.uScale = 80.0;
+        groundMaterial.bumpTexture.vScale = 80.0;
     ground.material = groundMaterial;
     //messing around with particle system
     var particleSystem = new BABYLON.ParticleSystem("particles", 4000, scene);
