@@ -1,3 +1,5 @@
+
+
 // Download the models at: https://www.cgtrader.com/items/1915278/download-page
 let i = 0;
 var state = "beach";
@@ -537,12 +539,38 @@ window.addEventListener("DOMContentLoaded", async function() {
 });
 
 //UI Code: Added By Steven
+var scene_toggle_counter = 0;
+var scene_options_showed = 0;
+
+function toggle_scenepanel(){
+  console.log("toggle scene pannel");
+  console.log(scene_toggle_counter )
+
+  if (scene_toggle_counter == 0 && scene_options_showed ==1){
+    $('#sceneTypes').animate({ left: '-=350px'  });
+    scene_toggle_counter = 1;
+    console.log("okay move right + 350px");
+
+  }
+  else if(scene_toggle_counter ==1){
+    $('#sceneTypes').animate({ left: '+=350px'  });
+    scene_toggle_counter = 0;
+    scene_options_showed = 0;
+
+    console.log("okay move right - 350px");
+
+  }
+
+}
+
+
 $("#min-max-button").click(function() {
   console.log("clicked");
   $("#sceneTypesContent").slideToggle();
   var button = $(this).find("i");
   if (button.hasClass("fa fa-window-minimize")) {
     console.log("he");
+    scene_options_showed = 1;
     button.removeClass("fas fa-window-minimize");
     button.addClass("fa fa-window-maximize");
   } else if (button.hasClass("fa fa-window-maximize")) {
@@ -556,3 +584,56 @@ function changeRender(sceneName) {
   console.log(sceneName);
   state = sceneName;
 }
+
+
+
+//Weather stuff
+
+
+//Weather UI;
+// Based on Steven's UI
+
+var toggle_counter = 0;
+var options_showed = 0;
+function toggle_weatherpanel(){
+  console.log("toggle");
+  console.log(toggle_counter)
+
+  if (toggle_counter == 0 && options_showed==1){
+    $('#citysearchbar').animate({ left: '+=350px'  });
+    toggle_counter = 1;
+    console.log("lalalalala");
+
+  }
+  else if(toggle_counter ==1){
+    $('#citysearchbar').animate({ left: '-=350px'  });
+    toggle_counter = 0;
+    options_showed = 0;
+
+  }
+}
+
+
+$("#city-scrolldown").click(function() {
+  console.log("clicked weather stuff");
+  $("#weatherContent").slideToggle();
+  var button = $(this).find("i");
+  if (button.hasClass("fa fa-window-minimize")) {
+    //options have been showed, we can hide the panel
+    options_showed = 1;
+    console.log("he");
+    button.removeClass("fas fa-window-minimize");
+    button.addClass("fa fa-window-maximize");
+  } else if (button.hasClass("fa fa-window-maximize")) {
+    button.removeClass("fas fa-window-maximize");
+
+    button.addClass("fa fa-window-minimize");
+  }
+});
+
+
+
+//Open Weather Stuff
+
+var open_weather_key = "4e6fc4bba619975d9060a9b9da350bf1"
+var open_weather_endpoint = "api.openweathermap.org/data/2.5/weather"
