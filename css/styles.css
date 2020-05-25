@@ -121,4 +121,13 @@ body {
   color: white;
 }
 
+.weatherContentinfo input[type=text]{
+    color: black;
+    height: 28px;
+    padding-left: 10px;
+    text-decoration: none;
+    border-radius: 5px; 
+    border: 0;
+    font-size :14px;
+}
 

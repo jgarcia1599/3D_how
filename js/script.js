@@ -547,13 +547,13 @@ function toggle_scenepanel(){
   console.log(scene_toggle_counter )
 
   if (scene_toggle_counter == 0 && scene_options_showed ==1){
-    $('#sceneTypes').animate({ left: '-=350px'  });
+    $('#sceneTypes').animate({ left: '-=347px'  });
     scene_toggle_counter = 1;
     console.log("okay move right + 350px");
 
   }
   else if(scene_toggle_counter ==1){
-    $('#sceneTypes').animate({ left: '+=350px'  });
+    $('#sceneTypes').animate({ left: '+=347px'  });
     scene_toggle_counter = 0;
     scene_options_showed = 0;
 
