@@ -45,8 +45,12 @@ window.addEventListener("DOMContentLoaded", async function() {
     var skybox = BABYLON.Mesh.CreateBox("skyBox", 5000.0, scene);
     var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
     skyboxMaterial.backFaceCulling = false;
+    // skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(
+    //   "textures/TropicalSunnyDay",
+    //   scene
+    // );
     skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(
-      "textures/TropicalSunnyDay",
+      "textures/night_skybox/night",
       scene
     );
     skyboxMaterial.reflectionTexture.coordinatesMode =
@@ -155,6 +159,13 @@ window.addEventListener("DOMContentLoaded", async function() {
         ) * 0.6
       );
     };
+
+    //Rain Stuff
+    console.log("Ok lets try to do rain")
+  //   BABYLON.ParticleHelper.CreateAsync("rain", scene, false).then((set) => {
+  //     set.start();
+  // });
+    rain(scene);
 
     // return the created scene
     return scene;
@@ -505,6 +516,7 @@ window.addEventListener("DOMContentLoaded", async function() {
     });
     console.log(i);
     // return the created scene
+    rain(scene);
     return scene;
   };
 
@@ -639,3 +651,10 @@ $("#city-scrolldown").click(function() {
 
 var open_weather_key = "4e6fc4bba619975d9060a9b9da350bf1"
 var open_weather_endpoint = "api.openweathermap.org/data/2.5/weather"
+
+
+function rain(scene){
+  BABYLON.ParticleHelper.CreateAsync("rain", scene, false).then((set) => {
+    set.start();
+  });
+}
