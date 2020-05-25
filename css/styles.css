@@ -48,6 +48,7 @@ body {
   text-align: center;
   display: flex;
   flex-wrap: wrap;
+
 }
 
 #sceneTypesContent .column {
@@ -100,7 +101,7 @@ body {
 
 #weatherContent {
   width: 380px;
-  height: 390px;
+  height: 600px;
   position: absolute;
   right: 10px;
   top: 55px;
@@ -111,13 +112,13 @@ body {
   display: flex;
   flex-wrap: wrap;
 }
-#weatherContent .column {
-  margin-top: 40px;
-  flex: 50%;
-  cursor: pointer;
+.weatherContentinfo{
+  margin-top: 20px;
 }
-#weatherContent .column img {
-  width: 170px;
-  height: 120px;
-  z-index: 3;
+
+.weatherContentinfo p a{
+  text-decoration: none;
+  color: white;
 }
+
+

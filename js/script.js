@@ -563,6 +563,8 @@ function toggle_scenepanel(){
 
 }
 
+//hide panel at the beginning
+// $("#sceneTypesContent").slideToggle();
 
 $("#min-max-button").click(function() {
   console.log("clicked");
