@@ -120,9 +120,36 @@ window.addEventListener("DOMContentLoaded", async function() {
         console.log(meshes[mesh].position);
         waterMaterial.addToRenderList(meshes[mesh]);
         // meshes[mesh].rotation.z = 120;
-        meshes[mesh].actionManager = new BABYLON.ActionManager(scene);
 
-        // Resources: https://www.babylonjs-playground.com/#XCPP9Y#13
+
+        // Boat's Action Manager Stuff 
+        meshes[mesh].actionManager = new BABYLON.ActionManager(scene);
+        meshes[mesh].actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickUpTrigger, function () {
+          // alert('Boat Clicked')
+              // GUI
+          // console.log(i);
+          console.log("Ok boat has been clicked");
+
+          
+
+          }));
+
+          var hl = new BABYLON.HighlightLayer("hl1", scene);
+
+          //On Mouse Enter
+          meshes[mesh].actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, function(ev){	
+            console.log("ok im in the boat");
+            hl.addMesh(meshes[mesh], new BABYLON.Color3(0.99,1,0.51));
+          }));
+          
+          //ON MOUSE EXIT
+          meshes[mesh].actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOutTrigger, function(ev){
+            // mesh.material.emissiveColor = BABYLON.Color3.Black();
+            console.log("Ok im outside the boat");
+            hl.removeMesh(meshes[mesh]);
+
+          }));
+// Resources: https://www.babylonjs-playground.com/#XCPP9Y#13
 
         ////////// RAY CAST TO FIND WATER HEIGHT ////////////
         //var angle = 0;
@@ -277,49 +304,36 @@ window.addEventListener("DOMContentLoaded", async function() {
         console.log(meshes[mesh].position);
         waterMaterial.addToRenderList(meshes[mesh]);
 
+
+
+        //Boat UI Code
         meshes[mesh].actionManager = new BABYLON.ActionManager(scene);
-
-        meshes[mesh].actionManager.registerAction(
-          new BABYLON.ExecuteCodeAction(
-            BABYLON.ActionManager.OnPickUpTrigger,
-            function() {
-              // alert('Boat Clicked')
+        meshes[mesh].actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickUpTrigger, function () {
+          // alert('Boat Clicked')
               // GUI
-              // console.log(i);
-              i = 1;
-              console.log(i);
-              var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI(
-                "UI"
-              );
+          // console.log(i);
+          console.log("Ok boat has been clicked");
 
-              // Style
-              var style = advancedTexture.createStyle();
-              style.fontSize = 24;
-              style.fontStyle = "bold";
+          
 
-              //Rectangl;e
-              // var rect1 = new BABYLON.GUI.StackPanel();
-              // rect1.adaptWidthToChildren = true;
-              // rect1.height = "20%";
-              // rect1.width = "200px";
-              // rect1.thickness = 4;
-              // rect1.background = "white";
-              // rect1.horizontalAlignment =
-              //   BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
-              // rect1.verticalAlignment =
-              //   BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
-              // advancedTexture.addControl(rect1);
+          }));
 
-              // var text1 = new BABYLON.GUI.TextBlock();
-              // text1.text = "Dhow Boat, U.A.E.";
-              // text1.color = "black";
-              // text1.width = "200px";
-              // text1.fontSize = 18;
-              // text1.fontFamily = "Helvetica Neue";
-              // rect1.addControl(text1);
-            }
-          )
-        );
+          var hl = new BABYLON.HighlightLayer("hl1", scene);
+
+          //On Mouse Enter
+          meshes[mesh].actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, function(ev){	
+            console.log("ok im in the boat");
+            hl.addMesh(meshes[mesh], new BABYLON.Color3(0.99,1,0.51));
+          }));
+          
+          //ON MOUSE EXIT
+          meshes[mesh].actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOutTrigger, function(ev){
+            // mesh.material.emissiveColor = BABYLON.Color3.Black();
+            console.log("Ok im outside the boat");
+            hl.removeMesh(meshes[mesh]);
+
+          }));
+
         // Resources: https://www.babylonjs-playground.com/#XCPP9Y#13
 
         ////////// RAY CAST TO FIND WATER HEIGHT ////////////
@@ -498,8 +512,33 @@ window.addEventListener("DOMContentLoaded", async function() {
         meshes[mesh].rotation.x = (3 * Math.PI) / 2;
         console.log(meshes[mesh].position);
 
+        //Boat UI Code
         meshes[mesh].actionManager = new BABYLON.ActionManager(scene);
-        // Resources: https://www.babylonjs-playground.com/#XCPP9Y#13
+        meshes[mesh].actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickUpTrigger, function () {
+          // alert('Boat Clicked')
+              // GUI
+          // console.log(i);
+          console.log("Ok boat has been clicked");
+
+          
+
+          }));
+
+          var hl = new BABYLON.HighlightLayer("hl1", scene);
+
+          //On Mouse Enter
+          meshes[mesh].actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, function(ev){	
+            console.log("ok im in the boat");
+            hl.addMesh(meshes[mesh], new BABYLON.Color3(0.99,1,0.51));
+          }));
+          
+          //ON MOUSE EXIT
+          meshes[mesh].actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOutTrigger, function(ev){
+            // mesh.material.emissiveColor = BABYLON.Color3.Black();
+            console.log("Ok im outside the boat");
+            hl.removeMesh(meshes[mesh]);
+
+          }));
 
         ////////// RAY CAST TO FIND WATER HEIGHT ////////////
         //var angle = 0;
@@ -577,10 +616,11 @@ function toggle_scenepanel(){
 
 //hide panel at the beginning
 // $("#sceneTypesContent").slideToggle();
-
+$("#sceneTypesContent").slideToggle();
 $("#min-max-button").click(function() {
   console.log("clicked");
   $("#sceneTypesContent").slideToggle();
+  // $("sceneTypesContent").css('display','flex');
   var button = $(this).find("i");
   if (button.hasClass("fa fa-window-minimize")) {
     console.log("he");
@@ -607,7 +647,7 @@ function changeRender(sceneName) {
 //Weather UI;
 // Based on Steven's UI
 
-var toggle_counter = 0;
+var toggle_counter = 1;
 var options_showed = 0;
 function toggle_weatherpanel(){
   console.log("toggle");
@@ -644,6 +684,8 @@ $("#city-scrolldown").click(function() {
     button.addClass("fa fa-window-minimize");
   }
 });
+
+//Central Panel Stuff
 
 
 

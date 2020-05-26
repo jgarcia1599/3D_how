@@ -24,6 +24,7 @@ body {
   color: white;
   text-align: center;
   z-index: 2;
+  right:-350px;
 }
 #sceneTypes img{
   position:absolute;
@@ -80,6 +81,7 @@ body {
   color: white;
   text-align: center;
   z-index: 2;
+  right: -340px;
 }
 #citysearchbar img{
   position:absolute;
@@ -111,9 +113,11 @@ body {
   text-align: center;
   display: flex;
   flex-wrap: wrap;
+  display:none;
+  /* left:-350px; */
 }
 .weatherContentinfo{
-  margin-top: 20px;
+  margin-top: 40px;
 }
 
 .weatherContentinfo p a{
@@ -130,4 +134,14 @@ body {
     border: 0;
     font-size :14px;
 }
+
+/* .popup_content {
+  margin: 10px;
+  padding: 0 10px;
+  max-width: 60%;
+  border: 2px solid #444;
+  background: white;
+} */
+
+
 
