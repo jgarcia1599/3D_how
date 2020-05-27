@@ -656,6 +656,44 @@ window.addEventListener("DOMContentLoaded", async function() {
         console.log(meshes[mesh].position);
 
         meshes[mesh].actionManager = new BABYLON.ActionManager(scene);
+        meshes[mesh].actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickUpTrigger, function () {
+          // alert('Boat Clicked')
+              // GUI
+          // console.log(i);
+          console.log("Ok boat has been clicked");
+          $( "#dialog" ).dialog({
+            height: 600,
+            width: 800,
+            dialogClass: "no-close success-dialog",
+            buttons: [
+              {
+                text: "Next",
+                click: function() {
+                  $( this ).dialog( "close" );
+                }
+              }
+            ]
+          });
+
+          
+
+          }));
+
+          var hl = new BABYLON.HighlightLayer("hl1", scene);
+
+          //On Mouse Enter
+          meshes[mesh].actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, function(ev){	
+            console.log("ok im in the boat");
+            hl.addMesh(meshes[mesh], new BABYLON.Color3(0.99,1,0.51));
+          }));
+          
+          //ON MOUSE EXIT
+          meshes[mesh].actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOutTrigger, function(ev){
+            // mesh.material.emissiveColor = BABYLON.Color3.Black();
+            console.log("Ok im outside the boat");
+            hl.removeMesh(meshes[mesh]);
+
+          }));
         // Resources: https://www.babylonjs-playground.com/#XCPP9Y#13
 
         ////////// RAY CAST TO FIND WATER HEIGHT ////////////
