@@ -50,7 +50,7 @@ window.addEventListener("DOMContentLoaded", async function() {
     //   scene
     // );
     skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(
-      "textures/skybox",
+      "textures/TropicalSunnyDay",
       scene
     );
     skyboxMaterial.reflectionTexture.coordinatesMode =
