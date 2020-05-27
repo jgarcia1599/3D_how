@@ -50,7 +50,7 @@ window.addEventListener("DOMContentLoaded", async function() {
     //   scene
     // );
     skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(
-      "textures/night_skybox/night",
+      "textures/skybox",
       scene
     );
     skyboxMaterial.reflectionTexture.coordinatesMode =
@@ -129,6 +129,19 @@ window.addEventListener("DOMContentLoaded", async function() {
               // GUI
           // console.log(i);
           console.log("Ok boat has been clicked");
+          $( "#dialog" ).dialog({
+            height: 600,
+            width: 800,
+            dialogClass: "no-close success-dialog",
+            buttons: [
+              {
+                text: "Next",
+                click: function() {
+                  $( this ).dialog( "close" );
+                }
+              }
+            ]
+          });
 
           
 
@@ -532,6 +545,19 @@ window.addEventListener("DOMContentLoaded", async function() {
               // GUI
           // console.log(i);
           console.log("Ok boat has been clicked");
+          $( "#dialog" ).dialog({
+            height: 600,
+            width: 800,
+            dialogClass: "no-close success-dialog",
+            buttons: [
+              {
+                text: "Next",
+                click: function() {
+                  $( this ).dialog( "close" );
+                }
+              }
+            ]
+          });
 
           
 
