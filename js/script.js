@@ -1,6 +1,6 @@
 // Download the models at: https://www.cgtrader.com/items/1915278/download-page
 let i = 0;
-var state = "beach";
+var state = "museum";
 var url =
   "https://cdn.rawgit.com/BabylonJS/Extensions/master/DynamicTerrain/dist/babylon.dynamicTerrain.min.js";
 var s = document.createElement("script");
@@ -517,10 +517,106 @@ window.addEventListener("DOMContentLoaded", async function() {
     return scene;
   };
 
+  var museumSceneCreate = function() {
+    // create a basic BJS Scene object
+    var scene = new BABYLON.Scene(engine);
+
+    // Camera
+    var camera = new BABYLON.ArcRotateCamera(
+      "Camera",
+      (3 * Math.PI) / 2,
+      Math.PI / 2.5,
+      30,
+      new BABYLON.Vector3(-22, 2, -13),
+      scene
+    );
+    camera.lowerRadiusLimit = 1;
+    camera.upperRadiusLimit = 40;
+    camera.attachControl(canvas, true);
+    var renderer = scene.enableDepthRenderer();
+
+    // create a basic light, aiming 0,1,0 - meaning, to the sky
+    var light = new BABYLON.HemisphericLight(
+      "light1",
+      new BABYLON.Vector3(0, 1, 0),
+      scene
+    );
+    //fix specular to not make material so glossy
+    light.intensity = 0.8;
+    light.diffuse = new BABYLON.Color3(1, 1, 1);
+    light.specular = new BABYLON.Color3(0, 0, 0);
+    var spotLight = new BABYLON.SpotLight("spotLight", new BABYLON.Vector3(-18, 15, -12), new BABYLON.Vector3(0, -1, 0), Math.PI / 1.6, 8, scene);
+    var spotLightTwo = new BABYLON.SpotLight("spotLightTwo", new BABYLON.Vector3(-18, 0, -12), new BABYLON.Vector3(0, 1, 0), Math.PI / 1.6, 8, scene);
+
+
+ 
+    BABYLON.SceneLoader.ImportMesh(null, "dhow/", "dhow_2.obj", scene, function(
+      meshes
+    ) {
+      //postioning of meshes
+      console.log(meshes);
+      for (mesh in meshes) {
+        //mesh positioning
+        var dhow = meshes[mesh];
+        console.log("museum position");
+        console.log(meshes[mesh].position);
+        meshes[mesh].rotation.x = (3 * Math.PI) / 2;
+        console.log(meshes[mesh].position);
+
+        meshes[mesh].actionManager = new BABYLON.ActionManager(scene);
+        // Resources: https://www.babylonjs-playground.com/#XCPP9Y#13
+
+        ////////// RAY CAST TO FIND WATER HEIGHT ////////////
+        //var angle = 0;
+        let i = 0;
+
+        scene.registerBeforeRender(function() {
+          var x = meshes[mesh].position.x;
+          meshes[mesh].position.y = -31;
+          meshes[mesh].position.z = -14;
+          meshes[mesh].position.x = -50;
+
+
+
+        });
+
+        //lower the boat as it was floating above the water
+      }
+    });
+    BABYLON.SceneLoader.ImportMesh(null, "museum/", "museumTest.obj", scene, function(
+      meshes
+    ) {
+      //postioning of meshes
+      console.log(meshes);
+      for (mesh in meshes) {
+        //mesh positioning
+
+
+        meshes[mesh].actionManager = new BABYLON.ActionManager(scene);
+        // Resources: https://www.babylonjs-playground.com/#XCPP9Y#13
+
+        ////////// RAY CAST TO FIND WATER HEIGHT ////////////
+        //var angle = 0;
+        let i = 0;
+
+        scene.registerBeforeRender(function() {
+          var x = meshes[mesh].position.x;
+
+        });
+
+        //lower the boat as it was floating above the water
+      }
+    });
+    console.log(i);
+    // return the created scene
+    return scene;
+  };
+
   // call the createScene function
   var seasScene = createScene();
   var beachScene = beachSceneCreate();
   var desertScene = desertSceneCreate();
+  var museumScene = museumSceneCreate();
 
   // run the render loop
   engine.runRenderLoop(function() {
@@ -530,6 +626,8 @@ window.addEventListener("DOMContentLoaded", async function() {
       beachScene.render();
     } else if (state == "desert") {
       desertScene.render();
+    } else if (state == "museum") {
+      museumScene.render();
     }
   });
 
