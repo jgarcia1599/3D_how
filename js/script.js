@@ -1,3 +1,5 @@
+
+
 // Download the models at: https://www.cgtrader.com/items/1915278/download-page
 let i = 0;
 var state = "beach";
@@ -43,6 +45,10 @@ window.addEventListener("DOMContentLoaded", async function() {
     var skybox = BABYLON.Mesh.CreateBox("skyBox", 5000.0, scene);
     var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
     skyboxMaterial.backFaceCulling = false;
+    // skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(
+    //   "textures/TropicalSunnyDay",
+    //   scene
+    // );
     skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(
       "textures/TropicalSunnyDay",
       scene
@@ -114,9 +120,49 @@ window.addEventListener("DOMContentLoaded", async function() {
         console.log(meshes[mesh].position);
         waterMaterial.addToRenderList(meshes[mesh]);
         // meshes[mesh].rotation.z = 120;
-        meshes[mesh].actionManager = new BABYLON.ActionManager(scene);
 
-        // Resources: https://www.babylonjs-playground.com/#XCPP9Y#13
+
+        // Boat's Action Manager Stuff 
+        meshes[mesh].actionManager = new BABYLON.ActionManager(scene);
+        meshes[mesh].actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickUpTrigger, function () {
+          // alert('Boat Clicked')
+              // GUI
+          // console.log(i);
+          console.log("Ok boat has been clicked");
+          $( "#dialog" ).dialog({
+            height: 600,
+            width: 800,
+            dialogClass: "no-close success-dialog",
+            buttons: [
+              {
+                text: "Next",
+                click: function() {
+                  $( this ).dialog( "close" );
+                }
+              }
+            ]
+          });
+
+          
+
+          }));
+
+          var hl = new BABYLON.HighlightLayer("hl1", scene);
+
+          //On Mouse Enter
+          meshes[mesh].actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, function(ev){	
+            console.log("ok im in the boat");
+            hl.addMesh(meshes[mesh], new BABYLON.Color3(0.99,1,0.51));
+          }));
+          
+          //ON MOUSE EXIT
+          meshes[mesh].actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOutTrigger, function(ev){
+            // mesh.material.emissiveColor = BABYLON.Color3.Black();
+            console.log("Ok im outside the boat");
+            hl.removeMesh(meshes[mesh]);
+
+          }));
+// Resources: https://www.babylonjs-playground.com/#XCPP9Y#13
 
         ////////// RAY CAST TO FIND WATER HEIGHT ////////////
         //var angle = 0;
@@ -153,6 +199,13 @@ window.addEventListener("DOMContentLoaded", async function() {
         ) * 0.6
       );
     };
+
+    //Rain Stuff
+    console.log("Ok lets try to do rain")
+  //   BABYLON.ParticleHelper.CreateAsync("rain", scene, false).then((set) => {
+  //     set.start();
+  // });
+    rain(scene);
 
     // return the created scene
     return scene;
@@ -264,49 +317,49 @@ window.addEventListener("DOMContentLoaded", async function() {
         console.log(meshes[mesh].position);
         waterMaterial.addToRenderList(meshes[mesh]);
 
+
+
+        //Boat UI Code
         meshes[mesh].actionManager = new BABYLON.ActionManager(scene);
-
-        meshes[mesh].actionManager.registerAction(
-          new BABYLON.ExecuteCodeAction(
-            BABYLON.ActionManager.OnPickUpTrigger,
-            function() {
-              // alert('Boat Clicked')
+        meshes[mesh].actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickUpTrigger, function () {
+          // alert('Boat Clicked')
               // GUI
-              // console.log(i);
-              i = 1;
-              console.log(i);
-              var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI(
-                "UI"
-              );
+          // console.log(i);
+          console.log("Ok boat has been clicked");
+          $( "#dialog" ).dialog({
+            height: 600,
+            width: 800,
+            dialogClass: "no-close success-dialog",
+            buttons: [
+              {
+                text: "Next",
+                click: function() {
+                  $( this ).dialog( "close" );
+                }
+              }
+            ]
+          });
 
-              // Style
-              var style = advancedTexture.createStyle();
-              style.fontSize = 24;
-              style.fontStyle = "bold";
+          
 
-              //Rectangl;e
-              // var rect1 = new BABYLON.GUI.StackPanel();
-              // rect1.adaptWidthToChildren = true;
-              // rect1.height = "20%";
-              // rect1.width = "200px";
-              // rect1.thickness = 4;
-              // rect1.background = "white";
-              // rect1.horizontalAlignment =
-              //   BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
-              // rect1.verticalAlignment =
-              //   BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
-              // advancedTexture.addControl(rect1);
+          }));
 
-              // var text1 = new BABYLON.GUI.TextBlock();
-              // text1.text = "Dhow Boat, U.A.E.";
-              // text1.color = "black";
-              // text1.width = "200px";
-              // text1.fontSize = 18;
-              // text1.fontFamily = "Helvetica Neue";
-              // rect1.addControl(text1);
-            }
-          )
-        );
+          var hl = new BABYLON.HighlightLayer("hl1", scene);
+
+          //On Mouse Enter
+          meshes[mesh].actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, function(ev){	
+            console.log("ok im in the boat");
+            hl.addMesh(meshes[mesh], new BABYLON.Color3(0.99,1,0.51));
+          }));
+          
+          //ON MOUSE EXIT
+          meshes[mesh].actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOutTrigger, function(ev){
+            // mesh.material.emissiveColor = BABYLON.Color3.Black();
+            console.log("Ok im outside the boat");
+            hl.removeMesh(meshes[mesh]);
+
+          }));
+
         // Resources: https://www.babylonjs-playground.com/#XCPP9Y#13
 
         ////////// RAY CAST TO FIND WATER HEIGHT ////////////
@@ -485,8 +538,46 @@ window.addEventListener("DOMContentLoaded", async function() {
         meshes[mesh].rotation.x = (3 * Math.PI) / 2;
         console.log(meshes[mesh].position);
 
+        //Boat UI Code
         meshes[mesh].actionManager = new BABYLON.ActionManager(scene);
-        // Resources: https://www.babylonjs-playground.com/#XCPP9Y#13
+        meshes[mesh].actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickUpTrigger, function () {
+          // alert('Boat Clicked')
+              // GUI
+          // console.log(i);
+          console.log("Ok boat has been clicked");
+          $( "#dialog" ).dialog({
+            height: 600,
+            width: 800,
+            dialogClass: "no-close success-dialog",
+            buttons: [
+              {
+                text: "Next",
+                click: function() {
+                  $( this ).dialog( "close" );
+                }
+              }
+            ]
+          });
+
+          
+
+          }));
+
+          var hl = new BABYLON.HighlightLayer("hl1", scene);
+
+          //On Mouse Enter
+          meshes[mesh].actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, function(ev){	
+            console.log("ok im in the boat");
+            hl.addMesh(meshes[mesh], new BABYLON.Color3(0.99,1,0.51));
+          }));
+          
+          //ON MOUSE EXIT
+          meshes[mesh].actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOutTrigger, function(ev){
+            // mesh.material.emissiveColor = BABYLON.Color3.Black();
+            console.log("Ok im outside the boat");
+            hl.removeMesh(meshes[mesh]);
+
+          }));
 
         ////////// RAY CAST TO FIND WATER HEIGHT ////////////
         //var angle = 0;
@@ -503,6 +594,7 @@ window.addEventListener("DOMContentLoaded", async function() {
     });
     console.log(i);
     // return the created scene
+    rain(scene);
     return scene;
   };
 
@@ -537,12 +629,41 @@ window.addEventListener("DOMContentLoaded", async function() {
 });
 
 //UI Code: Added By Steven
+var scene_toggle_counter = 0;
+var scene_options_showed = 1;
+
+function toggle_scenepanel(){
+  console.log("toggle scene pannel");
+  console.log(scene_toggle_counter )
+
+  if (scene_toggle_counter == 0){
+    $('#sceneTypes').animate({ left: '+=340px'  });
+    scene_toggle_counter = 1;
+    console.log("okay move right + 350px");
+
+  }
+  else if(scene_toggle_counter ==1){
+    $('#sceneTypes').animate({ left: '-=340px'  });
+    scene_toggle_counter = 0;
+    scene_options_showed = 0;
+
+    console.log("okay move right - 350px");
+
+  }
+
+}
+
+//hide panel at the beginning
+// $("#sceneTypesContent").slideToggle();
+$("#sceneTypesContent").slideToggle();
 $("#min-max-button").click(function() {
   console.log("clicked");
   $("#sceneTypesContent").slideToggle();
+  // $("sceneTypesContent").css('display','flex');
   var button = $(this).find("i");
   if (button.hasClass("fa fa-window-minimize")) {
     console.log("he");
+    scene_options_showed = 1;
     button.removeClass("fas fa-window-minimize");
     button.addClass("fa fa-window-maximize");
   } else if (button.hasClass("fa fa-window-maximize")) {
@@ -555,4 +676,66 @@ $("#min-max-button").click(function() {
 function changeRender(sceneName) {
   console.log(sceneName);
   state = sceneName;
+}
+
+
+
+//Weather stuff
+
+
+//Weather UI;
+// Based on Steven's UI
+
+var toggle_counter = 1;
+var options_showed = 0;
+function toggle_weatherpanel(){
+  console.log("toggle");
+  console.log(toggle_counter)
+
+  if (toggle_counter == 0){
+    $('#citysearchbar').animate({ left: '+=350px'  });
+    toggle_counter = 1;
+    console.log("lalalalala");
+
+  }
+  else if(toggle_counter ==1){
+    $('#citysearchbar').animate({ left: '-=350px'  });
+    toggle_counter = 0;
+    options_showed = 0;
+
+  }
+}
+
+
+$("#city-scrolldown").click(function() {
+  console.log("clicked weather stuff");
+  $("#weatherContent").slideToggle();
+  var button = $(this).find("i");
+  if (button.hasClass("fa fa-window-minimize")) {
+    //options have been showed, we can hide the panel
+    options_showed = 1;
+    console.log("he");
+    button.removeClass("fas fa-window-minimize");
+    button.addClass("fa fa-window-maximize");
+  } else if (button.hasClass("fa fa-window-maximize")) {
+    button.removeClass("fas fa-window-maximize");
+
+    button.addClass("fa fa-window-minimize");
+  }
+});
+
+//Central Panel Stuff
+
+
+
+//Open Weather Stuff
+
+var open_weather_key = "4e6fc4bba619975d9060a9b9da350bf1"
+var open_weather_endpoint = "api.openweathermap.org/data/2.5/weather"
+
+
+function rain(scene){
+  BABYLON.ParticleHelper.CreateAsync("rain", scene, false).then((set) => {
+    set.start();
+  });
 }
