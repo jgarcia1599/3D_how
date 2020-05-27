@@ -806,7 +806,6 @@ $("#sceneTypesContent").slideToggle();
 $("#min-max-button").click(function() {
   console.log("clicked");
   $("#sceneTypesContent").slideToggle();
-  // $("sceneTypesContent").css('display','flex');
   var button = $(this).find("i");
   if (button.hasClass("fa fa-window-minimize")) {
     console.log("he");
@@ -829,6 +828,32 @@ function changeRender(sceneName) {
 
 //Weather stuff
 
+function enableSunnyWeather(){
+  console.log("Ok its sunny");
+
+}
+
+function enableRainyWeather(){
+  console.log("Ok its rainy now");
+
+
+}
+
+function enableSnowyWeather(){
+  console.log("Ok its rainy now");
+
+
+}
+
+function enableDay(){
+  console.log("Rise and Shinee!!!");
+
+}
+
+function enableNight(){
+  console.log("Ok good nigghhttt!!!")
+
+}
 
 //Weather UI;
 // Based on Steven's UI
@@ -878,7 +903,47 @@ $("#city-scrolldown").click(function() {
 //Open Weather Stuff
 
 var open_weather_key = "4e6fc4bba619975d9060a9b9da350bf1"
-var open_weather_endpoint = "api.openweathermap.org/data/2.5/weather"
+var open_weather_endpoint = "https://api.openweathermap.org/data/2.5/weather"
+
+function getWeatherData(){
+  console.log("get weather data");
+  var cityname = $("#city").val()
+  console.log(cityname);
+  var open_weather_full_url = open_weather_endpoint + "?q="+cityname + "&appid="+open_weather_key;
+  console.log(open_weather_full_url);
+  fetch(open_weather_full_url)
+  .then(response => response.json())
+  .then(data => {
+    console.log(data);
+    var tempValue = data['main']['temp'];
+    var nameValue = data['name'];
+    var descValue = data['weather'][0]['description'];
+    console.log(tempValue);
+    console.log(nameValue);
+    console.log(descValue);
+    console.log(data['timezone'])
+
+    var date = new Date(data['timezone'] * 1000);
+
+
+    var hours = date.getHours();
+    console.log(hours);
+    if (hours>18){
+      console.log('Its night')
+    }
+    else{
+      console.log("Its day");
+      
+    }
+
+    console.log(data['weather'][0]['description']);
+
+
+
+  })
+}
+
+//Transforming time in from unix epoch : https://stackoverflow.com/questions/847185/convert-a-unix-timestamp-to-time-in-javascript
 
 
 function rain(scene){
