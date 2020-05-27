@@ -8,6 +8,7 @@
       src="https://kit.fontawesome.com/b2ec75c2b7.js"
       crossorigin="anonymous"
     ></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <!-- Important Resources and Examples:
 https://www.babylonjs-playground.com/#1SLLOJ#17
 Skybox: https://doc.babylonjs.com/how_to/skybox
@@ -29,6 +30,7 @@ Online tutorial: https://www.youtube.com/watch?v=OXXkyWku2PY -->
     <script src="https://preview.babylonjs.com/serializers/babylonjs.serializers.min.js"></script>
     <script src="https://preview.babylonjs.com/gui/babylon.gui.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <!-- <script src="https://cdn.jsdelivr.net/gh/vast-engineering/jquery-popup-overlay@2/jquery.popupoverlay.min.js"></script> -->
 
@@ -52,7 +54,7 @@ Online tutorial: https://www.youtube.com/watch?v=OXXkyWku2PY -->
   <body>
     <div id="sceneTypes">
       <div id="min-max-button">
-        <i class="fa fa-window-minimize"></i>
+        <i class="fa fa-window-maximize"></i>
       </div>
       <img onclick="toggle_scenepanel()" src="img/curtain.png">
       <h1>Scenes</h1>
@@ -93,7 +95,12 @@ Online tutorial: https://www.youtube.com/watch?v=OXXkyWku2PY -->
         <p><a href="">Sunny</a> | <a href="">Rainy</a> | <a href="">Snow</a> </p>
 
       </div>
-
+    </div>
+    <div id="dialog" title="Bronze Age Boat" style="display:none;">
+      <p>The Bronze Age Boat is being reconstructed at NYU Abu Dhabi.</p>
+      <img src="img/reconstruction.jpg">
+      <h1>Reconstruction Process</h1>
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/mRf3-JkwqfU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     </div>
     <canvas id="renderCanvas"></canvas>
     <script src="js/babylon_helper.js"></script>

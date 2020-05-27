@@ -313,6 +313,19 @@ window.addEventListener("DOMContentLoaded", async function() {
               // GUI
           // console.log(i);
           console.log("Ok boat has been clicked");
+          $( "#dialog" ).dialog({
+            height: 600,
+            width: 800,
+            dialogClass: "no-close success-dialog",
+            buttons: [
+              {
+                text: "Next",
+                click: function() {
+                  $( this ).dialog( "close" );
+                }
+              }
+            ]
+          });
 
           
 
@@ -591,20 +604,20 @@ window.addEventListener("DOMContentLoaded", async function() {
 
 //UI Code: Added By Steven
 var scene_toggle_counter = 0;
-var scene_options_showed = 0;
+var scene_options_showed = 1;
 
 function toggle_scenepanel(){
   console.log("toggle scene pannel");
   console.log(scene_toggle_counter )
 
-  if (scene_toggle_counter == 0 && scene_options_showed ==1){
-    $('#sceneTypes').animate({ left: '-=347px'  });
+  if (scene_toggle_counter == 0){
+    $('#sceneTypes').animate({ left: '+=340px'  });
     scene_toggle_counter = 1;
     console.log("okay move right + 350px");
 
   }
   else if(scene_toggle_counter ==1){
-    $('#sceneTypes').animate({ left: '+=347px'  });
+    $('#sceneTypes').animate({ left: '-=340px'  });
     scene_toggle_counter = 0;
     scene_options_showed = 0;
 
@@ -653,7 +666,7 @@ function toggle_weatherpanel(){
   console.log("toggle");
   console.log(toggle_counter)
 
-  if (toggle_counter == 0 && options_showed==1){
+  if (toggle_counter == 0){
     $('#citysearchbar').animate({ left: '+=350px'  });
     toggle_counter = 1;
     console.log("lalalalala");
