@@ -238,12 +238,23 @@ window.addEventListener("DOMContentLoaded", async function() {
   //   BABYLON.ParticleHelper.CreateAsync("rain", scene, false).then((set) => {
   //     set.start();
   // });
+    // Default Environment
 
-  console.log("Meshesss");
-  console.log(boat);
-  for(var i = 0;i<boat.length;i++ ){
-    console.log(boat[i]);
-  }
+
+  //VRStuff
+  var environment = scene.createDefaultEnvironment({ enableGroundShadow: true, groundYBias: 1 });
+  environment.setMainColor(BABYLON.Color3.FromHexString("#74b9ff"))
+  var vrHelper = scene.createDefaultVRExperience({createDeviceOrientationCamera:false});
+  vrHelper.enableTeleportation({floorMeshes: [environment.ground]});
+  vrHelper.onAfterEnteringVRObservable.add(()=>{
+    if(scene.activeCamera === vrHelper.vrDeviceOrientationCamera){
+        BABYLON.FreeCameraDeviceOrientationInput.WaitForOrientationChangeAsync(1000).then(()=>{
+            // Successfully received sensor input
+        }).catch(()=>{
+            console.log("Device orientation camera is being used but no sensor is found, prompt user to enable in safari settings");
+        })
+    }
+})
 
 
 
@@ -440,6 +451,19 @@ window.addEventListener("DOMContentLoaded", async function() {
         ) * 0.5
       );
     };
+    var environment = scene.createDefaultEnvironment({ enableGroundShadow: true, groundYBias: 1 });
+    environment.setMainColor(BABYLON.Color3.FromHexString("#74b9ff"))
+    var vrHelper = scene.createDefaultVRExperience({createDeviceOrientationCamera:false});
+    vrHelper.enableTeleportation({floorMeshes: [environment.ground]});
+    vrHelper.onAfterEnteringVRObservable.add(()=>{
+      if(scene.activeCamera === vrHelper.vrDeviceOrientationCamera){
+          BABYLON.FreeCameraDeviceOrientationInput.WaitForOrientationChangeAsync(1000).then(()=>{
+              // Successfully received sensor input
+          }).catch(()=>{
+              console.log("Device orientation camera is being used but no sensor is found, prompt user to enable in safari settings");
+          })
+      }
+  })
 
     // return the created scene
     return scene;
@@ -645,6 +669,20 @@ window.addEventListener("DOMContentLoaded", async function() {
     console.log(i);
     // return the created scene
     rain(scene);
+
+    var environment = scene.createDefaultEnvironment({ enableGroundShadow: true, groundYBias: 1 });
+    environment.setMainColor(BABYLON.Color3.FromHexString("#74b9ff"))
+    var vrHelper = scene.createDefaultVRExperience({createDeviceOrientationCamera:false});
+    vrHelper.enableTeleportation({floorMeshes: [environment.ground]});
+    vrHelper.onAfterEnteringVRObservable.add(()=>{
+      if(scene.activeCamera === vrHelper.vrDeviceOrientationCamera){
+          BABYLON.FreeCameraDeviceOrientationInput.WaitForOrientationChangeAsync(1000).then(()=>{
+              // Successfully received sensor input
+          }).catch(()=>{
+              console.log("Device orientation camera is being used but no sensor is found, prompt user to enable in safari settings");
+          })
+      }
+  })
     return scene;
   };
 
@@ -778,6 +816,20 @@ window.addEventListener("DOMContentLoaded", async function() {
     });
     console.log(i);
     // return the created scene
+
+    var environment = scene.createDefaultEnvironment({ enableGroundShadow: true, groundYBias: 1 });
+    environment.setMainColor(BABYLON.Color3.FromHexString("#74b9ff"))
+    var vrHelper = scene.createDefaultVRExperience({createDeviceOrientationCamera:false});
+    vrHelper.enableTeleportation({floorMeshes: [environment.ground]});
+    vrHelper.onAfterEnteringVRObservable.add(()=>{
+      if(scene.activeCamera === vrHelper.vrDeviceOrientationCamera){
+          BABYLON.FreeCameraDeviceOrientationInput.WaitForOrientationChangeAsync(1000).then(()=>{
+              // Successfully received sensor input
+          }).catch(()=>{
+              console.log("Device orientation camera is being used but no sensor is found, prompt user to enable in safari settings");
+          })
+      }
+  })
     return scene;
   };
 
