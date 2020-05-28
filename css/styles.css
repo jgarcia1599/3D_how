@@ -147,3 +147,24 @@ body {
   margin:0 auto;
 }
 
+#toggleNightDay {
+  position: absolute;
+  top: 6%;
+  left: 50%;
+  transform: translate(-50%, -50%);  height: 30px;
+  width: 100px;
+  height: 40px;
+  background-color: #303048;
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  border-radius: 15px;
+}
+
+#toggleNightDay img {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}

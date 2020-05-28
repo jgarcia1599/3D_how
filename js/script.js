@@ -2,7 +2,8 @@
 
 // Download the models at: https://www.cgtrader.com/items/1915278/download-page
 let i = 0;
-var state = "museum";
+var state = "seas";
+var dayTime = true;
 var url =
   "https://cdn.rawgit.com/BabylonJS/Extensions/master/DynamicTerrain/dist/babylon.dynamicTerrain.min.js";
 var s = document.createElement("script");
@@ -16,7 +17,9 @@ window.addEventListener("DOMContentLoaded", async function() {
   var engine = new BABYLON.Engine(canvas, true);
 
   // createScene function that creates and return the scene
-  var createScene = function() {
+  var createScene = function(timeofDay) {
+    var timeofDay = dayTime;
+    console.log(timeofDay);
     // create a basic BJS Scene object
     var scene = new BABYLON.Scene(engine);
 
@@ -40,19 +43,15 @@ window.addEventListener("DOMContentLoaded", async function() {
       new BABYLON.Vector3(0, 1, 0),
       scene
     );
-
     //Adding the skybox to the scene
     var skybox = BABYLON.Mesh.CreateBox("skyBox", 5000.0, scene);
     var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
     skyboxMaterial.backFaceCulling = false;
-    // skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(
-    //   "textures/TropicalSunnyDay",
-    //   scene
-    // );
     skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(
       "textures/TropicalSunnyDay",
       scene
     );
+
     skyboxMaterial.reflectionTexture.coordinatesMode =
       BABYLON.Texture.SKYBOX_MODE;
     skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
@@ -104,6 +103,8 @@ window.addEventListener("DOMContentLoaded", async function() {
       scene,
       false
     );
+
+    
     ground.position.y = -70;
     ground.material = groundMaterial;
 
@@ -173,6 +174,29 @@ window.addEventListener("DOMContentLoaded", async function() {
           var z = meshes[mesh].position.z;
           var waterHeight = getWaterHeightAtCoordinates(x, z, waterMaterial);
           meshes[mesh].position.y = waterHeight - 35;
+          timeofDay = dayTime;
+          if (timeofDay == false) {
+            console.log("be blue!");
+            groundMaterial.diffuseColor = new BABYLON.Color3(0.02, 0.03, 0.17);
+            groundMaterial.emissiveColor = new BABYLON.Color3(0.02, 0.03, 0.17);
+          }
+          if (timeofDay == true) {
+            console.log("be red!");
+            groundMaterial.diffuseColor = new BABYLON.Color3(0.02, 0.03, 0.17);
+            groundMaterial.emissiveColor = new BABYLON.Color3(0.02, 0.03, 0.17);
+          }
+          if (timeofDay == false) {    
+            skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(
+            "textures/night_skybox/sky1",
+            scene
+          );
+          }
+          else {
+            skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(
+            "textures/TropicalSunnyDay",
+            scene
+            );
+          }
         });
 
         //lower the boat as it was floating above the water
@@ -205,6 +229,7 @@ window.addEventListener("DOMContentLoaded", async function() {
   //   BABYLON.ParticleHelper.CreateAsync("rain", scene, false).then((set) => {
   //     set.start();
   // });
+  
     rain(scene);
 
     // return the created scene
@@ -743,16 +768,21 @@ window.addEventListener("DOMContentLoaded", async function() {
   };
 
   // call the createScene function
-  var seasScene = createScene();
+  var seasSceneRain = createScene(true);
+  var seasSceneSunny = createScene(false);
+
   var beachScene = beachSceneCreate();
   var desertScene = desertSceneCreate();
   var museumScene = museumSceneCreate();
 
   // run the render loop
   engine.runRenderLoop(function() {
-    if (state == "seas") {
-      seasScene.render();
-    } else if (state == "beach") {
+    if (state == "seas" && dayTime == true) {
+      seasSceneRain.render();
+    } 
+    else if (state == "seas" && dayTime == false) {
+      seasSceneSunny.render();
+    }else if (state == "beach") {
       beachScene.render();
     } else if (state == "desert") {
       desertScene.render();
@@ -825,6 +855,15 @@ function changeRender(sceneName) {
   state = sceneName;
 }
 
+function changeTimeDay(timeofDay) {
+  if (timeofDay == "night") {
+    dayTime = false;
+  }
+  else if (timeofDay == "day") {
+    dayTime = true;
+  }
+}
+
 
 
 //Weather stuff
@@ -886,3 +925,4 @@ function rain(scene){
     set.start();
   });
 }
+
