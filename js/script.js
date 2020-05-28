@@ -31,6 +31,7 @@ window.addEventListener("DOMContentLoaded", async function() {
     );
     camera.lowerRadiusLimit = 1;
     camera.upperRadiusLimit = 40;
+    camera.rotationOffset=0;
     camera.attachControl(canvas, true);
     var renderer = scene.enableDepthRenderer();
 
@@ -107,11 +108,16 @@ window.addEventListener("DOMContentLoaded", async function() {
     ground.position.y = -70;
     ground.material = groundMaterial;
 
+    var boat = []
+
     BABYLON.SceneLoader.ImportMesh(null, "dhow/", "dhow_2.obj", scene, function(
       meshes
     ) {
       //postioning of meshes
       for (mesh in meshes) {
+        boat.push(mesh);
+
+
         //mesh positioning
         var dhow = meshes[mesh];
         console.log("Dhow position");
@@ -164,8 +170,6 @@ window.addEventListener("DOMContentLoaded", async function() {
           }));
 // Resources: https://www.babylonjs-playground.com/#XCPP9Y#13
 
-        ////////// RAY CAST TO FIND WATER HEIGHT ////////////
-        //var angle = 0;
         let i = 0;
 
         scene.registerBeforeRender(function() {
@@ -173,12 +177,41 @@ window.addEventListener("DOMContentLoaded", async function() {
           var z = meshes[mesh].position.z;
           var waterHeight = getWaterHeightAtCoordinates(x, z, waterMaterial);
           meshes[mesh].position.y = waterHeight - 35;
+          
+
+          // Work on fixing boat inside water issue, dont delete
+
+          // var size = meshes[mesh].getBoundingInfo().boundingBox.extendSize;
+          // console.log("Size: ",size);
+
+
+          // // waterMesh.subMeshes = [];
+          // var verticesCount = waterMesh.getTotalVertices();
+          // console.log("Vertices\n",verticesCount);
+
+
+          // var transparent_material = BABYLON
+
+          // if (waterMesh.intersectsMesh(meshes[mesh],false)){
+          //   console.log("Boat is inside water");
+          //   waterMesh.material.waterColor = new BABYLON.Color4(1, 0, 0, 1,0);
+          // }
+          // else{
+          //   waterMesh.material.waterColor = new BABYLON.Color3(0, 0.1, 0.21);
+
+          // }
         });
+
+          
+
+
 
         //lower the boat as it was floating above the water
       }
     });
     console.log(i);
+
+    
 
     // Configure water material
     waterMaterial.addToRenderList(ground);
@@ -205,7 +238,14 @@ window.addEventListener("DOMContentLoaded", async function() {
   //   BABYLON.ParticleHelper.CreateAsync("rain", scene, false).then((set) => {
   //     set.start();
   // });
-    rain(scene);
+
+  console.log("Meshesss");
+  console.log(boat);
+  for(var i = 0;i<boat.length;i++ ){
+    console.log(boat[i]);
+  }
+
+
 
     // return the created scene
     return scene;
@@ -282,7 +322,6 @@ window.addEventListener("DOMContentLoaded", async function() {
     );
     waterMesh.material = waterMaterial;
 
-    //Ground
 
     // Ground
     var groundMaterial = new BABYLON.StandardMaterial("groundMaterial", scene);
@@ -900,50 +939,6 @@ $("#city-scrolldown").click(function() {
 
 
 
-//Open Weather Stuff
-
-var open_weather_key = "4e6fc4bba619975d9060a9b9da350bf1"
-var open_weather_endpoint = "https://api.openweathermap.org/data/2.5/weather"
-
-function getWeatherData(){
-  console.log("get weather data");
-  var cityname = $("#city").val()
-  console.log(cityname);
-  var open_weather_full_url = open_weather_endpoint + "?q="+cityname + "&appid="+open_weather_key;
-  console.log(open_weather_full_url);
-  fetch(open_weather_full_url)
-  .then(response => response.json())
-  .then(data => {
-    console.log(data);
-    var tempValue = data['main']['temp'];
-    var nameValue = data['name'];
-    var descValue = data['weather'][0]['description'];
-    console.log(tempValue);
-    console.log(nameValue);
-    console.log(descValue);
-    console.log(data['timezone'])
-
-    var date = new Date(data['timezone'] * 1000);
-
-
-    var hours = date.getHours();
-    console.log(hours);
-    if (hours>18){
-      console.log('Its night')
-    }
-    else{
-      console.log("Its day");
-      
-    }
-
-    console.log(data['weather'][0]['description']);
-
-
-
-  })
-}
-
-//Transforming time in from unix epoch : https://stackoverflow.com/questions/847185/convert-a-unix-timestamp-to-time-in-javascript
 
 
 function rain(scene){
@@ -951,3 +946,7 @@ function rain(scene){
     set.start();
   });
 }
+
+
+
+// https://www.babylonjs-playground.com/#L76FB1#120
