@@ -56,17 +56,17 @@ Online tutorial: https://www.youtube.com/watch?v=OXXkyWku2PY -->
       <div id="min-max-button">
         <i class="fa fa-window-maximize"></i>
       </div>
-      <img onclick="toggle_scenepanel()" src="img/curtain.png">
+      <!-- <img onclick="toggle_scenepanel()" src="img/curtain.png"> -->
       <h1>Scenes</h1>
     </div>
-    <div id="citysearchbar">
+    <!-- <div id="citysearchbar">
       <div id="city-scrolldown">
         <i class="fa fa-window-maximize"></i>
       </div>
       <img onclick="toggle_weatherpanel()" src="img/weather.png">
       <h1>Change Weather by City</h1>
-      
-    </div>
+    </div> -->
+
     <div id="toggleNightDay">
       <img class="nightDay" onclick="changeTimeDay('day')" src="icons/day.png">
       <img class="nightDay" onclick="changeTimeDay('night')" src="icons/night.png">
@@ -87,8 +87,11 @@ Online tutorial: https://www.youtube.com/watch?v=OXXkyWku2PY -->
       </div>
     </div>
 
-    <div id="weatherContent">
-      <div class="weatherContentinfo">
+    <div id="weatherContentPopOut">
+      <i class="fas fa-cloud" onclick="changeWeather('cloudy')"></i>
+      <i class="far fa-sun" onclick="changeWeather('clear')"></i>
+      <i class="fas fa-cloud-rain" onclick="changeWeather('rainy')"></i>
+      <!-- <div class="weatherContentinfo">
         <h1>Type a city in the search bar to change the weather of your scene.</h1>
         <input type="text">
         <h2>Or customize the weather at your please by clicking below.</h2>
@@ -98,7 +101,7 @@ Online tutorial: https://www.youtube.com/watch?v=OXXkyWku2PY -->
         <h1>Weather</h1>
         <p><a href="">Sunny</a> | <a href="">Rainy</a> | <a href="">Snow</a> </p>
 
-      </div>
+      </div> -->
     </div>
     <div id="dialog" title="Bronze Age Boat" style="display:none;">
       <p>The Bronze Age Boat is being reconstructed at NYU Abu Dhabi.</p>

@@ -4,6 +4,11 @@
 let i = 0;
 var state = "seas";
 var dayTime = true;
+var weatherState = "clear";
+var isRaining = false;
+var prevDayTime = false;
+var mysystem;
+
 var url =
   "https://cdn.rawgit.com/BabylonJS/Extensions/master/DynamicTerrain/dist/babylon.dynamicTerrain.min.js";
 var s = document.createElement("script");
@@ -22,6 +27,7 @@ window.addEventListener("DOMContentLoaded", async function() {
     console.log(timeofDay);
     // create a basic BJS Scene object
     var scene = new BABYLON.Scene(engine);
+    scene.debugLayer.show();
 
     // Camera
     var camera = new BABYLON.ArcRotateCamera(
@@ -43,7 +49,7 @@ window.addEventListener("DOMContentLoaded", async function() {
       new BABYLON.Vector3(0, 1, 0),
       scene
     );
-    //Adding the skybox to the scene
+    //add skybox to scene
     var skybox = BABYLON.Mesh.CreateBox("skyBox", 5000.0, scene);
     var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
     skyboxMaterial.backFaceCulling = false;
@@ -51,7 +57,6 @@ window.addEventListener("DOMContentLoaded", async function() {
       "textures/TropicalSunnyDay",
       scene
     );
-
     skyboxMaterial.reflectionTexture.coordinatesMode =
       BABYLON.Texture.SKYBOX_MODE;
     skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
@@ -175,28 +180,68 @@ window.addEventListener("DOMContentLoaded", async function() {
           var waterHeight = getWaterHeightAtCoordinates(x, z, waterMaterial);
           meshes[mesh].position.y = waterHeight - 35;
           timeofDay = dayTime;
+          //check time of day
           if (timeofDay == false) {
-            console.log("be blue!");
+            console.log(weatherState);
             groundMaterial.diffuseColor = new BABYLON.Color3(0.02, 0.03, 0.17);
             groundMaterial.emissiveColor = new BABYLON.Color3(0.02, 0.03, 0.17);
+              if (skyboxMaterial.reflectionTexture != "textures/night_skybox/sky1") {
+                skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(
+                "textures/night_skybox/sky1",
+                scene
+              );
+            }
+            skybox.material = skyboxMaterial;
+            //assign rain ps to mysystem var
+            if (weatherState == "rainy" && isRaining == false) {
+              console.log("rainnn!!!");
+              new BABYLON.ParticleHelper.CreateAsync("rain", scene).then((systems) => {
+                systems.start();
+                mysystem = systems;
+             });
+              isRaining = true;
+            }
+            //kill mystem var/the rain
+            if (weatherState == "clear") {
+              isRaining = false;
+              console.log("clear loop");
+
+              if (mysystem != null) {
+                console.log("kill");
+                mysystem.dispose();
+              }
+            }
           }
           if (timeofDay == true) {
-            console.log("be red!");
             groundMaterial.diffuseColor = new BABYLON.Color3(0.02, 0.03, 0.17);
             groundMaterial.emissiveColor = new BABYLON.Color3(0.02, 0.03, 0.17);
-          }
-          if (timeofDay == false) {    
-            skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(
-            "textures/night_skybox/sky1",
-            scene
-          );
-          }
-          else {
-            skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(
-            "textures/TropicalSunnyDay",
-            scene
+            if (skyboxMaterial.reflectionTexture != "textures/TropicalSunnyDay") {
+              skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(
+              "textures/TropicalSunnyDay",
+              scene
             );
           }
+          skybox.material = skyboxMaterial;
+          //assign rain ps to mysystem var
+          if (weatherState == "rainy" && isRaining == false) {
+            console.log("rainnn!!!");
+            new BABYLON.ParticleHelper.CreateAsync("rain", scene).then((systems) => {
+              systems.start();
+              mysystem = systems;
+           });
+            isRaining = true;
+          }
+          //kill mystem var/the rain
+          if (weatherState == "clear") {
+            isRaining = false;
+            console.log("clear loop");
+
+            if (mysystem != null) {
+              console.log("kill");
+              mysystem.dispose();
+            }
+          }
+        }
         });
 
         //lower the boat as it was floating above the water
@@ -230,7 +275,6 @@ window.addEventListener("DOMContentLoaded", async function() {
   //     set.start();
   // });
   
-    rain(scene);
 
     // return the created scene
     return scene;
@@ -809,26 +853,26 @@ window.addEventListener("DOMContentLoaded", async function() {
 var scene_toggle_counter = 0;
 var scene_options_showed = 1;
 
-function toggle_scenepanel(){
-  console.log("toggle scene pannel");
-  console.log(scene_toggle_counter )
+// function toggle_scenepanel(){
+//   console.log("toggle scene pannel");
+//   console.log(scene_toggle_counter )
 
-  if (scene_toggle_counter == 0){
-    $('#sceneTypes').animate({ left: '+=340px'  });
-    scene_toggle_counter = 1;
-    console.log("okay move right + 350px");
+//   if (scene_toggle_counter == 0){
+//     $('#sceneTypes').animate({ left: '+=340px'  });
+//     scene_toggle_counter = 1;
+//     console.log("okay move right + 350px");
 
-  }
-  else if(scene_toggle_counter ==1){
-    $('#sceneTypes').animate({ left: '-=340px'  });
-    scene_toggle_counter = 0;
-    scene_options_showed = 0;
+//   }
+//   else if(scene_toggle_counter ==1){
+//     $('#sceneTypes').animate({ left: '-=340px'  });
+//     scene_toggle_counter = 0;
+//     scene_options_showed = 0;
 
-    console.log("okay move right - 350px");
+//     console.log("okay move right - 350px");
 
-  }
+//   }
 
-}
+// }
 
 //hide panel at the beginning
 // $("#sceneTypesContent").slideToggle();
@@ -862,6 +906,15 @@ function changeTimeDay(timeofDay) {
   else if (timeofDay == "day") {
     dayTime = true;
   }
+}
+
+function changeWeather(weather) {
+  // if (weather != prevWeatherState) {
+    weatherState = weather;
+  //   console.log("debounce");
+  // } else {
+  //   prevWeatherState = weather;
+  // }
 }
 
 
