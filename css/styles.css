@@ -49,8 +49,11 @@ body {
   text-align: center;
   display: flex;
   flex-wrap: wrap;
-
 }
+
+/* .flexDisplay {
+  display: flex;
+} */
 
 #sceneTypesContent .column {
   margin-top: 40px;
@@ -145,5 +148,10 @@ body {
 }
 #dialog iframe{
   margin:0 auto;
+}
+
+
+.weatherSelect{
+  cursor: pointer;
 }
 
