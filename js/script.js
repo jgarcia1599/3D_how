@@ -588,7 +588,7 @@ window.addEventListener("DOMContentLoaded", async function() {
     return scene;
   };
 
-  var desertSceneCreate = function() {
+  var desertSceneCreate = function(timeofDay, currentWeather) {
     // create a basic BJS Scene object
     var scene = new BABYLON.Scene(engine);
 
@@ -933,7 +933,7 @@ window.addEventListener("DOMContentLoaded", async function() {
   var beachSceneDay = beachSceneCreate(dayTime, weatherState);
   var beachSceneNight = beachSceneCreate(dayTime, weatherState);
 
-  var desertSceneDay = desertSceneCreate(dayTime, weatherState);
+  var desertScene = desertSceneCreate(dayTime, weatherState);
   var desertSceneNight = desertSceneCreate(dayTime, weatherState);
 
 
