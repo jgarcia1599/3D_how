@@ -40,6 +40,7 @@ window.addEventListener("DOMContentLoaded", async function() {
     );
     camera.lowerRadiusLimit = 1;
     camera.upperRadiusLimit = 40;
+    camera.rotationOffset=0;
     camera.attachControl(canvas, true);
     var renderer = scene.enableDepthRenderer();
 
@@ -114,11 +115,16 @@ window.addEventListener("DOMContentLoaded", async function() {
     ground.position.y = -70;
     ground.material = groundMaterial;
 
+    var boat = []
+
     BABYLON.SceneLoader.ImportMesh(null, "dhow/", "dhow_2.obj", scene, function(
       meshes
     ) {
       //postioning of meshes
       for (mesh in meshes) {
+        boat.push(mesh);
+
+
         //mesh positioning
         var dhow = meshes[mesh];
         console.log("Dhow position");
@@ -171,8 +177,6 @@ window.addEventListener("DOMContentLoaded", async function() {
           }));
 // Resources: https://www.babylonjs-playground.com/#XCPP9Y#13
 
-        ////////// RAY CAST TO FIND WATER HEIGHT ////////////
-        //var angle = 0;
         let i = 0;
 
         scene.registerBeforeRender(function() {
@@ -180,6 +184,7 @@ window.addEventListener("DOMContentLoaded", async function() {
           var z = meshes[mesh].position.z;
           var waterHeight = getWaterHeightAtCoordinates(x, z, waterMaterial);
           meshes[mesh].position.y = waterHeight - 35;
+
           timeofDay = dayTime;
           //check time of day
           if (timeofDay == false) {
@@ -254,12 +259,43 @@ window.addEventListener("DOMContentLoaded", async function() {
           // skybox.material = skyboxMaterial;
 
         }
+
+          
+
+          // Work on fixing boat inside water issue, dont delete
+
+          // var size = meshes[mesh].getBoundingInfo().boundingBox.extendSize;
+          // console.log("Size: ",size);
+
+
+          // // waterMesh.subMeshes = [];
+          // var verticesCount = waterMesh.getTotalVertices();
+          // console.log("Vertices\n",verticesCount);
+
+
+          // var transparent_material = BABYLON
+
+          // if (waterMesh.intersectsMesh(meshes[mesh],false)){
+          //   console.log("Boat is inside water");
+          //   waterMesh.material.waterColor = new BABYLON.Color4(1, 0, 0, 1,0);
+          // }
+          // else{
+          //   waterMesh.material.waterColor = new BABYLON.Color3(0, 0.1, 0.21);
+
+          // }
+
         });
+
+          
+
+
 
         //lower the boat as it was floating above the water
       }
     });
     console.log(i);
+
+    
 
     // Configure water material
     waterMaterial.addToRenderList(ground);
@@ -286,6 +322,7 @@ window.addEventListener("DOMContentLoaded", async function() {
   //   BABYLON.ParticleHelper.CreateAsync("rain", scene, false).then((set) => {
   //     set.start();
   // });
+
   function changeSkybox(pathToFile, localSkybox) {
     localSkybox.dispose();
     var skybox = BABYLON.Mesh.CreateBox("skyBox", 5000.0, scene);
@@ -303,6 +340,26 @@ window.addEventListener("DOMContentLoaded", async function() {
     waterMaterial.addToRenderList(skybox);
     currentSkyboxName = pathToFile;
   }
+
+    // Default Environment
+
+
+  //VRStuff
+  var environment = scene.createDefaultEnvironment({ enableGroundShadow: true, groundYBias: 1 });
+  environment.setMainColor(BABYLON.Color3.FromHexString("#74b9ff"))
+  var vrHelper = scene.createDefaultVRExperience({createDeviceOrientationCamera:false});
+  vrHelper.enableTeleportation({floorMeshes: [environment.ground]});
+  vrHelper.onAfterEnteringVRObservable.add(()=>{
+    if(scene.activeCamera === vrHelper.vrDeviceOrientationCamera){
+        BABYLON.FreeCameraDeviceOrientationInput.WaitForOrientationChangeAsync(1000).then(()=>{
+            // Successfully received sensor input
+        }).catch(()=>{
+            console.log("Device orientation camera is being used but no sensor is found, prompt user to enable in safari settings");
+        })
+    }
+})
+
+
 
     // return the created scene
     return scene;
@@ -386,7 +443,6 @@ window.addEventListener("DOMContentLoaded", async function() {
     );
     waterMesh.material = waterMaterial;
 
-    //Ground
 
     // Ground
     var groundMaterial = new BABYLON.StandardMaterial("groundMaterial", scene);
@@ -560,6 +616,19 @@ window.addEventListener("DOMContentLoaded", async function() {
         ) * 0.6
       );
     };
+    var environment = scene.createDefaultEnvironment({ enableGroundShadow: true, groundYBias: 1 });
+    environment.setMainColor(BABYLON.Color3.FromHexString("#74b9ff"))
+    var vrHelper = scene.createDefaultVRExperience({createDeviceOrientationCamera:false});
+    vrHelper.enableTeleportation({floorMeshes: [environment.ground]});
+    vrHelper.onAfterEnteringVRObservable.add(()=>{
+      if(scene.activeCamera === vrHelper.vrDeviceOrientationCamera){
+          BABYLON.FreeCameraDeviceOrientationInput.WaitForOrientationChangeAsync(1000).then(()=>{
+              // Successfully received sensor input
+          }).catch(()=>{
+              console.log("Device orientation camera is being used but no sensor is found, prompt user to enable in safari settings");
+          })
+      }
+  })
 
     //Rain Stuff
     console.log("Ok lets try to do rain")
@@ -789,6 +858,20 @@ window.addEventListener("DOMContentLoaded", async function() {
     console.log(i);
     // return the created scene
     rain(scene);
+
+    var environment = scene.createDefaultEnvironment({ enableGroundShadow: true, groundYBias: 1 });
+    environment.setMainColor(BABYLON.Color3.FromHexString("#74b9ff"))
+    var vrHelper = scene.createDefaultVRExperience({createDeviceOrientationCamera:false});
+    vrHelper.enableTeleportation({floorMeshes: [environment.ground]});
+    vrHelper.onAfterEnteringVRObservable.add(()=>{
+      if(scene.activeCamera === vrHelper.vrDeviceOrientationCamera){
+          BABYLON.FreeCameraDeviceOrientationInput.WaitForOrientationChangeAsync(1000).then(()=>{
+              // Successfully received sensor input
+          }).catch(()=>{
+              console.log("Device orientation camera is being used but no sensor is found, prompt user to enable in safari settings");
+          })
+      }
+  })
     return scene;
   };
 
@@ -922,6 +1005,20 @@ window.addEventListener("DOMContentLoaded", async function() {
     });
     console.log(i);
     // return the created scene
+
+    var environment = scene.createDefaultEnvironment({ enableGroundShadow: true, groundYBias: 1 });
+    environment.setMainColor(BABYLON.Color3.FromHexString("#74b9ff"))
+    var vrHelper = scene.createDefaultVRExperience({createDeviceOrientationCamera:false});
+    vrHelper.enableTeleportation({floorMeshes: [environment.ground]});
+    vrHelper.onAfterEnteringVRObservable.add(()=>{
+      if(scene.activeCamera === vrHelper.vrDeviceOrientationCamera){
+          BABYLON.FreeCameraDeviceOrientationInput.WaitForOrientationChangeAsync(1000).then(()=>{
+              // Successfully received sensor input
+          }).catch(()=>{
+              console.log("Device orientation camera is being used but no sensor is found, prompt user to enable in safari settings");
+          })
+      }
+  })
     return scene;
   };
 
@@ -1005,7 +1102,6 @@ $("#sceneTypesContent").slideToggle();
 $("#min-max-button").click(function() {
   console.log("clicked");
   $("#sceneTypesContent").slideToggle();
-  // $("sceneTypesContent").css('display','flex');
   var button = $(this).find("i");
   if (button.hasClass("fa fa-window-minimize")) {
     console.log("he");
@@ -1054,6 +1150,32 @@ function changeWeather(weather) {
 
 //Weather stuff
 
+function enableSunnyWeather(){
+  console.log("Ok its sunny");
+
+}
+
+function enableRainyWeather(){
+  console.log("Ok its rainy now");
+
+
+}
+
+function enableSnowyWeather(){
+  console.log("Ok its rainy now");
+
+
+}
+
+function enableDay(){
+  console.log("Rise and Shinee!!!");
+
+}
+
+function enableNight(){
+  console.log("Ok good nigghhttt!!!")
+
+}
 
 //Weather UI;
 // Based on Steven's UI
@@ -1100,10 +1222,6 @@ $("#city-scrolldown").click(function() {
 
 
 
-//Open Weather Stuff
-
-var open_weather_key = "4e6fc4bba619975d9060a9b9da350bf1"
-var open_weather_endpoint = "api.openweathermap.org/data/2.5/weather"
 
 
 function rain(scene){
@@ -1112,3 +1230,7 @@ function rain(scene){
   });
 }
 
+
+
+
+// https://www.babylonjs-playground.com/#L76FB1#120
