@@ -10,16 +10,25 @@
   font-family: "Gotham-Medium";
   src: url("./fonts/Gotham-Medium.TTF");
 }
-body {
-  font-family: "Gotham-Light";
+
+@font-face {
+  font-family: "Gill-Sans";
+  src: url("./fonts/GillSans.ttc");
 }
-#sceneTypes {
+@font-face {
+  font-family: "Gill-Sans-Bold";
+  src: url("./fonts/Gill-Sans-Bold.ttf");
+}
+body {
+  font-family: "Gill-Sans";
+}
+/* #sceneTypes {
   width: 300px;
   height: 80px;
   position: absolute;
   left: 10px;
   top: 10px;
-  background: #303048;
+  background: #3f3f3f;
   border-radius: 20px;
   color: white;
   text-align: center;
@@ -33,30 +42,60 @@ body {
   height: 30px;
   cursor: pointer;
 
-}
+} */
 
 
-#sceneTypesContent {
-  width: 300px;
-  height: 360px;
+.sceneTypesContent {
+  width: 160px;
   position: absolute;
-  left: 10px;
-  top: 55px;
-  background: #303048;
-  border-radius: 0 0 20px 20px;
+  top: 10px;
+  background: #3f3f3f;
+  border-radius: 11px;
   color: white;
-  text-align: center;
-  display: flex;
-  flex-wrap: wrap;
+  padding: 10px;
+  box-shadow: 2px 2px 2px #484848;
+}
+
+#upperLeft {
+  left: 10px;
+  height: 195px;
+  width: 160px;
 
 }
 
-#sceneTypesContent .column {
-  margin-top: 40px;
-  flex: 50%;
+#upperRight {
+  right: 10px;
+  height: 165px;
+  width: 140px;
+
+
+}
+
+.active {
+  color: #f26321;
+}
+
+.sceneTypesContent .column {
+  margin-top: 5px;
   cursor: pointer;
+  font-size: 10px;
 }
-#sceneTypesContent .column img {
+.sceneTypesContent i {
+  float: left;
+  margin-left: 20px;
+  font-size: 25px;
+}
+.sceneTypesContent h1 {
+  margin-left: 75px;
+}
+#titleSceneTypesContent {
+  text-align: center !important;
+  margin-left: 0px;
+  font-family: "Gill-Sans-Bold";
+  font-size: 20px;
+  margin-bottom: 0px;
+}
+.sceneTypesContent .column img {
   width: 130px;
   height: 110px;
   z-index: 3;
@@ -120,7 +159,7 @@ body {
   width: 60px;
   height: 200px;
   position: absolute;
-  right: 0;
+  right: 0px;
   top: 50%;
   z-index: 4;
   background: #303048;
@@ -131,8 +170,6 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
-  /* display:none; */
-  /* left:-350px; */
 }
 
 #weatherContentPopOut i{
@@ -173,22 +210,21 @@ body {
 
 #toggleNightDay {
   position: absolute;
-  top: 6%;
+  top: 30px;
   left: 50%;
-  transform: translate(-50%, -50%);  height: 30px;
-  width: 100px;
-  height: 40px;
-  background-color: #303048;
+  transform: translate(-50%, -50%);  
+  height: 50px;
+  width: 110px;
+  border-radius: 10px;
+  background-color: #3f3f3f;
   text-align: center;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
-  border-radius: 15px;
 }
 
-#toggleNightDay img {
-  width: 24px;
-  height: 24px;
+#toggleNightDay i {
+  font-size: 30px;
   cursor: pointer;
 }

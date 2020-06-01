@@ -312,7 +312,6 @@ window.addEventListener("DOMContentLoaded", async function() {
     // create a basic BJS Scene object
 
     var timeofDay = dayTime;
-    console.log("switch time!");
     // create a basic BJS Scene object
     var scene = new BABYLON.Scene(engine);
     // scene.debugLayer.show();
@@ -590,6 +589,8 @@ window.addEventListener("DOMContentLoaded", async function() {
 
   var desertSceneCreate = function(timeofDay, currentWeather) {
     // create a basic BJS Scene object
+    var timeofDay = dayTime;
+
     var scene = new BABYLON.Scene(engine);
 
     // Camera
@@ -615,6 +616,7 @@ window.addEventListener("DOMContentLoaded", async function() {
     //fix specular to not make material so glossy
     light.diffuse = new BABYLON.Color3(1, 1, 1);
     light.specular = new BABYLON.Color3(0, 0, 0);
+    currentSkyboxName = "textures/overcastAndRainy/overcast";
 
     //Adding the skybox to the scene
     var skybox = BABYLON.Mesh.CreateBox("skyBox", 5000.0, scene);
@@ -776,19 +778,111 @@ window.addEventListener("DOMContentLoaded", async function() {
         ////////// RAY CAST TO FIND WATER HEIGHT ////////////
         //var angle = 0;
         let i = 0;
-
         scene.registerBeforeRender(function() {
-          var x = meshes[mesh].position.x;
           meshes[mesh].position.z = 150;
           meshes[mesh].position.y = -51;
+          timeofDay = dayTime;
+          //check time of day
+          console.log(isRaining);
+          if (timeofDay == false) {
+            console.log(weatherState);
+            if (currentSkyboxName != "textures/nightSkyboxClear/clearNight") {
+                changeSkybox("textures/nightSkyboxClear/clearNight", skybox);
+                skybox.dispose();
+            }
+            //assign rain ps to mysystem var
+            if (weatherState == "rainy" && isRaining == false) {
+              if (mysystem != null) {
+                new BABYLON.ParticleHelper.CreateAsync("rain", scene).then((systems) => {
+                  systems.start();
+                  mysystem = systems;
+                });
+              }
+
+              isRaining = true;
+            }
+            //kill mystem var/the rain
+            if (weatherState == "clear") {
+              isRaining = false;
+              if (mysystem != null) {
+                mysystem.dispose();
+              }
+            }
+          }
+
+          if (timeofDay == true) {
+            // groundMaterial.diffuseColor = new BABYLON.Color3(0.02, 0.03, 0.17);
+            // groundMaterial.emissiveColor = new BABYLON.Color3(0.02, 0.03, 0.17);
+            //assign rain ps to mysystem var
+            if (weatherState == "rainy" && isRaining == false) {
+              console.log("rainnn!!!");
+              new BABYLON.ParticleHelper.CreateAsync("rain", scene).then((systems) => {
+                systems.start();
+                mysystem = systems;
+            });
+                if (currentSkyboxName != "textures/overcastAndRainy/overcast") {
+                  changeSkybox("textures/overcastAndRainy/overcast", skybox);
+                  skybox.dispose();
+              }
+              isRaining = true;
+            }
+          //kill msystem var/the rain
+            if (weatherState == "clear") {
+              isRaining = false;
+              if (mysystem != null) {
+                mysystem.dispose();
+              }
+              if (currentSkyboxName != "textures/TropicalSunnyDay") {
+              changeSkybox("textures/TropicalSunnyDay", skybox);
+              skybox.dispose();
+            }
+          }
+        }
         });
 
         //lower the boat as it was floating above the water
       }
     });
     console.log(i);
+
+    // Configure water material
+    // waterMaterial.addToRenderList(ground);
+    // waterMaterial.addToRenderList(skybox);
+
+    var getWaterHeightAtCoordinates = function(x, z, waterMaterial) {
+      var time = waterMaterial._lastTime / 100000;
+      return (
+        Math.abs(
+          Math.sin(x / 0.05 + time * waterMaterial.waveSpeed) *
+            waterMaterial.waveHeight *
+            waterMaterial.windDirection.x *
+            5.0 +
+            Math.cos(z / 0.05 + time * waterMaterial.waveSpeed) *
+              waterMaterial.waveHeight *
+              waterMaterial.windDirection.y *
+              5.0
+        ) * 0.6
+      );
+    };
+  function changeSkybox(pathToFile, localSkybox) {
+    localSkybox.dispose();
+    var skybox = BABYLON.Mesh.CreateBox("skyBox", 5000.0, scene);
+    var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+    skyboxMaterial.backFaceCulling = false;
+    skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(
+      pathToFile,
+      scene
+    );
+    skyboxMaterial.reflectionTexture.coordinatesMode =
+      BABYLON.Texture.SKYBOX_MODE;
+    skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+    skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+    skybox.material = skyboxMaterial;
+    // waterMaterial.addToRenderList(skybox);
+    currentSkyboxName = pathToFile;
+  }
+
     // return the created scene
-    rain(scene);
     return scene;
   };
 
@@ -933,7 +1027,7 @@ window.addEventListener("DOMContentLoaded", async function() {
   var beachSceneDay = beachSceneCreate(dayTime, weatherState);
   var beachSceneNight = beachSceneCreate(dayTime, weatherState);
 
-  var desertScene = desertSceneCreate(dayTime, weatherState);
+  var desertSceneDay = desertSceneCreate(dayTime, weatherState);
   var desertSceneNight = desertSceneCreate(dayTime, weatherState);
 
 
@@ -953,9 +1047,14 @@ window.addEventListener("DOMContentLoaded", async function() {
       beachSceneNight.render();
     }
     
-    else if (state == "desert") {
-      desertScene.render();
-    } else if (state == "museum") {
+    else if (state == "desert" && dayTime == true) {
+      desertSceneDay.render();
+    } 
+    else if (state == "desert" && dayTime == false) {
+      desertSceneNight.render();
+    }
+    
+    else if (state == "museum") {
       museumScene.render();
     }
   });
@@ -1001,53 +1100,84 @@ var scene_options_showed = 1;
 
 //hide panel at the beginning
 // $("#sceneTypesContent").slideToggle();
-$("#sceneTypesContent").slideToggle();
-$("#min-max-button").click(function() {
-  console.log("clicked");
-  $("#sceneTypesContent").slideToggle();
-  // $("sceneTypesContent").css('display','flex');
-  var button = $(this).find("i");
-  if (button.hasClass("fa fa-window-minimize")) {
-    console.log("he");
-    scene_options_showed = 1;
-    button.removeClass("fas fa-window-minimize");
-    button.addClass("fa fa-window-maximize");
-  } else if (button.hasClass("fa fa-window-maximize")) {
-    button.removeClass("fas fa-window-maximize");
+// $("#sceneTypesContent").slideToggle();
+// $("#min-max-button").click(function() {
+//   console.log("clicked");
+//   $("#sceneTypesContent").slideToggle();
+//   // $("sceneTypesContent").css('display','flex');
+//   var button = $(this).find("i");
+//   if (button.hasClass("fa fa-window-minimize")) {
+//     console.log("he");
+//     scene_options_showed = 1;
+//     button.removeClass("fas fa-window-minimize");
+//     button.addClass("fa fa-window-maximize");
+//   } else if (button.hasClass("fa fa-window-maximize")) {
+//     button.removeClass("fas fa-window-maximize");
 
-    button.addClass("fa fa-window-minimize");
-  }
-});
+//     button.addClass("fa fa-window-minimize");
+//   }
+// });
 
-function changeRender(sceneName) {
+function changeRender(sceneName, e) {
   console.log(sceneName);
   isRaining = false;
   weatherState = "clear";
   state = sceneName;
+  dayTime = true;
+  var environment = document.getElementsByClassName('environment');
+  var weather = document.getElementsByClassName('weather');
+  var defaultSunny = document.getElementById('sunnyDefault');
+  var nightIcon = document.getElementById('nightDefault');
+  var dayIcon = document.getElementById('dayDefault')
+  for (i = 0; i < environment.length; i++) {
+    environment[i].className = "column environment";
+  }
+  for (i = 0; i < weather.length; i++) {
+    weather[i].className = "column weather";
+  }
+  console.log(e);
+  defaultSunny.className = "column weather active";
+  e.className = "column environment active";
+  dayIcon.className = "far fa-sun nightDay active";
+  nightIcon.className =  "fas fa-moon nightDay";
 }
 
 function changeTimeDay(timeofDay) {
+  var nightIcon = document.getElementById('nightDefault');
+  var dayIcon = document.getElementById('dayDefault')
+
   if (timeofDay == "night") {
     isRaining = false;
     weatherState = "clear";
     dayTime = false;
-
+    dayIcon.className = "far fa-sun nightDay";
+    nightIcon.className =  "fas fa-moon nightDay active";
   }
   else if (timeofDay == "day") {
     isRaining = false;
     weatherState = "clear";
     dayTime = true;
+    dayIcon.className = "far fa-sun nightDay active";
+    nightIcon.className =  "fas fa-moon nightDay";
   }
+  var defaultSunny = document.getElementById('sunnyDefault');
+  var weather = document.getElementsByClassName('weather');
+  for (i = 0; i < weather.length; i++) {
+    weather[i].className = "column weather";
+  }
+  defaultSunny.className = "column weather active";
+
 }
 
-function changeWeather(weather) {
+function changeWeather(weather, e) {
   isRaining = false;
-  // if (weather != prevWeatherState) {
-    weatherState = weather;
-  //   console.log("debounce");
-  // } else {
-  //   prevWeatherState = weather;
-  // }
+  weatherState = weather;
+  var weather = document.getElementsByClassName('weather');
+  for (i = 0; i < weather.length; i++) {
+    weather[i].className = "column weather";
+  }
+  console.log(e);
+  e.className = "column weather active";
 }
 
 
@@ -1058,43 +1188,43 @@ function changeWeather(weather) {
 //Weather UI;
 // Based on Steven's UI
 
-var toggle_counter = 1;
-var options_showed = 0;
-function toggle_weatherpanel(){
-  console.log("toggle");
-  console.log(toggle_counter)
+// var toggle_counter = 1;
+// var options_showed = 0;
+// function toggle_weatherpanel(){
+//   console.log("toggle");
+//   console.log(toggle_counter)
 
-  if (toggle_counter == 0){
-    $('#citysearchbar').animate({ left: '+=350px'  });
-    toggle_counter = 1;
-    console.log("lalalalala");
+//   if (toggle_counter == 0){
+//     $('#citysearchbar').animate({ left: '+=350px'  });
+//     toggle_counter = 1;
+//     console.log("lalalalala");
 
-  }
-  else if(toggle_counter ==1){
-    $('#citysearchbar').animate({ left: '-=350px'  });
-    toggle_counter = 0;
-    options_showed = 0;
+//   }
+//   else if(toggle_counter ==1){
+//     $('#citysearchbar').animate({ left: '-=350px'  });
+//     toggle_counter = 0;
+//     options_showed = 0;
 
-  }
-}
+//   }
+// }
 
 
-$("#city-scrolldown").click(function() {
-  console.log("clicked weather stuff");
-  $("#weatherContent").slideToggle();
-  var button = $(this).find("i");
-  if (button.hasClass("fa fa-window-minimize")) {
-    //options have been showed, we can hide the panel
-    options_showed = 1;
-    console.log("he");
-    button.removeClass("fas fa-window-minimize");
-    button.addClass("fa fa-window-maximize");
-  } else if (button.hasClass("fa fa-window-maximize")) {
-    button.removeClass("fas fa-window-maximize");
+// $("#city-scrolldown").click(function() {
+//   console.log("clicked weather stuff");
+//   $("#weatherContent").slideToggle();
+//   var button = $(this).find("i");
+//   if (button.hasClass("fa fa-window-minimize")) {
+//     //options have been showed, we can hide the panel
+//     options_showed = 1;
+//     console.log("he");
+//     button.removeClass("fas fa-window-minimize");
+//     button.addClass("fa fa-window-maximize");
+//   } else if (button.hasClass("fa fa-window-maximize")) {
+//     button.removeClass("fas fa-window-maximize");
 
-    button.addClass("fa fa-window-minimize");
-  }
-});
+//     button.addClass("fa fa-window-minimize");
+//   }
+// });
 
 //Central Panel Stuff
 
