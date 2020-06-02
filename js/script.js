@@ -8,21 +8,21 @@ var weatherState = "clear";
 var isRaining = false;
 var prevDayTime = false;
 var mysystem;
-var currentSkyboxName; 
+var currentSkyboxName;
 
 var url =
   "https://cdn.rawgit.com/BabylonJS/Extensions/master/DynamicTerrain/dist/babylon.dynamicTerrain.min.js";
 var s = document.createElement("script");
 s.src = url;
 document.head.appendChild(s);
-window.addEventListener("DOMContentLoaded", async function() {
+window.addEventListener("DOMContentLoaded", async function () {
   // get the canvas DOM element
   var canvas = document.getElementById("renderCanvas");
 
   // load the 3D engine
   var engine = new BABYLON.Engine(canvas, true);
   // createScene function that creates and return the scene
-  var createScene = function(timeofDay, currentWeather) {
+  var createScene = function (timeofDay, currentWeather) {
     var timeofDay = dayTime;
     weatherState = "clear";
     // create a basic BJS Scene object
@@ -110,11 +110,11 @@ window.addEventListener("DOMContentLoaded", async function() {
       false
     );
 
-    
+
     ground.position.y = -70;
     ground.material = groundMaterial;
 
-    BABYLON.SceneLoader.ImportMesh(null, "dhow/", "dhow_2.obj", scene, function(
+    BABYLON.SceneLoader.ImportMesh(null, "dhow/", "dhow_posAdjusted.obj", scene, function (
       meshes
     ) {
       //postioning of meshes
@@ -133,72 +133,73 @@ window.addEventListener("DOMContentLoaded", async function() {
         meshes[mesh].actionManager = new BABYLON.ActionManager(scene);
         meshes[mesh].actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickUpTrigger, function () {
           // alert('Boat Clicked')
-              // GUI
+          // GUI
           // console.log(i);
           console.log("Ok boat has been clicked");
-          $( "#dialog" ).dialog({
+          $("#dialog").dialog({
             height: 600,
             width: 800,
             dialogClass: "no-close success-dialog",
             buttons: [
               {
                 text: "Next",
-                click: function() {
-                  $( this ).dialog( "close" );
+                click: function () {
+                  $(this).dialog("close");
                 }
               }
             ]
           });
 
-          
 
-          }));
 
-          var hl = new BABYLON.HighlightLayer("hl1", scene);
+        }));
 
-          //On Mouse Enter
-          meshes[mesh].actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, function(ev){	
-            console.log("ok im in the boat");
-            hl.addMesh(meshes[mesh], new BABYLON.Color3(0.99,1,0.51));
-          }));
-          
-          //ON MOUSE EXIT
-          meshes[mesh].actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOutTrigger, function(ev){
-            // mesh.material.emissiveColor = BABYLON.Color3.Black();
-            console.log("Ok im outside the boat");
-            hl.removeMesh(meshes[mesh]);
+        var hl = new BABYLON.HighlightLayer("hl1", scene);
 
-          }));
-// Resources: https://www.babylonjs-playground.com/#XCPP9Y#13
+        //On Mouse Enter
+        meshes[mesh].actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, function (ev) {
+          console.log("ok im in the boat");
+          hl.addMesh(meshes[mesh], new BABYLON.Color3(0.99, 1, 0.51));
+        }));
+
+        //ON MOUSE EXIT
+        meshes[mesh].actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOutTrigger, function (ev) {
+          // mesh.material.emissiveColor = BABYLON.Color3.Black();
+          console.log("Ok im outside the boat");
+          hl.removeMesh(meshes[mesh]);
+
+        }));
+        // Resources: https://www.babylonjs-playground.com/#XCPP9Y#13
 
         ////////// RAY CAST TO FIND WATER HEIGHT ////////////
         //var angle = 0;
         let i = 0;
 
-        scene.registerBeforeRender(function() {
+        scene.registerBeforeRender(function () {
           var x = meshes[mesh].position.x;
           var z = meshes[mesh].position.z;
           var waterHeight = getWaterHeightAtCoordinates(x, z, waterMaterial);
           meshes[mesh].position.y = waterHeight - 35;
+          console.log(meshes[mesh].position.y);
           timeofDay = dayTime;
           //check time of day
           if (timeofDay == false) {
-            console.log("israining is: "+ isRaining);
-            console.log("state is: "+ weatherState);
+            console.log("israining is: " + isRaining);
+            console.log("state is: " + weatherState);
 
             groundMaterial.diffuseColor = new BABYLON.Color3(0.02, 0.03, 0.17);
             groundMaterial.emissiveColor = new BABYLON.Color3(0.02, 0.03, 0.17);
             if (currentSkyboxName != "textures/nightSkyboxClear/clearNight") {
-                changeSkybox("textures/nightSkyboxClear/clearNight", skybox);
-                skybox.dispose();
+              changeSkybox("textures/nightSkyboxClear/clearNight", skybox);
+              skybox.dispose();
             }
             //assign rain ps to mysystem var
             if (weatherState == "rainy" && isRaining == false) {
-              console.log("rainnn!!!");
+              console.log("should be enlarged!!!");
               new BABYLON.ParticleHelper.CreateAsync("rain", scene).then((systems) => {
                 systems.start();
                 mysystem = systems;
-             });
+              });
               isRaining = true;
             }
             //kill mystem var/the rain
@@ -221,20 +222,14 @@ window.addEventListener("DOMContentLoaded", async function() {
               new BABYLON.ParticleHelper.CreateAsync("rain", scene).then((systems) => {
                 systems.start();
                 mysystem = systems;
-            });
-                isRaining = true;
-                if (currentSkyboxName != "textures/overcastAndRainy/overcast") {
-                  // skybox.dispose();
-                  // skyboxMaterial.dispose();
-                  // skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(
-                  // "textures/overcastAndRainy/overcast",
-                  // scene
-                  changeSkybox("textures/overcastAndRainy/overcast", skybox);
-                  skybox.dispose();
-                // );
+              });
+              isRaining = true;
+              if (currentSkyboxName != "textures/overcastAndRainy/overcast") {
+                changeSkybox("textures/overcastAndRainy/overcast", skybox);
+                skybox.dispose();
               }
             }
-          //kill msystem var/the rain
+            //kill msystem var/the rain
             if (weatherState == "clear") {
               isRaining = false;
               console.log("clear loop");
@@ -243,20 +238,12 @@ window.addEventListener("DOMContentLoaded", async function() {
                 mysystem.dispose();
               }
               if (currentSkyboxName != "textures/TropicalSunnyDay") {
-              //   skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(
-              //   "textures/TropicalSunnyDay",
-              //   scene
-              // );
-              changeSkybox("textures/TropicalSunnyDay", skybox);
-              skybox.dispose();
+                changeSkybox("textures/TropicalSunnyDay", skybox);
+                skybox.dispose();
+              }
             }
           }
-          // skybox.material = skyboxMaterial;
-
-        }
         });
-
-        //lower the boat as it was floating above the water
       }
     });
     console.log(i);
@@ -265,50 +252,50 @@ window.addEventListener("DOMContentLoaded", async function() {
     waterMaterial.addToRenderList(ground);
     waterMaterial.addToRenderList(skybox);
 
-    var getWaterHeightAtCoordinates = function(x, z, waterMaterial) {
+    var getWaterHeightAtCoordinates = function (x, z, waterMaterial) {
       var time = waterMaterial._lastTime / 100000;
       return (
         Math.abs(
           Math.sin(x / 0.05 + time * waterMaterial.waveSpeed) *
-            waterMaterial.waveHeight *
-            waterMaterial.windDirection.x *
-            5.0 +
-            Math.cos(z / 0.05 + time * waterMaterial.waveSpeed) *
-              waterMaterial.waveHeight *
-              waterMaterial.windDirection.y *
-              5.0
-        ) * 0.6
+          waterMaterial.waveHeight *
+          waterMaterial.windDirection.x *
+          5.0 +
+          Math.cos(z / 0.05 + time * waterMaterial.waveSpeed) *
+          waterMaterial.waveHeight *
+          waterMaterial.windDirection.y *
+          5.0
+        ) * 1
       );
     };
 
     //Rain Stuff
     console.log("Ok lets try to do rain")
-  //   BABYLON.ParticleHelper.CreateAsync("rain", scene, false).then((set) => {
-  //     set.start();
-  // });
-  function changeSkybox(pathToFile, localSkybox) {
-    localSkybox.dispose();
-    var skybox = BABYLON.Mesh.CreateBox("skyBox", 5000.0, scene);
-    var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
-    skyboxMaterial.backFaceCulling = false;
-    skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(
-      pathToFile,
-      scene
-    );
-    skyboxMaterial.reflectionTexture.coordinatesMode =
-      BABYLON.Texture.SKYBOX_MODE;
-    skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
-    skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
-    skybox.material = skyboxMaterial;
-    waterMaterial.addToRenderList(skybox);
-    currentSkyboxName = pathToFile;
-  }
+    //   BABYLON.ParticleHelper.CreateAsync("rain", scene, false).then((set) => {
+    //     set.start();
+    // });
+    function changeSkybox(pathToFile, localSkybox) {
+      localSkybox.dispose();
+      var skybox = BABYLON.Mesh.CreateBox("skyBox", 5000.0, scene);
+      var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+      skyboxMaterial.backFaceCulling = false;
+      skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(
+        pathToFile,
+        scene
+      );
+      skyboxMaterial.reflectionTexture.coordinatesMode =
+        BABYLON.Texture.SKYBOX_MODE;
+      skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+      skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+      skybox.material = skyboxMaterial;
+      waterMaterial.addToRenderList(skybox);
+      currentSkyboxName = pathToFile;
+    }
 
     // return the created scene
     return scene;
   };
 
-  var beachSceneCreate = function(timeofDay, currentWeather) {
+  var beachSceneCreate = function (timeofDay, currentWeather) {
     // create a basic BJS Scene object
 
     var timeofDay = dayTime;
@@ -410,7 +397,7 @@ window.addEventListener("DOMContentLoaded", async function() {
     );
     ground.material = groundMaterial;
 
-    BABYLON.SceneLoader.ImportMesh(null, "dhow/", "dhow_2.obj", scene, function(
+    BABYLON.SceneLoader.ImportMesh(null, "dhow/", "dhow_2.obj", scene, function (
       meshes
     ) {
       //postioning of meshes
@@ -429,38 +416,38 @@ window.addEventListener("DOMContentLoaded", async function() {
         meshes[mesh].actionManager = new BABYLON.ActionManager(scene);
         meshes[mesh].actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickUpTrigger, function () {
           // alert('Boat Clicked')
-              // GUI
+          // GUI
           // console.log(i);
           console.log("Ok boat has been clicked");
-          $( "#dialog" ).dialog({
+          $("#dialog").dialog({
             height: 600,
             width: 800,
             dialogClass: "no-close success-dialog",
             buttons: [
               {
                 text: "Next",
-                click: function() {
-                  $( this ).dialog( "close" );
+                click: function () {
+                  $(this).dialog("close");
                 }
               }
             ]
           });
-          }));
+        }));
 
-          var hl = new BABYLON.HighlightLayer("hl1", scene);
+        var hl = new BABYLON.HighlightLayer("hl1", scene);
 
-          //On Mouse Enter
-          meshes[mesh].actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, function(ev){	
-            console.log("ok im in the boat");
-            hl.addMesh(meshes[mesh], new BABYLON.Color3(0.99,1,0.51));
-          }));
-          
-          //ON MOUSE EXIT
-          meshes[mesh].actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOutTrigger, function(ev){
-            // mesh.material.emissiveColor = BABYLON.Color3.Black();
-            console.log("Ok im outside the boat");
-            hl.removeMesh(meshes[mesh]);
-          }));
+        //On Mouse Enter
+        meshes[mesh].actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, function (ev) {
+          console.log("ok im in the boat");
+          hl.addMesh(meshes[mesh], new BABYLON.Color3(0.99, 1, 0.51));
+        }));
+
+        //ON MOUSE EXIT
+        meshes[mesh].actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOutTrigger, function (ev) {
+          // mesh.material.emissiveColor = BABYLON.Color3.Black();
+          console.log("Ok im outside the boat");
+          hl.removeMesh(meshes[mesh]);
+        }));
 
         // Resources: https://www.babylonjs-playground.com/#XCPP9Y#13
 
@@ -468,7 +455,7 @@ window.addEventListener("DOMContentLoaded", async function() {
         //var angle = 0;
         let i = 0;
 
-        scene.registerBeforeRender(function() {
+        scene.registerBeforeRender(function () {
           var x = meshes[mesh].position.x;
           var z = meshes[mesh].position.z;
           var waterHeight = getWaterHeightAtCoordinates(x, z, waterMaterial);
@@ -481,8 +468,8 @@ window.addEventListener("DOMContentLoaded", async function() {
             groundMaterial.diffuseColor = new BABYLON.Color3(0.02, 0.03, 0.17);
             groundMaterial.emissiveColor = new BABYLON.Color3(0.02, 0.03, 0.17);
             if (currentSkyboxName != "textures/nightSkyboxClear/clearNight") {
-                changeSkybox("textures/nightSkyboxClear/clearNight", skybox);
-                skybox.dispose();
+              changeSkybox("textures/nightSkyboxClear/clearNight", skybox);
+              skybox.dispose();
             }
             //assign rain ps to mysystem var
             if (weatherState == "rainy" && isRaining == false) {
@@ -513,14 +500,14 @@ window.addEventListener("DOMContentLoaded", async function() {
               new BABYLON.ParticleHelper.CreateAsync("rain", scene).then((systems) => {
                 systems.start();
                 mysystem = systems;
-            });
-                if (currentSkyboxName != "textures/overcastAndRainy/overcast") {
-                  changeSkybox("textures/overcastAndRainy/overcast", skybox);
-                  skybox.dispose();
+              });
+              if (currentSkyboxName != "textures/overcastAndRainy/overcast") {
+                changeSkybox("textures/overcastAndRainy/overcast", skybox);
+                skybox.dispose();
               }
               isRaining = true;
             }
-          //kill msystem var/the rain
+            //kill msystem var/the rain
             if (weatherState == "clear") {
               console.log("in the clear");
               isRaining = false;
@@ -528,11 +515,11 @@ window.addEventListener("DOMContentLoaded", async function() {
                 mysystem.dispose();
               }
               if (currentSkyboxName != "textures/TropicalSunnyDay") {
-              changeSkybox("textures/TropicalSunnyDay", skybox);
-              skybox.dispose();
+                changeSkybox("textures/TropicalSunnyDay", skybox);
+                skybox.dispose();
+              }
             }
           }
-        }
         });
 
         //lower the boat as it was floating above the water
@@ -544,50 +531,50 @@ window.addEventListener("DOMContentLoaded", async function() {
     waterMaterial.addToRenderList(ground);
     waterMaterial.addToRenderList(skybox);
 
-    var getWaterHeightAtCoordinates = function(x, z, waterMaterial) {
+    var getWaterHeightAtCoordinates = function (x, z, waterMaterial) {
       var time = waterMaterial._lastTime / 100000;
       return (
         Math.abs(
           Math.sin(x / 0.05 + time * waterMaterial.waveSpeed) *
-            waterMaterial.waveHeight *
-            waterMaterial.windDirection.x *
-            5.0 +
-            Math.cos(z / 0.05 + time * waterMaterial.waveSpeed) *
-              waterMaterial.waveHeight *
-              waterMaterial.windDirection.y *
-              5.0
+          waterMaterial.waveHeight *
+          waterMaterial.windDirection.x *
+          5.0 +
+          Math.cos(z / 0.05 + time * waterMaterial.waveSpeed) *
+          waterMaterial.waveHeight *
+          waterMaterial.windDirection.y *
+          5.0
         ) * 0.6
       );
     };
 
     //Rain Stuff
     console.log("Ok lets try to do rain")
-  //   BABYLON.ParticleHelper.CreateAsync("rain", scene, false).then((set) => {
-  //     set.start();
-  // });
-  function changeSkybox(pathToFile, localSkybox) {
-    localSkybox.dispose();
-    var skybox = BABYLON.Mesh.CreateBox("skyBox", 5000.0, scene);
-    var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
-    skyboxMaterial.backFaceCulling = false;
-    skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(
-      pathToFile,
-      scene
-    );
-    skyboxMaterial.reflectionTexture.coordinatesMode =
-      BABYLON.Texture.SKYBOX_MODE;
-    skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
-    skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
-    skybox.material = skyboxMaterial;
-    waterMaterial.addToRenderList(skybox);
-    currentSkyboxName = pathToFile;
-  }
+    //   BABYLON.ParticleHelper.CreateAsync("rain", scene, false).then((set) => {
+    //     set.start();
+    // });
+    function changeSkybox(pathToFile, localSkybox) {
+      localSkybox.dispose();
+      var skybox = BABYLON.Mesh.CreateBox("skyBox", 5000.0, scene);
+      var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+      skyboxMaterial.backFaceCulling = false;
+      skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(
+        pathToFile,
+        scene
+      );
+      skyboxMaterial.reflectionTexture.coordinatesMode =
+        BABYLON.Texture.SKYBOX_MODE;
+      skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+      skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+      skybox.material = skyboxMaterial;
+      waterMaterial.addToRenderList(skybox);
+      currentSkyboxName = pathToFile;
+    }
 
     // return the created scene
     return scene;
   };
 
-  var desertSceneCreate = function(timeofDay, currentWeather) {
+  var desertSceneCreate = function (timeofDay, currentWeather) {
     // create a basic BJS Scene object
     var timeofDay = dayTime;
 
@@ -653,20 +640,20 @@ window.addEventListener("DOMContentLoaded", async function() {
       scene,
       false
     );
-        //add normal map
-        groundMaterial.bumpTexture = new BABYLON.Texture(
-          "textures/normalSand.png",
-          scene
-        );
-           groundMaterial.bumpTexture.uScale = 80.0;
-        groundMaterial.bumpTexture.vScale = 80.0;
+    //add normal map
+    groundMaterial.bumpTexture = new BABYLON.Texture(
+      "textures/normalSand.png",
+      scene
+    );
+    groundMaterial.bumpTexture.uScale = 80.0;
+    groundMaterial.bumpTexture.vScale = 80.0;
     ground.material = groundMaterial;
     //messing around with particle system
     var particleSystem = new BABYLON.ParticleSystem("particles", 4000, scene);
     particleSystem.textureMask = new BABYLON.Color4(0.1, 0.8, 0.8, 1.0);
 
     var source = BABYLON.Mesh.CreateBox("source", 3.0, scene);
-    source.position = new BABYLON.Vector3(0, 0, 130);
+    source.position = new BABYLON.Vector3(0, -20, 130);
     // Create a particle system
     var particleSystem = new BABYLON.ParticleSystem("particles", 2000, scene);
 
@@ -721,7 +708,7 @@ window.addEventListener("DOMContentLoaded", async function() {
     // Start the particle system
     particleSystem.start();
 
-    BABYLON.SceneLoader.ImportMesh(null, "dhow/", "dhow_2.obj", scene, function(
+    BABYLON.SceneLoader.ImportMesh(null, "dhow/", "dhow_2.obj", scene, function (
       meshes
     ) {
       //postioning of meshes
@@ -738,47 +725,40 @@ window.addEventListener("DOMContentLoaded", async function() {
         meshes[mesh].actionManager = new BABYLON.ActionManager(scene);
         meshes[mesh].actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickUpTrigger, function () {
           // alert('Boat Clicked')
-              // GUI
+          // GUI
           // console.log(i);
           console.log("Ok boat has been clicked");
-          $( "#dialog" ).dialog({
+          $("#dialog").dialog({
             height: 600,
             width: 800,
             dialogClass: "no-close success-dialog",
             buttons: [
               {
                 text: "Next",
-                click: function() {
-                  $( this ).dialog( "close" );
+                click: function () {
+                  $(this).dialog("close");
                 }
               }
             ]
           });
+        }));
 
-          
+        var hl = new BABYLON.HighlightLayer("hl1", scene);
 
-          }));
+        //On Mouse Enter
+        meshes[mesh].actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, function (ev) {
+          console.log("ok im in the boat");
+          hl.addMesh(meshes[mesh], new BABYLON.Color3(0.99, 1, 0.51));
+        }));
 
-          var hl = new BABYLON.HighlightLayer("hl1", scene);
+        //ON MOUSE EXIT
+        meshes[mesh].actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOutTrigger, function (ev) {
+          // mesh.material.emissiveColor = BABYLON.Color3.Black();
+          console.log("Ok im outside the boat");
+          hl.removeMesh(meshes[mesh]);
 
-          //On Mouse Enter
-          meshes[mesh].actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, function(ev){	
-            console.log("ok im in the boat");
-            hl.addMesh(meshes[mesh], new BABYLON.Color3(0.99,1,0.51));
-          }));
-          
-          //ON MOUSE EXIT
-          meshes[mesh].actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOutTrigger, function(ev){
-            // mesh.material.emissiveColor = BABYLON.Color3.Black();
-            console.log("Ok im outside the boat");
-            hl.removeMesh(meshes[mesh]);
-
-          }));
-
-        ////////// RAY CAST TO FIND WATER HEIGHT ////////////
-        //var angle = 0;
-        let i = 0;
-        scene.registerBeforeRender(function() {
+        }));
+        scene.registerBeforeRender(function () {
           meshes[mesh].position.z = 150;
           meshes[mesh].position.y = -51;
           timeofDay = dayTime;
@@ -787,8 +767,8 @@ window.addEventListener("DOMContentLoaded", async function() {
           if (timeofDay == false) {
             console.log(weatherState);
             if (currentSkyboxName != "textures/nightSkyboxClear/clearNight") {
-                changeSkybox("textures/nightSkyboxClear/clearNight", skybox);
-                skybox.dispose();
+              changeSkybox("textures/nightSkyboxClear/clearNight", skybox);
+              skybox.dispose();
             }
             //assign rain ps to mysystem var
             if (weatherState == "rainy" && isRaining == false) {
@@ -811,33 +791,30 @@ window.addEventListener("DOMContentLoaded", async function() {
           }
 
           if (timeofDay == true) {
-            // groundMaterial.diffuseColor = new BABYLON.Color3(0.02, 0.03, 0.17);
-            // groundMaterial.emissiveColor = new BABYLON.Color3(0.02, 0.03, 0.17);
-            //assign rain ps to mysystem var
             if (weatherState == "rainy" && isRaining == false) {
               console.log("rainnn!!!");
               new BABYLON.ParticleHelper.CreateAsync("rain", scene).then((systems) => {
                 systems.start();
                 mysystem = systems;
-            });
-                if (currentSkyboxName != "textures/overcastAndRainy/overcast") {
-                  changeSkybox("textures/overcastAndRainy/overcast", skybox);
-                  skybox.dispose();
+              });
+              if (currentSkyboxName != "textures/overcastAndRainy/overcast") {
+                changeSkybox("textures/overcastAndRainy/overcast", skybox);
+                skybox.dispose();
               }
               isRaining = true;
             }
-          //kill msystem var/the rain
+            //kill msystem var/the rain
             if (weatherState == "clear") {
               isRaining = false;
               if (mysystem != null) {
                 mysystem.dispose();
               }
               if (currentSkyboxName != "textures/TropicalSunnyDay") {
-              changeSkybox("textures/TropicalSunnyDay", skybox);
-              skybox.dispose();
+                changeSkybox("textures/TropicalSunnyDay", skybox);
+                skybox.dispose();
+              }
             }
           }
-        }
         });
 
         //lower the boat as it was floating above the water
@@ -849,44 +826,44 @@ window.addEventListener("DOMContentLoaded", async function() {
     // waterMaterial.addToRenderList(ground);
     // waterMaterial.addToRenderList(skybox);
 
-    var getWaterHeightAtCoordinates = function(x, z, waterMaterial) {
+    var getWaterHeightAtCoordinates = function (x, z, waterMaterial) {
       var time = waterMaterial._lastTime / 100000;
       return (
         Math.abs(
           Math.sin(x / 0.05 + time * waterMaterial.waveSpeed) *
-            waterMaterial.waveHeight *
-            waterMaterial.windDirection.x *
-            5.0 +
-            Math.cos(z / 0.05 + time * waterMaterial.waveSpeed) *
-              waterMaterial.waveHeight *
-              waterMaterial.windDirection.y *
-              5.0
+          waterMaterial.waveHeight *
+          waterMaterial.windDirection.x *
+          5.0 +
+          Math.cos(z / 0.05 + time * waterMaterial.waveSpeed) *
+          waterMaterial.waveHeight *
+          waterMaterial.windDirection.y *
+          5.0
         ) * 0.6
       );
     };
-  function changeSkybox(pathToFile, localSkybox) {
-    localSkybox.dispose();
-    var skybox = BABYLON.Mesh.CreateBox("skyBox", 5000.0, scene);
-    var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
-    skyboxMaterial.backFaceCulling = false;
-    skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(
-      pathToFile,
-      scene
-    );
-    skyboxMaterial.reflectionTexture.coordinatesMode =
-      BABYLON.Texture.SKYBOX_MODE;
-    skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
-    skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
-    skybox.material = skyboxMaterial;
-    // waterMaterial.addToRenderList(skybox);
-    currentSkyboxName = pathToFile;
-  }
+    function changeSkybox(pathToFile, localSkybox) {
+      localSkybox.dispose();
+      var skybox = BABYLON.Mesh.CreateBox("skyBox", 5000.0, scene);
+      var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+      skyboxMaterial.backFaceCulling = false;
+      skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(
+        pathToFile,
+        scene
+      );
+      skyboxMaterial.reflectionTexture.coordinatesMode =
+        BABYLON.Texture.SKYBOX_MODE;
+      skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+      skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+      skybox.material = skyboxMaterial;
+      // waterMaterial.addToRenderList(skybox);
+      currentSkyboxName = pathToFile;
+    }
 
     // return the created scene
     return scene;
   };
 
-  var museumSceneCreate = function() {
+  var museumSceneCreate = function () {
     // create a basic BJS Scene object
     var scene = new BABYLON.Scene(engine);
 
@@ -896,7 +873,7 @@ window.addEventListener("DOMContentLoaded", async function() {
       (3 * Math.PI) / 2,
       Math.PI / 2.5,
       30,
-      new BABYLON.Vector3(-22, 2, -13),
+      new BABYLON.Vector3(-18, 3, -13),
       scene
     );
     camera.lowerRadiusLimit = 1;
@@ -918,8 +895,8 @@ window.addEventListener("DOMContentLoaded", async function() {
     var spotLightTwo = new BABYLON.SpotLight("spotLightTwo", new BABYLON.Vector3(-18, 0, -12), new BABYLON.Vector3(0, 1, 0), Math.PI / 1.6, 8, scene);
 
 
- 
-    BABYLON.SceneLoader.ImportMesh(null, "dhow/", "dhow_2.obj", scene, function(
+
+    BABYLON.SceneLoader.ImportMesh(null, "dhow/", "dhow_2.obj", scene, function (
       meshes
     ) {
       //postioning of meshes
@@ -935,49 +912,49 @@ window.addEventListener("DOMContentLoaded", async function() {
         meshes[mesh].actionManager = new BABYLON.ActionManager(scene);
         meshes[mesh].actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickUpTrigger, function () {
           // alert('Boat Clicked')
-              // GUI
+          // GUI
           // console.log(i);
           console.log("Ok boat has been clicked");
-          $( "#dialog" ).dialog({
+          $("#dialog").dialog({
             height: 600,
             width: 800,
             dialogClass: "no-close success-dialog",
             buttons: [
               {
                 text: "Next",
-                click: function() {
-                  $( this ).dialog( "close" );
+                click: function () {
+                  $(this).dialog("close");
                 }
               }
             ]
           });
 
-          
 
-          }));
 
-          var hl = new BABYLON.HighlightLayer("hl1", scene);
+        }));
 
-          //On Mouse Enter
-          meshes[mesh].actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, function(ev){	
-            console.log("ok im in the boat");
-            hl.addMesh(meshes[mesh], new BABYLON.Color3(0.99,1,0.51));
-          }));
-          
-          //ON MOUSE EXIT
-          meshes[mesh].actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOutTrigger, function(ev){
-            // mesh.material.emissiveColor = BABYLON.Color3.Black();
-            console.log("Ok im outside the boat");
-            hl.removeMesh(meshes[mesh]);
+        var hl = new BABYLON.HighlightLayer("hl1", scene);
 
-          }));
+        //On Mouse Enter
+        meshes[mesh].actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, function (ev) {
+          console.log("ok im in the boat");
+          hl.addMesh(meshes[mesh], new BABYLON.Color3(0.99, 1, 0.51));
+        }));
+
+        //ON MOUSE EXIT
+        meshes[mesh].actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOutTrigger, function (ev) {
+          // mesh.material.emissiveColor = BABYLON.Color3.Black();
+          console.log("Ok im outside the boat");
+          hl.removeMesh(meshes[mesh]);
+
+        }));
         // Resources: https://www.babylonjs-playground.com/#XCPP9Y#13
 
         ////////// RAY CAST TO FIND WATER HEIGHT ////////////
         //var angle = 0;
         let i = 0;
 
-        scene.registerBeforeRender(function() {
+        scene.registerBeforeRender(function () {
           var x = meshes[mesh].position.x;
           meshes[mesh].position.y = -31;
           meshes[mesh].position.z = -14;
@@ -990,7 +967,7 @@ window.addEventListener("DOMContentLoaded", async function() {
         //lower the boat as it was floating above the water
       }
     });
-    BABYLON.SceneLoader.ImportMesh(null, "museum/", "museumTest.obj", scene, function(
+    BABYLON.SceneLoader.ImportMesh(null, "museum/", "museumTest.obj", scene, function (
       meshes
     ) {
       //postioning of meshes
@@ -1006,7 +983,7 @@ window.addEventListener("DOMContentLoaded", async function() {
         //var angle = 0;
         let i = 0;
 
-        scene.registerBeforeRender(function() {
+        scene.registerBeforeRender(function () {
           var x = meshes[mesh].position.x;
 
         });
@@ -1019,6 +996,89 @@ window.addEventListener("DOMContentLoaded", async function() {
     return scene;
   };
 
+  var autoRotateSceneCreate = function () {
+    // create a basic BJS Scene object
+    var spherePositions = [new BABYLON.Vector3(13, 6, 4), new BABYLON.Vector3(12.5, 14, 4), new BABYLON.Vector3(30, 3, 4), new BABYLON.Vector3(49, 5, 4)];
+    var spheresArray = [];
+    var glowingMeshArray = [];
+    var scene = new BABYLON.Scene(engine);
+    var middleOfBoat = new BABYLON.Vector3(31, 5, 4);
+
+    // sphere.position = lockedPosition;
+    // Camera
+    // scene.debugLayer.show();
+
+    var camera = new BABYLON.ArcRotateCamera(
+      "Camera",
+      (3 * Math.PI) / 2,
+      Math.PI / 3.25,
+      50,
+      middleOfBoat,
+      scene
+    );
+    camera.lowerRadiusLimit = 1;
+    camera.upperRadiusLimit = 40;
+    camera.setTarget = middleOfBoat;
+
+    camera.attachControl(canvas, true);
+    var renderer = scene.enableDepthRenderer();
+    // create a basic light, aiming 0,1,0 - meaning, to the sky
+    var light = new BABYLON.HemisphericLight(
+      "light1",
+      new BABYLON.Vector3(0, 1, 0),
+      scene
+    );
+    //fix specular to not make material so glossy
+    light.intensity = 0.8;
+    light.diffuse = new BABYLON.Color3(1, 1, 1);
+    light.specular = new BABYLON.Color3(0, 0, 0);
+    var spotLight = new BABYLON.SpotLight("spotLight", new BABYLON.Vector3(-18, 15, -12), new BABYLON.Vector3(0, -1, 0), Math.PI / 1.6, 8, scene);
+    var spotLightTwo = new BABYLON.SpotLight("spotLightTwo", new BABYLON.Vector3(-18, 0, -12), new BABYLON.Vector3(0, 1, 0), Math.PI / 1.6, 8, scene);
+
+    for (var i = 0; i < spherePositions.length; i++) {
+      spheresArray[i] = BABYLON.MeshBuilder.CreateSphere("sphere" + i, {diameter: 2, scene});
+      spheresArray[i].position = spherePositions[i];
+      glowingMeshArray[i] = new BABYLON.HighlightLayer("hl1", scene);
+      glowingMeshArray[i].addMesh(spheresArray[i], new BABYLON.Color3(0.95, 0.39, 0.13)); 
+      spheresArray[i].actionManager = new BABYLON.ActionManager(scene);
+      spheresArray[i].actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickUpTrigger, function () {
+        console.log(spheresArray[i].position);
+        camera.setTarget = spherePositions[i];   
+      }));
+      console.log(spheresArray);
+    }
+
+    BABYLON.SceneLoader.ImportMesh(null, "dhow/", "dhow_posAdjusted.obj", scene, function (
+      meshes
+    ) {
+      //postioning of meshes
+      console.log(meshes);
+      for (mesh in meshes) {
+        var dhow = meshes[mesh];
+        console.log("museum position");
+        console.log(meshes[mesh].position);
+        meshes[mesh].rotation.x = (3 * Math.PI) / 2;
+        console.log(meshes[mesh].position);
+
+
+        scene.registerBeforeRender(function () {
+        });
+
+        //lower the boat as it was floating above the water
+      }
+    });
+    var glowMeshAlpha = 0;
+
+    scene.registerBeforeRender(function () {
+      for (var i = 0; i < glowingMeshArray.length; i++) {
+          glowMeshAlpha += 0.02;
+          glowingMeshArray[i].blurHorizontalSize = Math.sin(glowMeshAlpha / 3);		
+          glowingMeshArray[i].blurVerticalSize = Math.sin(glowMeshAlpha / 3);
+      }
+    });
+    // return the created scene
+    return scene;
+  };
 
   // call the createScene function
   var seasSceneDay = createScene(true, weatherState);
@@ -1032,35 +1092,35 @@ window.addEventListener("DOMContentLoaded", async function() {
 
 
   var museumScene = museumSceneCreate();
-
+  var autoRotateScene = autoRotateSceneCreate();
   // run the render loop
-  engine.runRenderLoop(function() {
+  engine.runRenderLoop(function () {
     if (state == "seas" && dayTime == true) {
       seasSceneDay.render();
-    } 
+    }
     else if (state == "seas" && dayTime == false) {
       seasSceneNight.render();
-    }else if (state == "beach" && dayTime == true) {
+    } else if (state == "beach" && dayTime == true) {
       beachSceneDay.render();
-    } 
+    }
     else if (state == "beach" && dayTime == false) {
       beachSceneNight.render();
     }
-    
+
     else if (state == "desert" && dayTime == true) {
       desertSceneDay.render();
-    } 
+    }
     else if (state == "desert" && dayTime == false) {
       desertSceneNight.render();
     }
-    
+
     else if (state == "museum") {
       museumScene.render();
     }
   });
 
   // the canvas/window resize event handler
-  window.addEventListener("resize", function() {
+  window.addEventListener("resize", function () {
     engine.resize();
   });
 
@@ -1139,7 +1199,7 @@ function changeRender(sceneName, e) {
   defaultSunny.className = "column weather active";
   e.className = "column environment active";
   dayIcon.className = "far fa-sun nightDay active";
-  nightIcon.className =  "fas fa-moon nightDay";
+  nightIcon.className = "fas fa-moon nightDay";
 }
 
 function changeTimeDay(timeofDay) {
@@ -1151,14 +1211,14 @@ function changeTimeDay(timeofDay) {
     weatherState = "clear";
     dayTime = false;
     dayIcon.className = "far fa-sun nightDay";
-    nightIcon.className =  "fas fa-moon nightDay active";
+    nightIcon.className = "fas fa-moon nightDay active";
   }
   else if (timeofDay == "day") {
     isRaining = false;
     weatherState = "clear";
     dayTime = true;
     dayIcon.className = "far fa-sun nightDay active";
-    nightIcon.className =  "fas fa-moon nightDay";
+    nightIcon.className = "fas fa-moon nightDay";
   }
   var defaultSunny = document.getElementById('sunnyDefault');
   var weather = document.getElementsByClassName('weather');
@@ -1236,7 +1296,7 @@ var open_weather_key = "4e6fc4bba619975d9060a9b9da350bf1"
 var open_weather_endpoint = "api.openweathermap.org/data/2.5/weather"
 
 
-function rain(scene){
+function rain(scene) {
   BABYLON.ParticleHelper.CreateAsync("rain", scene, false).then((set) => {
     set.start();
   });
