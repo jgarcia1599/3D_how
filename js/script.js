@@ -264,7 +264,7 @@ window.addEventListener("DOMContentLoaded", async function () {
           waterMaterial.waveHeight *
           waterMaterial.windDirection.y *
           5.0
-        ) * 1
+        ) * 0.6
       );
     };
 
