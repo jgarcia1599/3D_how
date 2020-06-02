@@ -2,7 +2,7 @@
 
 // Download the models at: https://www.cgtrader.com/items/1915278/download-page
 let i = 0;
-var state = "seas";
+var state = "museum";
 var dayTime = true;
 var weatherState = "clear";
 var isRaining = false;
@@ -114,7 +114,7 @@ window.addEventListener("DOMContentLoaded", async function () {
     ground.position.y = -70;
     ground.material = groundMaterial;
 
-    BABYLON.SceneLoader.ImportMesh(null, "dhow/", "dhow_posAdjusted.obj", scene, function (
+    BABYLON.SceneLoader.ImportMesh(null, "dhow/", "dhow_2.obj", scene, function (
       meshes
     ) {
       //postioning of meshes
@@ -122,9 +122,7 @@ window.addEventListener("DOMContentLoaded", async function () {
         //mesh positioning
         var dhow = meshes[mesh];
         console.log("Dhow position");
-        console.log(meshes[mesh].position);
         meshes[mesh].rotation.x = (3 * Math.PI) / 2;
-        console.log(meshes[mesh].position);
         waterMaterial.addToRenderList(meshes[mesh]);
         // meshes[mesh].rotation.z = 120;
 
@@ -225,8 +223,14 @@ window.addEventListener("DOMContentLoaded", async function () {
               });
               isRaining = true;
               if (currentSkyboxName != "textures/overcastAndRainy/overcast") {
+                // skybox.dispose();
+                // skyboxMaterial.dispose();
+                // skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(
+                // "textures/overcastAndRainy/overcast",
+                // scene
                 changeSkybox("textures/overcastAndRainy/overcast", skybox);
                 skybox.dispose();
+                // );
               }
             }
             //kill msystem var/the rain
@@ -238,12 +242,20 @@ window.addEventListener("DOMContentLoaded", async function () {
                 mysystem.dispose();
               }
               if (currentSkyboxName != "textures/TropicalSunnyDay") {
+                //   skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(
+                //   "textures/TropicalSunnyDay",
+                //   scene
+                // );
                 changeSkybox("textures/TropicalSunnyDay", skybox);
                 skybox.dispose();
               }
             }
+            // skybox.material = skyboxMaterial;
+
           }
         });
+
+        //lower the boat as it was floating above the water
       }
     });
     console.log(i);
@@ -353,10 +365,10 @@ window.addEventListener("DOMContentLoaded", async function () {
       scene
     );
     waterMaterial.windForce = -10;
-    waterMaterial.waveHeight = 0.2;
+    waterMaterial.waveHeight = 0.3;
     waterMaterial.bumpHeight = 0.1;
     waterMaterial.waveLength = 0.1;
-    waterMaterial.waveSpeed = 3.0;
+    waterMaterial.waveSpeed = 5.0;
     waterMaterial.windDirection = new BABYLON.Vector2(1, 1);
     waterMaterial.colorBlendFactor = 0.2;
     waterMaterial.waterColor = new BABYLON.Color3(0, 0.1, 0.4);
@@ -405,9 +417,7 @@ window.addEventListener("DOMContentLoaded", async function () {
         //mesh positioning
         var dhow = meshes[mesh];
         console.log("Dhow position");
-        console.log(meshes[mesh].position);
         meshes[mesh].rotation.x = (3 * Math.PI) / 2;
-        console.log(meshes[mesh].position);
         waterMaterial.addToRenderList(meshes[mesh]);
 
 
@@ -543,7 +553,7 @@ window.addEventListener("DOMContentLoaded", async function () {
           waterMaterial.waveHeight *
           waterMaterial.windDirection.y *
           5.0
-        ) * 0.6
+        ) * 0.3
       );
     };
 
@@ -716,10 +726,7 @@ window.addEventListener("DOMContentLoaded", async function () {
       for (mesh in meshes) {
         //mesh positioning
         var dhow = meshes[mesh];
-        console.log("Dhow position");
-        console.log(meshes[mesh].position);
         meshes[mesh].rotation.x = (3 * Math.PI) / 2;
-        console.log(meshes[mesh].position);
 
         //Boat UI Code
         meshes[mesh].actionManager = new BABYLON.ActionManager(scene);
@@ -1006,7 +1013,7 @@ window.addEventListener("DOMContentLoaded", async function () {
 
     // sphere.position = lockedPosition;
     // Camera
-    // scene.debugLayer.show();
+    scene.debugLayer.show();
 
     var camera = new BABYLON.ArcRotateCamera(
       "Camera",
@@ -1115,7 +1122,7 @@ window.addEventListener("DOMContentLoaded", async function () {
     }
 
     else if (state == "museum") {
-      museumScene.render();
+      autoRotateScene.render();
     }
   });
 
