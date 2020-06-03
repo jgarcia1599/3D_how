@@ -1005,7 +1005,25 @@ window.addEventListener("DOMContentLoaded", async function () {
 
   var autoRotateSceneCreate = function () {
     // create a basic BJS Scene object
-    var spherePositions = [new BABYLON.Vector3(13, 6, 4), new BABYLON.Vector3(12.5, 14, 4), new BABYLON.Vector3(30, 3, 4), new BABYLON.Vector3(49, 5, 4)];
+    // var spherePositions = [new BABYLON.Vector3(13, 6, 4), new BABYLON.Vector3(12.5, 14, 4), new BABYLON.Vector3(30, 3, 4), new BABYLON.Vector3(49, 5, 4)];
+    var spherePositions = [
+      { name: 'Hull', 
+        text: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Itaque libero labore est. Adipisci, doloribus modi? Facere sunt doloribus at perspiciatis asperiores odit. Eum autem consectetur quis ab nisi incidunt necessitatibus', 
+        position: new BABYLON.Vector3(13, 6, 4)
+      }, 
+      { name: 'Mast', 
+      text: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Itaque libero labore est. Adipisci, doloribus modi? Facere sunt doloribus at perspiciatis asperiores odit. Eum autem consectetur quis ab nisi incidunt necessitatibus', 
+      position: new BABYLON.Vector3(12.5, 14, 4)
+      }, 
+      { name: 'Deck', 
+      text: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Itaque libero labore est. Adipisci, doloribus modi? Facere sunt doloribus at perspiciatis asperiores odit. Eum autem consectetur quis ab nisi incidunt necessitatibus', 
+      position: new BABYLON.Vector3(30, 3, 4)
+      }, 
+      { name: 'Back', 
+      text: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Itaque libero labore est. Adipisci, doloribus modi? Facere sunt doloribus at perspiciatis asperiores odit. Eum autem consectetur quis ab nisi incidunt necessitatibus', 
+      position: new BABYLON.Vector3(49, 5, 4)
+      }, 
+  ]
     var spheresArray = [];
     var glowingMeshArray = [];
     var scene = new BABYLON.Scene(engine);
@@ -1013,19 +1031,18 @@ window.addEventListener("DOMContentLoaded", async function () {
 
     // sphere.position = lockedPosition;
     // Camera
-    scene.debugLayer.show();
+    // scene.debugLayer.show();
 
     var camera = new BABYLON.ArcRotateCamera(
       "Camera",
       (3 * Math.PI) / 2,
       Math.PI / 3.25,
-      50,
+      30,
       middleOfBoat,
       scene
     );
     camera.lowerRadiusLimit = 1;
     camera.upperRadiusLimit = 40;
-    camera.setTarget = middleOfBoat;
 
     camera.attachControl(canvas, true);
     var renderer = scene.enableDepthRenderer();
@@ -1041,19 +1058,48 @@ window.addEventListener("DOMContentLoaded", async function () {
     light.specular = new BABYLON.Color3(0, 0, 0);
     var spotLight = new BABYLON.SpotLight("spotLight", new BABYLON.Vector3(-18, 15, -12), new BABYLON.Vector3(0, -1, 0), Math.PI / 1.6, 8, scene);
     var spotLightTwo = new BABYLON.SpotLight("spotLightTwo", new BABYLON.Vector3(-18, 0, -12), new BABYLON.Vector3(0, 1, 0), Math.PI / 1.6, 8, scene);
+    var currentTarget = middleOfBoat;
 
     for (var i = 0; i < spherePositions.length; i++) {
-      spheresArray[i] = BABYLON.MeshBuilder.CreateSphere("sphere" + i, {diameter: 2, scene});
-      spheresArray[i].position = spherePositions[i];
+
+      spheresArray[i] = BABYLON.MeshBuilder.CreateSphere("sphere" + i, { diameter: 2, scene });
+      spheresArray[i].position = spherePositions[i].position;
+      spheresArray[i].titleInfo = spherePositions[i].name;
+      spheresArray[i].contentInfo = spherePositions[i].text;
+
       glowingMeshArray[i] = new BABYLON.HighlightLayer("hl1", scene);
-      glowingMeshArray[i].addMesh(spheresArray[i], new BABYLON.Color3(0.95, 0.39, 0.13)); 
-      spheresArray[i].actionManager = new BABYLON.ActionManager(scene);
-      spheresArray[i].actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickUpTrigger, function () {
-        console.log(spheresArray[i].position);
-        camera.setTarget = spherePositions[i];   
-      }));
-      console.log(spheresArray);
+      glowingMeshArray[i].addMesh(spheresArray[i], new BABYLON.Color3(0.95, 0.39, 0.13));
     }
+    var mesh = new BABYLON.Mesh("custom", scene);
+
+
+    var changeTargetCamera = function (sphere) {
+      var infoText = document.getElementById("partText");
+      var infoTitle = document.getElementById("partName");
+      var infoContainer = document.getElementById("informationContainer");
+
+      sphere.actionManager = new BABYLON.ActionManager(scene);
+      sphere.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickUpTrigger, function () {
+        currentTarget = new BABYLON.Vector3(sphere.position.x, sphere.position.y, sphere.position.z);
+        // console.log(infoContainer.style.display);
+        // if (infoContainer.style.display == "none") {
+        //   console.log("display");
+        //   infoContainer.style.display = "block";
+        // }
+        infoTitle.innerHTML = sphere.titleInfo;
+        infoText.innerHTML = sphere.contentInfo;  
+      }));
+    }
+
+    changeTargetCamera(spheresArray[0]);
+    changeTargetCamera(spheresArray[1]);
+    changeTargetCamera(spheresArray[2]);
+    changeTargetCamera(spheresArray[3]);
+    var changeToLargeView = document.getElementById("backToLargeView");
+    changeToLargeView.addEventListener("click",function () {
+      currentTarget = middleOfBoat;
+
+    });
 
     BABYLON.SceneLoader.ImportMesh(null, "dhow/", "dhow_posAdjusted.obj", scene, function (
       meshes
@@ -1067,7 +1113,6 @@ window.addEventListener("DOMContentLoaded", async function () {
         meshes[mesh].rotation.x = (3 * Math.PI) / 2;
         console.log(meshes[mesh].position);
 
-
         scene.registerBeforeRender(function () {
         });
 
@@ -1077,10 +1122,24 @@ window.addEventListener("DOMContentLoaded", async function () {
     var glowMeshAlpha = 0;
 
     scene.registerBeforeRender(function () {
+      var currentPos = camera.target;
+      var distanceSnap = currentPos.subtract(currentTarget).length();
+      console.log(spheresArray);
+      if (distanceSnap > 0.2) {
+        camera.target = BABYLON.Vector3.Lerp(camera.target, currentTarget, 0.1);
+        camera.radius = Lerp(camera.radius, 25, 0.1);
+      }
+      else {
+        camera.target = currentTarget;
+      }
+      console.log(distanceSnap);
+      // if (camer)
+      // camera.setTarget(currentTarget);
+      console.log(camera.target);
       for (var i = 0; i < glowingMeshArray.length; i++) {
-          glowMeshAlpha += 0.02;
-          glowingMeshArray[i].blurHorizontalSize = Math.sin(glowMeshAlpha / 3);		
-          glowingMeshArray[i].blurVerticalSize = Math.sin(glowMeshAlpha / 3);
+        glowMeshAlpha += 0.02;
+        glowingMeshArray[i].blurHorizontalSize = Math.sin(glowMeshAlpha / 3);
+        glowingMeshArray[i].blurVerticalSize = Math.sin(glowMeshAlpha / 3);
       }
     });
     // return the created scene
@@ -1207,6 +1266,9 @@ function changeRender(sceneName, e) {
   e.className = "column environment active";
   dayIcon.className = "far fa-sun nightDay active";
   nightIcon.className = "fas fa-moon nightDay";
+  if (state = museum) {
+
+  }
 }
 
 function changeTimeDay(timeofDay) {
@@ -1309,3 +1371,6 @@ function rain(scene) {
   });
 }
 
+function Lerp(start, end, amount) {
+  return (start + (end - start) * amount);
+}

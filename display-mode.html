@@ -50,90 +50,16 @@ Online tutorial: https://www.youtube.com/watch?v=OXXkyWku2PY -->
         touch-action: none;
       }
     </style>
-  </head>
-  <body>
-    <!-- <div id="sceneTypes">
-      <div id="min-max-button">
-        <i class="fa fa-window-maximize"></i>
-      </div>
-      <img onclick="toggle_scenepanel()" src="img/curtain.png">
-      <h1>Environment</h1>
-    </div>
-    <div id="citysearchbar">
-      <div id="city-scrolldown">
-        <i class="fa fa-window-maximize"></i>
-      </div>
-      <img onclick="toggle_weatherpanel()" src="img/weather.png">
-      <h1>Change Weather by City</h1>
-    </div> -->
-
-    <div id="toggleNightDay">
-      <!-- <img class="nightDay" onclick="changeTimeDay('day')" src="icons/day.png"> -->
-      <i class="fas fa-moon nightDay" id="nightDefault" onclick="changeTimeDay('night')"></i>
-
-
-      <i class="far fa-sun nightDay active" id="dayDefault" onclick="changeTimeDay('day')"></i>
-
-
-    </div>
-
-    <div class="sceneTypesContent" id="upperLeft">
-      <h1 id="titleSceneTypesContent">Environment</h1>
-
-      <div class="column environment" onclick="changeRender('beach', this)">
-        <!-- <img src="./img/beach.jpg" />Coastline -->
-        <i class="fas fa-umbrella-beach"></i>
-        <h1>Beach</h1>
-      </div>
-      <div class="column environment" onclick="changeRender('desert', this)">
-        <i class="fas fa-wind"></i>
-        <h1>Desert</h1>
-        <!-- <img src="./img/desert.jpg" />Desert -->
-      </div>
-      <div class="column environment active" onclick="changeRender('seas', this)">
-        <i class="fas fa-water"></i>
-        <h1>Seas</h1>
-        <!-- <img src="./img/seas.jpeg" />High Seas -->
-      </div>
-      <div class="column environment" onclick="changeRender('museum', this)">
-        <i class="fas fa-landmark"></i>
-        <h1>Museum</h1>
-        <!-- <img src="./img/museum.jpeg" />Museum -->
-      </div>
-    </div>
-
-    <div class="sceneTypesContent" id="upperRight">
-      <h1 id="titleSceneTypesContent">Weather</h1>
-      <div class="column weather active" onclick="changeWeather('clear', this)" id="sunnyDefault">
-        <i class="far fa-sun"></i>
-        <h1>Clear</h1>
-      </div>
-      <div class="column weather" onclick="changeWeather('cloudy', this)">
-        <i class="fas fa-cloud" ></i>
-        <h1>Cloudy</h1>
-      </div>
-      <div class="column weather" onclick="changeWeather('rainy', this)">
-        <i class="fas fa-cloud-rain"></i>
-        <h1>Rainy</h1>
-      </div>
-      <!-- <div class="weatherContentinfo">
-        <h1>Type a city in the search bar to change the weather of your scene.</h1>
-        <input type="text">
-        <h2>Or customize the weather at your please by clicking below.</h2>
-        <h1>Time of Day</h1>
-        <p><a href="">Day</a>| <a href="">Night</a></p>
-        <br>
-        <h1>Weather</h1>
-        <p><a href="">Sunny</a> | <a href="">Rainy</a> | <a href="">Snow</a> </p>
-
-      </div> -->
-    </div>
-
+ <body>
     <div id="changeFromPlayground">
-      <!-- <img class="nightDay" onclick="changeTimeDay('day')" src="icons/day.png"> -->
-      <a href="display-mode.html"><p>Change To Focused View</p></a>
+        <a href="index.html"><p>Change To Playground View</p></a>
+    </div>
 
+    <div class="sceneTypesContent" id="informationContainer">
+        <i class="fa fa-arrow-left" aria-hidden="true" id="backToLargeView"></i>
 
+      <h1 id="partName">The Hull</h1>
+      <p id="partText">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Itaque libero labore est. Adipisci, doloribus modi? Facere sunt doloribus at perspiciatis asperiores odit. Eum autem consectetur quis ab nisi incidunt necessitatibus?</p>
     </div>
     <div id="dialog" title="Bronze Age Boat" style="display:none;">
       <p>The Bronze Age Boat is being reconstructed at NYU Abu Dhabi.</p>
