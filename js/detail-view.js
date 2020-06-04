@@ -7,6 +7,7 @@ var isRaining = false;
 var prevDayTime = false;
 var mysystem;
 var currentSkyboxName;
+var currentIndex;
 
 var url =
     "https://cdn.rawgit.com/BabylonJS/Extensions/master/DynamicTerrain/dist/babylon.dynamicTerrain.min.js";
@@ -84,46 +85,84 @@ window.addEventListener("DOMContentLoaded", async function () {
         var currentTarget = middleOfBoat;
 
         for (var i = 0; i < spherePositions.length; i++) {
-
             spheresArray[i] = BABYLON.MeshBuilder.CreateSphere("sphere" + i, { diameter: 2, scene });
             spheresArray[i].position = spherePositions[i].position;
             spheresArray[i].titleInfo = spherePositions[i].name;
             spheresArray[i].contentInfo = spherePositions[i].text;
-
+            spheresArray[i].indexForGallery = i;
             glowingMeshArray[i] = new BABYLON.HighlightLayer("hl1", scene);
             glowingMeshArray[i].addMesh(spheresArray[i], new BABYLON.Color3(0.95, 0.39, 0.13));
         }
         var mesh = new BABYLON.Mesh("custom", scene);
 
 
-        var changeTargetCamera = function (sphere) {
+        var changeTargetCamera = function (sphere, index, isSphereClick) {
             var infoText = document.getElementById("partText");
             var infoTitle = document.getElementById("partName");
             var infoContainer = document.getElementById("informationContainer");
-
-            sphere.actionManager = new BABYLON.ActionManager(scene);
-            sphere.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickUpTrigger, function () {
-                currentTarget = new BABYLON.Vector3(sphere.position.x, sphere.position.y, sphere.position.z);
-                // console.log(infoContainer.style.display);
-                // if (infoContainer.style.display == "none") {
-                //   console.log("display");
-                //   infoContainer.style.display = "block";
-                // }
-                infoTitle.innerHTML = sphere.titleInfo;
-                infoText.innerHTML = sphere.contentInfo;
-            }));
+            var prevDisplay = document.getElementById("prevDisplay");
+            var nextDisplay = document.getElementById("nextDisplay");
+            if (isSphereClick) {
+                sphere.actionManager = new BABYLON.ActionManager(scene);
+                sphere.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickUpTrigger, function () {
+                    currentTarget = new BABYLON.Vector3(sphere.position.x, sphere.position.y, sphere.position.z);
+                    currentIndex = sphere.indexForGallery;
+                    infoTitle.innerHTML = sphere.titleInfo;
+                    infoText.innerHTML = sphere.contentInfo;
+                    if (spheresArray[index  + 1]!= null) {
+                        prevDisplay.innerHTML = spheresArray[index + 1].titleInfo;
+                    }    
+                    else {
+                        prevDisplay.innerHTML = " ";
+     
+                    }
+                    if (spheresArray[index - 1] != null) {
+                        nextDisplay.innerHTML = spheresArray[index - 1].titleInfo;
+                    }
+                    else {
+                        nextDisplay.innerHTML = " ";
+                    }
+                }));
+            } else {
+                currentTarget = new BABYLON.Vector3(spheresArray[index].position.x, spheresArray[index].position.y, spheresArray[index].position.z);
+                currentIndex = index;
+                infoTitle.innerHTML = spheresArray[index].titleInfo;
+                infoText.innerHTML = spheresArray[index].contentInfo;
+                if (spheresArray[index  + 1] != null) {
+                    prevDisplay.innerHTML = spheresArray[index + 1].titleInfo;
+                }    
+                else {
+                    prevDisplay.innerHTML = "";
+ 
+                }
+                if (spheresArray[index - 1] != null) {
+                    nextDisplay.innerHTML = spheresArray[index - 1].titleInfo;
+                }
+                else {
+                    nextDisplay.innerHTML = "";
+                }
+            }
         }
 
-        changeTargetCamera(spheresArray[0]);
-        changeTargetCamera(spheresArray[1]);
-        changeTargetCamera(spheresArray[2]);
-        changeTargetCamera(spheresArray[3]);
+        changeTargetCamera(spheresArray[0], 0, true);
+        changeTargetCamera(spheresArray[1], 1, true);
+        changeTargetCamera(spheresArray[2], 2, true);
+        changeTargetCamera(spheresArray[3], 3, true);
         var changeToLargeView = document.getElementById("backToLargeView");
+        var prevDisplay = document.getElementById("prevDisplay");
+        var nextDisplay = document.getElementById("nextDisplay");
 
         changeToLargeView.addEventListener("click", function () {
             currentTarget = middleOfBoat;
             $("#informationContainer").fadeOut();
+        });
 
+        prevDisplay.addEventListener("click", function () {
+            changeTargetCamera(spheresArray[currentIndex + 1], currentIndex + 1, false)
+        });
+
+        nextDisplay.addEventListener("click", function () {
+            changeTargetCamera(spheresArray[currentIndex - 1], currentIndex - 1, false)
 
         });
 
@@ -144,6 +183,7 @@ window.addEventListener("DOMContentLoaded", async function () {
         var glowMeshAlpha = 0;
 
         scene.registerBeforeRender(function () {
+            console.log(currentIndex);
             var currentPos = camera.target;
             var distanceSnap = currentPos.subtract(currentTarget).length();
             if (distanceSnap > 0.1) {
@@ -155,7 +195,6 @@ window.addEventListener("DOMContentLoaded", async function () {
                 }
                 else {
                     camera.radius = Lerp(camera.radius, 30, 0.1);
-
                 }
             }
             else {
