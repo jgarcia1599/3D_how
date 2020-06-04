@@ -2,7 +2,7 @@
 
 // Download the models at: https://www.cgtrader.com/items/1915278/download-page
 let i = 0;
-var state = "museum";
+var state = "seas";
 var dayTime = true;
 var weatherState = "clear";
 var isRaining = false;
@@ -1158,7 +1158,7 @@ window.addEventListener("DOMContentLoaded", async function () {
 
 
   var museumScene = museumSceneCreate();
-  var autoRotateScene = autoRotateSceneCreate();
+  // var autoRotateScene = autoRotateSceneCreate();
   // run the render loop
   engine.runRenderLoop(function () {
     if (state == "seas" && dayTime == true) {
@@ -1181,7 +1181,7 @@ window.addEventListener("DOMContentLoaded", async function () {
     }
 
     else if (state == "museum") {
-      autoRotateScene.render();
+      // autoRotateScene.render();
     }
   });
 
