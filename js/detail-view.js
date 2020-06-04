@@ -84,6 +84,19 @@ window.addEventListener("DOMContentLoaded", async function () {
         var spotLightTwo = new BABYLON.SpotLight("spotLightTwo", new BABYLON.Vector3(-18, 0, -12), new BABYLON.Vector3(0, 1, 0), Math.PI / 1.6, 8, scene);
         var currentTarget = middleOfBoat;
 
+        var skybox = BABYLON.Mesh.CreateBox("skyBox", 5000.0, scene);
+        var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+        skyboxMaterial.backFaceCulling = false;
+        skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(
+          "textures/solidBlack/black",
+          scene
+        );
+        skyboxMaterial.reflectionTexture.coordinatesMode =
+          BABYLON.Texture.SKYBOX_MODE;
+        skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+        skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+        skybox.material = skyboxMaterial;
+
         for (var i = 0; i < spherePositions.length; i++) {
             spheresArray[i] = BABYLON.MeshBuilder.CreateSphere("sphere" + i, { diameter: 2, scene });
             spheresArray[i].position = spherePositions[i].position;
@@ -102,6 +115,9 @@ window.addEventListener("DOMContentLoaded", async function () {
             var infoContainer = document.getElementById("informationContainer");
             var prevDisplay = document.getElementById("prevDisplay");
             var nextDisplay = document.getElementById("nextDisplay");
+            var prevDisplayContainer = document.getElementById("lessThan");
+            var nextDisplayContainer = document.getElementById("greaterThan");
+
             if (isSphereClick) {
                 sphere.actionManager = new BABYLON.ActionManager(scene);
                 sphere.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickUpTrigger, function () {
@@ -109,18 +125,19 @@ window.addEventListener("DOMContentLoaded", async function () {
                     currentIndex = sphere.indexForGallery;
                     infoTitle.innerHTML = sphere.titleInfo;
                     infoText.innerHTML = sphere.contentInfo;
-                    if (spheresArray[index  + 1]!= null) {
+                    if (spheresArray[index  + 1] != null) {
+                        prevDisplayContainer.style.display = "flex";
                         prevDisplay.innerHTML = spheresArray[index + 1].titleInfo;
                     }    
                     else {
-                        prevDisplay.innerHTML = " ";
-     
+                        prevDisplayContainer.style.display = "none";
                     }
                     if (spheresArray[index - 1] != null) {
+                        nextDisplayContainer.style.display = "flex";
                         nextDisplay.innerHTML = spheresArray[index - 1].titleInfo;
                     }
                     else {
-                        nextDisplay.innerHTML = " ";
+                        nextDisplayContainer.style.display = "none";
                     }
                 }));
             } else {
@@ -129,17 +146,18 @@ window.addEventListener("DOMContentLoaded", async function () {
                 infoTitle.innerHTML = spheresArray[index].titleInfo;
                 infoText.innerHTML = spheresArray[index].contentInfo;
                 if (spheresArray[index  + 1] != null) {
+                    prevDisplayContainer.style.display = "flex";
                     prevDisplay.innerHTML = spheresArray[index + 1].titleInfo;
                 }    
                 else {
-                    prevDisplay.innerHTML = "";
- 
+                    prevDisplayContainer.style.display = "none"; 
                 }
                 if (spheresArray[index - 1] != null) {
+                    nextDisplayContainer.style.display = "flex";
                     nextDisplay.innerHTML = spheresArray[index - 1].titleInfo;
                 }
                 else {
-                    nextDisplay.innerHTML = "";
+                    nextDisplayContainer.style.display = "none";
                 }
             }
         }
@@ -190,7 +208,7 @@ window.addEventListener("DOMContentLoaded", async function () {
                 camera.target = BABYLON.Vector3.Lerp(camera.target, currentTarget, 0.1);
                 if (currentTarget != middleOfBoat) {
                     $("#informationContainer").fadeIn();
-                    camera.radius = Lerp(camera.radius, 20, 0.1);
+                    camera.radius = Lerp(camera.radius, 15, 0.1);
 
                 }
                 else {
