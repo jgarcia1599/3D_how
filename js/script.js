@@ -246,11 +246,6 @@ window.addEventListener("DOMContentLoaded", async function() {
     // Default Environment
 
 
-  //VRStuff
-
-  var vrHelper = scene.createDefaultVRExperience({createDeviceOrientationCamera:false});
-
-
 
 
     // return the created scene
@@ -446,7 +441,6 @@ window.addEventListener("DOMContentLoaded", async function() {
         ) * 0.5
       );
     };
-    var vrHelper = scene.createDefaultVRExperience({createDeviceOrientationCamera:false});
 
     // return the created scene
     return scene;
@@ -652,8 +646,6 @@ window.addEventListener("DOMContentLoaded", async function() {
     console.log(i);
     // return the created scene
     rain(scene);
-
-    var vrHelper = scene.createDefaultVRExperience({createDeviceOrientationCamera:false});
     return scene;
   };
 
@@ -788,7 +780,6 @@ window.addEventListener("DOMContentLoaded", async function() {
     console.log(i);
     // return the created scene
 
-    var vrHelper = scene.createDefaultVRExperience({createDeviceOrientationCamera:false});
     return scene;
   };
 
