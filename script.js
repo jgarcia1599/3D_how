@@ -159,22 +159,26 @@ window.addEventListener("DOMContentLoaded", async function() {
           let time = waterMaterial._lastTime / 100000;
           let x = meshes[mesh].position.x;
           let z = meshes[mesh].position.z;
-          meshes[mesh].position.y = Math.abs(
-            Math.sin(x / 0.05 + time * waterMaterial.waveSpeed) *
-              waterMaterial.waveHeight *
-              waterMaterial.windDirection.x *
-              5.0 +
-              Math.cos(z / 0.05 + time * waterMaterial.waveSpeed) *
-                waterMaterial.waveHeight *
-                waterMaterial.windDirection.y *
-                5.0
-          );
-          //lower the boat as it was floating above the water
-          meshes[mesh].position.y -= 35;
+          meshes[mesh].position.y = Math.abs((Math.sin(((x / 0.05) + time * waterMaterial.waveSpeed)) * waterMaterial.waveHeight * waterMaterial.windDirection.x * 5.0) + (Math.cos(((z / 0.05) +  time * waterMaterial.waveSpeed)) * waterMaterial.waveHeight * waterMaterial.windDirection.y * 5.0));
+          console.log(meshes[mesh].position.y);
+          // let time = waterMaterial._lastTime / 100000;
+          // let x = meshes[mesh].position.x;
+          // let z = meshes[mesh].position.z;
+          // meshes[mesh].position.y = Math.abs(
+          //   Math.sin(x / 0.05 + time * waterMaterial.waveSpeed) *
+          //     waterMaterial.waveHeight *
+          //     waterMaterial.windDirection.x *
+          //     5.0 +
+          //     Math.cos(z / 0.05 + time * waterMaterial.waveSpeed) *
+          //       waterMaterial.waveHeight *
+          //       waterMaterial.windDirection.y *
+          //       5.0
+          // );
+          // //lower the boat as it was floating above the water
+          // meshes[mesh].position.y -= 35;
         });
       }
     });
-    console.log(i);
 
     // Configure water material
     waterMaterial.addToRenderList(ground);
