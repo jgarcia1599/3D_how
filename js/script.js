@@ -15,6 +15,9 @@ var url =
 var s = document.createElement("script");
 s.src = url;
 document.head.appendChild(s);
+
+
+
 window.addEventListener("DOMContentLoaded", async function() {
   // get the canvas DOM element
   var canvas = document.getElementById("renderCanvas");
@@ -22,9 +25,15 @@ window.addEventListener("DOMContentLoaded", async function() {
   // load the 3D engine
   var engine = new BABYLON.Engine(canvas, true);
   // createScene function that creates and return the scene
+
+
+  //high seas Scene 
+//   var createScene = function() {
+
   var createScene = function(timeofDay, currentWeather) {
     var timeofDay = dayTime;
     weatherState = "clear";
+
     // create a basic BJS Scene object
     var scene = new BABYLON.Scene(engine);
     // scene.debugLayer.show();
@@ -345,19 +354,9 @@ window.addEventListener("DOMContentLoaded", async function() {
 
 
   //VRStuff
-  var environment = scene.createDefaultEnvironment({ enableGroundShadow: true, groundYBias: 1 });
-  environment.setMainColor(BABYLON.Color3.FromHexString("#74b9ff"))
+
   var vrHelper = scene.createDefaultVRExperience({createDeviceOrientationCamera:false});
-  vrHelper.enableTeleportation({floorMeshes: [environment.ground]});
-  vrHelper.onAfterEnteringVRObservable.add(()=>{
-    if(scene.activeCamera === vrHelper.vrDeviceOrientationCamera){
-        BABYLON.FreeCameraDeviceOrientationInput.WaitForOrientationChangeAsync(1000).then(()=>{
-            // Successfully received sensor input
-        }).catch(()=>{
-            console.log("Device orientation camera is being used but no sensor is found, prompt user to enable in safari settings");
-        })
-    }
-})
+
 
 
 
@@ -616,19 +615,7 @@ window.addEventListener("DOMContentLoaded", async function() {
         ) * 0.6
       );
     };
-    var environment = scene.createDefaultEnvironment({ enableGroundShadow: true, groundYBias: 1 });
-    environment.setMainColor(BABYLON.Color3.FromHexString("#74b9ff"))
     var vrHelper = scene.createDefaultVRExperience({createDeviceOrientationCamera:false});
-    vrHelper.enableTeleportation({floorMeshes: [environment.ground]});
-    vrHelper.onAfterEnteringVRObservable.add(()=>{
-      if(scene.activeCamera === vrHelper.vrDeviceOrientationCamera){
-          BABYLON.FreeCameraDeviceOrientationInput.WaitForOrientationChangeAsync(1000).then(()=>{
-              // Successfully received sensor input
-          }).catch(()=>{
-              console.log("Device orientation camera is being used but no sensor is found, prompt user to enable in safari settings");
-          })
-      }
-  })
 
     //Rain Stuff
     console.log("Ok lets try to do rain")
@@ -859,19 +846,7 @@ window.addEventListener("DOMContentLoaded", async function() {
     // return the created scene
     rain(scene);
 
-    var environment = scene.createDefaultEnvironment({ enableGroundShadow: true, groundYBias: 1 });
-    environment.setMainColor(BABYLON.Color3.FromHexString("#74b9ff"))
     var vrHelper = scene.createDefaultVRExperience({createDeviceOrientationCamera:false});
-    vrHelper.enableTeleportation({floorMeshes: [environment.ground]});
-    vrHelper.onAfterEnteringVRObservable.add(()=>{
-      if(scene.activeCamera === vrHelper.vrDeviceOrientationCamera){
-          BABYLON.FreeCameraDeviceOrientationInput.WaitForOrientationChangeAsync(1000).then(()=>{
-              // Successfully received sensor input
-          }).catch(()=>{
-              console.log("Device orientation camera is being used but no sensor is found, prompt user to enable in safari settings");
-          })
-      }
-  })
     return scene;
   };
 
@@ -1006,19 +981,7 @@ window.addEventListener("DOMContentLoaded", async function() {
     console.log(i);
     // return the created scene
 
-    var environment = scene.createDefaultEnvironment({ enableGroundShadow: true, groundYBias: 1 });
-    environment.setMainColor(BABYLON.Color3.FromHexString("#74b9ff"))
     var vrHelper = scene.createDefaultVRExperience({createDeviceOrientationCamera:false});
-    vrHelper.enableTeleportation({floorMeshes: [environment.ground]});
-    vrHelper.onAfterEnteringVRObservable.add(()=>{
-      if(scene.activeCamera === vrHelper.vrDeviceOrientationCamera){
-          BABYLON.FreeCameraDeviceOrientationInput.WaitForOrientationChangeAsync(1000).then(()=>{
-              // Successfully received sensor input
-          }).catch(()=>{
-              console.log("Device orientation camera is being used but no sensor is found, prompt user to enable in safari settings");
-          })
-      }
-  })
     return scene;
   };
 
