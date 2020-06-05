@@ -2,7 +2,14 @@
 
 // Download the models at: https://www.cgtrader.com/items/1915278/download-page
 let i = 0;
-var state = "museum";
+var state = "seas";
+var dayTime = true;
+var weatherState = "clear";
+var isRaining = false;
+var prevDayTime = false;
+var mysystem;
+var currentSkyboxName; 
+
 var url =
   "https://cdn.rawgit.com/BabylonJS/Extensions/master/DynamicTerrain/dist/babylon.dynamicTerrain.min.js";
 var s = document.createElement("script");
@@ -17,13 +24,19 @@ window.addEventListener("DOMContentLoaded", async function() {
 
   // load the 3D engine
   var engine = new BABYLON.Engine(canvas, true);
-
   // createScene function that creates and return the scene
 
+
   //high seas Scene 
-  var createScene = function() {
+//   var createScene = function() {
+
+  var createScene = function(timeofDay, currentWeather) {
+    var timeofDay = dayTime;
+    weatherState = "clear";
+
     // create a basic BJS Scene object
     var scene = new BABYLON.Scene(engine);
+    // scene.debugLayer.show();
 
     // Camera
     var camera = new BABYLON.ArcRotateCamera(
@@ -46,17 +59,13 @@ window.addEventListener("DOMContentLoaded", async function() {
       new BABYLON.Vector3(0, 1, 0),
       scene
     );
-
-    //Adding the skybox to the scene
+    //add skybox to scene
+    currentSkyboxName = "textures/overcastAndRainy/overcast";
     var skybox = BABYLON.Mesh.CreateBox("skyBox", 5000.0, scene);
     var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
     skyboxMaterial.backFaceCulling = false;
-    // skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(
-    //   "textures/TropicalSunnyDay",
-    //   scene
-    // );
     skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(
-      "textures/TropicalSunnyDay",
+      "textures/overcastAndRainy/overcast",
       scene
     );
     skyboxMaterial.reflectionTexture.coordinatesMode =
@@ -110,6 +119,8 @@ window.addEventListener("DOMContentLoaded", async function() {
       scene,
       false
     );
+
+    
     ground.position.y = -70;
     ground.material = groundMaterial;
 
@@ -182,6 +193,82 @@ window.addEventListener("DOMContentLoaded", async function() {
           var z = meshes[mesh].position.z;
           var waterHeight = getWaterHeightAtCoordinates(x, z, waterMaterial);
           meshes[mesh].position.y = waterHeight - 35;
+
+          timeofDay = dayTime;
+          //check time of day
+          if (timeofDay == false) {
+            console.log("israining is: "+ isRaining);
+            console.log("state is: "+ weatherState);
+
+            groundMaterial.diffuseColor = new BABYLON.Color3(0.02, 0.03, 0.17);
+            groundMaterial.emissiveColor = new BABYLON.Color3(0.02, 0.03, 0.17);
+            if (currentSkyboxName != "textures/nightSkyboxClear/clearNight") {
+                changeSkybox("textures/nightSkyboxClear/clearNight", skybox);
+                skybox.dispose();
+            }
+            //assign rain ps to mysystem var
+            if (weatherState == "rainy" && isRaining == false) {
+              console.log("rainnn!!!");
+              new BABYLON.ParticleHelper.CreateAsync("rain", scene).then((systems) => {
+                systems.start();
+                mysystem = systems;
+             });
+              isRaining = true;
+            }
+            //kill mystem var/the rain
+            if (weatherState == "clear") {
+              isRaining = false;
+              console.log("clear loop");
+              if (mysystem != null) {
+                console.log("kill");
+                mysystem.dispose();
+              }
+            }
+          }
+          if (timeofDay == true) {
+            groundMaterial.diffuseColor = new BABYLON.Color3(0.02, 0.03, 0.17);
+            groundMaterial.emissiveColor = new BABYLON.Color3(0.02, 0.03, 0.17);
+            console.log(weatherState);
+            //assign rain ps to mysystem var
+            if (weatherState == "rainy" && isRaining == false) {
+              console.log("rainnn!!!");
+              new BABYLON.ParticleHelper.CreateAsync("rain", scene).then((systems) => {
+                systems.start();
+                mysystem = systems;
+            });
+                isRaining = true;
+                if (currentSkyboxName != "textures/overcastAndRainy/overcast") {
+                  // skybox.dispose();
+                  // skyboxMaterial.dispose();
+                  // skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(
+                  // "textures/overcastAndRainy/overcast",
+                  // scene
+                  changeSkybox("textures/overcastAndRainy/overcast", skybox);
+                  skybox.dispose();
+                // );
+              }
+            }
+          //kill msystem var/the rain
+            if (weatherState == "clear") {
+              isRaining = false;
+              console.log("clear loop");
+              if (mysystem != null) {
+                console.log("kill");
+                mysystem.dispose();
+              }
+              if (currentSkyboxName != "textures/TropicalSunnyDay") {
+              //   skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(
+              //   "textures/TropicalSunnyDay",
+              //   scene
+              // );
+              changeSkybox("textures/TropicalSunnyDay", skybox);
+              skybox.dispose();
+            }
+          }
+          // skybox.material = skyboxMaterial;
+
+        }
+
           
 
           // Work on fixing boat inside water issue, dont delete
@@ -205,6 +292,7 @@ window.addEventListener("DOMContentLoaded", async function() {
           //   waterMesh.material.waterColor = new BABYLON.Color3(0, 0.1, 0.21);
 
           // }
+
         });
 
           
@@ -243,6 +331,25 @@ window.addEventListener("DOMContentLoaded", async function() {
   //   BABYLON.ParticleHelper.CreateAsync("rain", scene, false).then((set) => {
   //     set.start();
   // });
+
+  function changeSkybox(pathToFile, localSkybox) {
+    localSkybox.dispose();
+    var skybox = BABYLON.Mesh.CreateBox("skyBox", 5000.0, scene);
+    var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+    skyboxMaterial.backFaceCulling = false;
+    skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(
+      pathToFile,
+      scene
+    );
+    skyboxMaterial.reflectionTexture.coordinatesMode =
+      BABYLON.Texture.SKYBOX_MODE;
+    skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+    skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+    skybox.material = skyboxMaterial;
+    waterMaterial.addToRenderList(skybox);
+    currentSkyboxName = pathToFile;
+  }
+
     // Default Environment
 
 
@@ -257,9 +364,14 @@ window.addEventListener("DOMContentLoaded", async function() {
     return scene;
   };
 
-  var beachSceneCreate = function() {
+  var beachSceneCreate = function(timeofDay, currentWeather) {
+    // create a basic BJS Scene object
+
+    var timeofDay = dayTime;
+    console.log("switch time!");
     // create a basic BJS Scene object
     var scene = new BABYLON.Scene(engine);
+    // scene.debugLayer.show();
 
     // Camera
     var camera = new BABYLON.ArcRotateCamera(
@@ -267,7 +379,7 @@ window.addEventListener("DOMContentLoaded", async function() {
       (3 * Math.PI) / 2,
       Math.PI / 2.5,
       50,
-      new BABYLON.Vector3(70, 5, 0),
+      new BABYLON.Vector3(30, 5, 0),
       scene
     );
     camera.lowerRadiusLimit = 1;
@@ -286,6 +398,8 @@ window.addEventListener("DOMContentLoaded", async function() {
     light.specular = new BABYLON.Color3(0, 0, 0);
 
     //Adding the skybox to the scene
+    currentSkyboxName = "textures/overcastAndRainy/overcast";
+
     var skybox = BABYLON.Mesh.CreateBox("skyBox", 5000.0, scene);
     var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
     skyboxMaterial.backFaceCulling = false;
@@ -387,9 +501,6 @@ window.addEventListener("DOMContentLoaded", async function() {
               }
             ]
           });
-
-          
-
           }));
 
           var hl = new BABYLON.HighlightLayer("hl1", scene);
@@ -405,7 +516,6 @@ window.addEventListener("DOMContentLoaded", async function() {
             // mesh.material.emissiveColor = BABYLON.Color3.Black();
             console.log("Ok im outside the boat");
             hl.removeMesh(meshes[mesh]);
-
           }));
 
         // Resources: https://www.babylonjs-playground.com/#XCPP9Y#13
@@ -418,8 +528,67 @@ window.addEventListener("DOMContentLoaded", async function() {
           var x = meshes[mesh].position.x;
           var z = meshes[mesh].position.z;
           var waterHeight = getWaterHeightAtCoordinates(x, z, waterMaterial);
-          meshes[mesh].position.y = waterHeight - 36;
-          meshes[mesh].position.x = 40;
+          meshes[mesh].position.y = waterHeight - 35;
+          timeofDay = dayTime;
+          //check time of day
+          console.log(isRaining);
+          if (timeofDay == false) {
+            console.log(weatherState);
+            groundMaterial.diffuseColor = new BABYLON.Color3(0.02, 0.03, 0.17);
+            groundMaterial.emissiveColor = new BABYLON.Color3(0.02, 0.03, 0.17);
+            if (currentSkyboxName != "textures/nightSkyboxClear/clearNight") {
+                changeSkybox("textures/nightSkyboxClear/clearNight", skybox);
+                skybox.dispose();
+            }
+            //assign rain ps to mysystem var
+            if (weatherState == "rainy" && isRaining == false) {
+              if (mysystem != null) {
+                new BABYLON.ParticleHelper.CreateAsync("rain", scene).then((systems) => {
+                  systems.start();
+                  mysystem = systems;
+                });
+              }
+
+              isRaining = true;
+            }
+            //kill mystem var/the rain
+            if (weatherState == "clear") {
+              isRaining = false;
+              if (mysystem != null) {
+                mysystem.dispose();
+              }
+            }
+          }
+
+          if (timeofDay == true) {
+            // groundMaterial.diffuseColor = new BABYLON.Color3(0.02, 0.03, 0.17);
+            // groundMaterial.emissiveColor = new BABYLON.Color3(0.02, 0.03, 0.17);
+            //assign rain ps to mysystem var
+            if (weatherState == "rainy" && isRaining == false) {
+              console.log("rainnn!!!");
+              new BABYLON.ParticleHelper.CreateAsync("rain", scene).then((systems) => {
+                systems.start();
+                mysystem = systems;
+            });
+                if (currentSkyboxName != "textures/overcastAndRainy/overcast") {
+                  changeSkybox("textures/overcastAndRainy/overcast", skybox);
+                  skybox.dispose();
+              }
+              isRaining = true;
+            }
+          //kill msystem var/the rain
+            if (weatherState == "clear") {
+              console.log("in the clear");
+              isRaining = false;
+              if (mysystem != null) {
+                mysystem.dispose();
+              }
+              if (currentSkyboxName != "textures/TropicalSunnyDay") {
+              changeSkybox("textures/TropicalSunnyDay", skybox);
+              skybox.dispose();
+            }
+          }
+        }
         });
 
         //lower the boat as it was floating above the water
@@ -443,14 +612,38 @@ window.addEventListener("DOMContentLoaded", async function() {
               waterMaterial.waveHeight *
               waterMaterial.windDirection.y *
               5.0
-        ) * 0.5
+        ) * 0.6
       );
     };
     var vrHelper = scene.createDefaultVRExperience({createDeviceOrientationCamera:false});
 
+    //Rain Stuff
+    console.log("Ok lets try to do rain")
+  //   BABYLON.ParticleHelper.CreateAsync("rain", scene, false).then((set) => {
+  //     set.start();
+  // });
+  function changeSkybox(pathToFile, localSkybox) {
+    localSkybox.dispose();
+    var skybox = BABYLON.Mesh.CreateBox("skyBox", 5000.0, scene);
+    var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+    skyboxMaterial.backFaceCulling = false;
+    skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture(
+      pathToFile,
+      scene
+    );
+    skyboxMaterial.reflectionTexture.coordinatesMode =
+      BABYLON.Texture.SKYBOX_MODE;
+    skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+    skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+    skybox.material = skyboxMaterial;
+    waterMaterial.addToRenderList(skybox);
+    currentSkyboxName = pathToFile;
+  }
+
     // return the created scene
     return scene;
   };
+
   var desertSceneCreate = function() {
     // create a basic BJS Scene object
     var scene = new BABYLON.Scene(engine);
@@ -792,19 +985,35 @@ window.addEventListener("DOMContentLoaded", async function() {
     return scene;
   };
 
+
   // call the createScene function
-  var seasScene = createScene();
-  var beachScene = beachSceneCreate();
-  var desertScene = desertSceneCreate();
+  var seasSceneDay = createScene(true, weatherState);
+  var seasSceneNight = createScene(false, weatherState);
+
+  var beachSceneDay = beachSceneCreate(dayTime, weatherState);
+  var beachSceneNight = beachSceneCreate(dayTime, weatherState);
+
+  var desertSceneDay = desertSceneCreate(dayTime, weatherState);
+  var desertSceneNight = desertSceneCreate(dayTime, weatherState);
+
+
   var museumScene = museumSceneCreate();
 
   // run the render loop
   engine.runRenderLoop(function() {
-    if (state == "seas") {
-      seasScene.render();
-    } else if (state == "beach") {
-      beachScene.render();
-    } else if (state == "desert") {
+    if (state == "seas" && dayTime == true) {
+      seasSceneDay.render();
+    } 
+    else if (state == "seas" && dayTime == false) {
+      seasSceneNight.render();
+    }else if (state == "beach" && dayTime == true) {
+      beachSceneDay.render();
+    } 
+    else if (state == "beach" && dayTime == false) {
+      beachSceneNight.render();
+    }
+    
+    else if (state == "desert") {
       desertScene.render();
     } else if (state == "museum") {
       museumScene.render();
@@ -829,26 +1038,26 @@ window.addEventListener("DOMContentLoaded", async function() {
 var scene_toggle_counter = 0;
 var scene_options_showed = 1;
 
-function toggle_scenepanel(){
-  console.log("toggle scene pannel");
-  console.log(scene_toggle_counter )
+// function toggle_scenepanel(){
+//   console.log("toggle scene pannel");
+//   console.log(scene_toggle_counter )
 
-  if (scene_toggle_counter == 0){
-    $('#sceneTypes').animate({ left: '+=340px'  });
-    scene_toggle_counter = 1;
-    console.log("okay move right + 350px");
+//   if (scene_toggle_counter == 0){
+//     $('#sceneTypes').animate({ left: '+=340px'  });
+//     scene_toggle_counter = 1;
+//     console.log("okay move right + 350px");
 
-  }
-  else if(scene_toggle_counter ==1){
-    $('#sceneTypes').animate({ left: '-=340px'  });
-    scene_toggle_counter = 0;
-    scene_options_showed = 0;
+//   }
+//   else if(scene_toggle_counter ==1){
+//     $('#sceneTypes').animate({ left: '-=340px'  });
+//     scene_toggle_counter = 0;
+//     scene_options_showed = 0;
 
-    console.log("okay move right - 350px");
+//     console.log("okay move right - 350px");
 
-  }
+//   }
 
-}
+// }
 
 //hide panel at the beginning
 // $("#sceneTypesContent").slideToggle();
@@ -871,7 +1080,33 @@ $("#min-max-button").click(function() {
 
 function changeRender(sceneName) {
   console.log(sceneName);
+  isRaining = false;
+  weatherState = "clear";
   state = sceneName;
+}
+
+function changeTimeDay(timeofDay) {
+  if (timeofDay == "night") {
+    isRaining = false;
+    weatherState = "clear";
+    dayTime = false;
+
+  }
+  else if (timeofDay == "day") {
+    isRaining = false;
+    weatherState = "clear";
+    dayTime = true;
+  }
+}
+
+function changeWeather(weather) {
+  isRaining = false;
+  // if (weather != prevWeatherState) {
+    weatherState = weather;
+  //   console.log("debounce");
+  // } else {
+  //   prevWeatherState = weather;
+  // }
 }
 
 
@@ -957,6 +1192,7 @@ function rain(scene){
     set.start();
   });
 }
+
 
 
 

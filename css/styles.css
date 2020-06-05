@@ -14,7 +14,7 @@ body {
   font-family: "Gotham-Light";
 }
 #sceneTypes {
-  width: 380px;
+  width: 300px;
   height: 80px;
   position: absolute;
   left: 10px;
@@ -24,7 +24,6 @@ body {
   color: white;
   text-align: center;
   z-index: 2;
-  left:-330px;
 }
 #sceneTypes img{
   position:absolute;
@@ -38,8 +37,8 @@ body {
 
 
 #sceneTypesContent {
-  width: 380px;
-  height: 390px;
+  width: 300px;
+  height: 360px;
   position: absolute;
   left: 10px;
   top: 55px;
@@ -61,8 +60,8 @@ body {
   cursor: pointer;
 }
 #sceneTypesContent .column img {
-  width: 170px;
-  height: 120px;
+  width: 130px;
+  height: 110px;
   z-index: 3;
 }
 
@@ -119,6 +118,31 @@ body {
   display:none;
   /* left:-350px; */
 }
+
+#weatherContentPopOut {
+  width: 60px;
+  height: 200px;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  z-index: 4;
+  background: #303048;
+  border-radius: 20px 0px 0px 20px;
+    color: white;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  /* display:none; */
+  /* left:-350px; */
+}
+
+#weatherContentPopOut i{
+  width: 80px;
+
+
+}
 .weatherContentinfo{
   margin-top: 40px;
 }
@@ -151,7 +175,31 @@ body {
 }
 
 
-.weatherSelect{
+#toggleNightDay {
+  position: absolute;
+  top: 6%;
+  left: 50%;
+  transform: translate(-50%, -50%);  height: 30px;
+  width: 100px;
+  height: 40px;
+  background-color: #303048;
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  border-radius: 15px;
+}
+
+#toggleNightDay img {
+  width: 24px;
+  height: 24px;
   cursor: pointer;
 }
+
+
+/* .weatherSelect{
+  cursor: pointer;
+} */
+
 
