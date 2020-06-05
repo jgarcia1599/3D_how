@@ -16,15 +16,18 @@ var s = document.createElement("script");
 s.src = url;
 document.head.appendChild(s);
 window.addEventListener("DOMContentLoaded", async function () {
+
   // get the canvas DOM element
   var canvas = document.getElementById("renderCanvas");
 
   // load the 3D engine
   var engine = new BABYLON.Engine(canvas, true);
+  
   // createScene function that creates and return the scene
   var createScene = function (timeofDay, currentWeather) {
     var timeofDay = dayTime;
     weatherState = "clear";
+
     // create a basic BJS Scene object
     var scene = new BABYLON.Scene(engine);
     // scene.debugLayer.show();
@@ -40,6 +43,7 @@ window.addEventListener("DOMContentLoaded", async function () {
     );
     camera.lowerRadiusLimit = 1;
     camera.upperRadiusLimit = 40;
+    camera.rotationOffset=0;
     camera.attachControl(canvas, true);
     var renderer = scene.enableDepthRenderer();
 
@@ -114,11 +118,14 @@ window.addEventListener("DOMContentLoaded", async function () {
     ground.position.y = -70;
     ground.material = groundMaterial;
 
-    BABYLON.SceneLoader.ImportMesh(null, "dhow/", "dhow_2.obj", scene, function (
-      meshes
-    ) {
+
+    var boat = []
+    BABYLON.SceneLoader.ImportMesh(null, "dhow/", "dhow_2.obj", scene, function(meshes) {
       //postioning of meshes
       for (mesh in meshes) {
+        boat.push(mesh);
+
+
         //mesh positioning
         var dhow = meshes[mesh];
         console.log("Dhow position");
@@ -169,8 +176,6 @@ window.addEventListener("DOMContentLoaded", async function () {
         }));
         // Resources: https://www.babylonjs-playground.com/#XCPP9Y#13
 
-        ////////// RAY CAST TO FIND WATER HEIGHT ////////////
-        //var angle = 0;
         let i = 0;
 
         scene.registerBeforeRender(function () {
@@ -252,13 +257,44 @@ window.addEventListener("DOMContentLoaded", async function () {
             }
             // skybox.material = skyboxMaterial;
 
-          }
+        }
+
+          
+
+          // Work on fixing boat inside water issue, dont delete
+
+          // var size = meshes[mesh].getBoundingInfo().boundingBox.extendSize;
+          // console.log("Size: ",size);
+
+
+          // // waterMesh.subMeshes = [];
+          // var verticesCount = waterMesh.getTotalVertices();
+          // console.log("Vertices\n",verticesCount);
+
+
+          // var transparent_material = BABYLON
+
+          // if (waterMesh.intersectsMesh(meshes[mesh],false)){
+          //   console.log("Boat is inside water");
+          //   waterMesh.material.waterColor = new BABYLON.Color4(1, 0, 0, 1,0);
+          // }
+          // else{
+          //   waterMesh.material.waterColor = new BABYLON.Color3(0, 0.1, 0.21);
+
+          // }
+
         });
+
+          
+
+
 
         //lower the boat as it was floating above the water
       }
     });
     console.log(i);
+
+    
 
     // Configure water material
     waterMaterial.addToRenderList(ground);
@@ -302,6 +338,11 @@ window.addEventListener("DOMContentLoaded", async function () {
       waterMaterial.addToRenderList(skybox);
       currentSkyboxName = pathToFile;
     }
+
+    // Default Environment
+
+
+
 
     // return the created scene
     return scene;
@@ -384,7 +425,6 @@ window.addEventListener("DOMContentLoaded", async function () {
     );
     waterMesh.material = waterMaterial;
 
-    //Ground
 
     // Ground
     var groundMaterial = new BABYLON.StandardMaterial("groundMaterial", scene);
@@ -1000,6 +1040,7 @@ window.addEventListener("DOMContentLoaded", async function () {
     });
     console.log(i);
     // return the created scene
+
     return scene;
   };
 
@@ -1244,6 +1285,7 @@ var scene_options_showed = 1;
 //   }
 // });
 
+
 function changeRender(sceneName, e) {
   console.log(sceneName);
   isRaining = false;
@@ -1313,6 +1355,32 @@ function changeWeather(weather, e) {
 
 //Weather stuff
 
+function enableSunnyWeather(){
+  console.log("Ok its sunny");
+
+}
+
+function enableRainyWeather(){
+  console.log("Ok its rainy now");
+
+
+}
+
+function enableSnowyWeather(){
+  console.log("Ok its rainy now");
+
+
+}
+
+function enableDay(){
+  console.log("Rise and Shinee!!!");
+
+}
+
+function enableNight(){
+  console.log("Ok good nigghhttt!!!")
+
+}
 
 //Weather UI;
 // Based on Steven's UI
@@ -1359,10 +1427,6 @@ function changeWeather(weather, e) {
 
 
 
-//Open Weather Stuff
-
-var open_weather_key = "4e6fc4bba619975d9060a9b9da350bf1"
-var open_weather_endpoint = "api.openweathermap.org/data/2.5/weather"
 
 
 function rain(scene) {
@@ -1371,6 +1435,12 @@ function rain(scene) {
   });
 }
 
+
 function Lerp(start, end, amount) {
   return (start + (end - start) * amount);
 }
+
+
+
+// https://www.babylonjs-playground.com/#L76FB1#120
+

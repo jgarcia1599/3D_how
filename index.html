@@ -120,11 +120,16 @@ Online tutorial: https://www.youtube.com/watch?v=OXXkyWku2PY -->
         <h1>Type a city in the search bar to change the weather of your scene.</h1>
         <input type="text">
         <h2>Or customize the weather at your please by clicking below.</h2>
+
+    <div id="weatherContent">
+      <div class="weatherContentinfo">
+        <h1>Customize the weather at your please by clicking below.</h2>
+
         <h1>Time of Day</h1>
-        <p><a href="">Day</a>| <a href="">Night</a></p>
+        <p><span class="weatherSelect" onclick="enableDay()">Day</span>| <span class="weatherSelect" onclick="enableNight()">Night</span></p>
         <br>
         <h1>Weather</h1>
-        <p><a href="">Sunny</a> | <a href="">Rainy</a> | <a href="">Snow</a> </p>
+        <p><span class="weatherSelect" onclick="enableSunnyWeather()">Sunny</span> | <span class="weatherSelect" onclick="enableRainyWeather()">Rainy</span> | <span class="weatherSelect" onclick="enableSnowyWeather()">Snow</span> </p>
 
       </div> -->
     </div>
@@ -138,6 +143,7 @@ Online tutorial: https://www.youtube.com/watch?v=OXXkyWku2PY -->
     <div id="dialog" title="Bronze Age Boat" style="display:none;">
       <p>The Bronze Age Boat is being reconstructed at NYU Abu Dhabi.</p>
       <img src="img/reconstruction.jpg">
+      <p>New York University Abu Dhabi and Zayed University are constructing an 18-m Bronze Age ship for display in the central atrium of the Zayed National Museum. The ship will provide visitors with an invaluable example of one of the earliest forms of maritime technology in the Arabian Gulf. The ship will be a reconstruction of a hypothetical trading vessel from the Umm an-Nar period during the late 3rd millennium BC, with internal wooden framing and an outer hull composed of reed bundles coated in bitumen. It will be built by professional shipwrights and students from both universities. The vessel will rely a variety of historical evidence, including archaeological boat remains, iconography, and cuneiform texts from the Bronze Age, and will be constructed of natural, authentic materials that were available in the region at the time.</p>
       <h1>Reconstruction Process</h1>
       <iframe width="560" height="315" src="https://www.youtube.com/embed/mRf3-JkwqfU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     </div>
