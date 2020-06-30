@@ -405,6 +405,7 @@ window.addEventListener("DOMContentLoaded", async function () {
       "//www.babylonjs.com/assets/waterbump.png",
       scene
     );
+
     waterMaterial.windForce = -10;
     waterMaterial.waveHeight = 0.3;
     waterMaterial.bumpHeight = 0.1;
@@ -1241,8 +1242,8 @@ window.addEventListener("DOMContentLoaded", async function () {
 });
 
 //UI Code: Added By Steven
-var scene_toggle_counter = 0;
-var scene_options_showed = 1;
+// var scene_toggle_counter = 0;
+// var scene_options_showed = 1;
 
 // function toggle_scenepanel(){
 //   console.log("toggle scene pannel");
