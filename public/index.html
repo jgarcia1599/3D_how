@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <title>Bronze Age Boat</title>
+    <script
+      src="https://kit.fontawesome.com/b2ec75c2b7.js"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <!-- Important Resources and Examples:
+https://www.babylonjs-playground.com/#1SLLOJ#17
+Skybox: https://doc.babylonjs.com/how_to/skybox
+Online tutorial: https://www.youtube.com/watch?v=OXXkyWku2PY -->
+    <!--- Link to the last version of BabylonJS --->
+    <script src="https://code.jquery.com/pep/0.4.2/pep.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.6.2/dat.gui.min.js"></script>
+    <script src="https://preview.babylonjs.com/ammo.js"></script>
+    <script src="https://preview.babylonjs.com/cannon.js"></script>
+    <script src="https://preview.babylonjs.com/Oimo.js"></script>
+    <script src="https://preview.babylonjs.com/libktx.js"></script>
+    <script src="https://preview.babylonjs.com/earcut.min.js"></script>
+    <script src="https://preview.babylonjs.com/babylon.js"></script>
+    <script src="https://preview.babylonjs.com/inspector/babylon.inspector.bundle.js"></script>
+    <script src="https://preview.babylonjs.com/materialsLibrary/babylonjs.materials.min.js"></script>
+    <script src="https://preview.babylonjs.com/proceduralTexturesLibrary/babylonjs.proceduralTextures.min.js"></script>
+    <script src="https://preview.babylonjs.com/postProcessesLibrary/babylonjs.postProcess.min.js"></script>
+    <script src="https://preview.babylonjs.com/loaders/babylonjs.loaders.js"></script>
+    <script src="https://preview.babylonjs.com/serializers/babylonjs.serializers.min.js"></script>
+    <script src="https://preview.babylonjs.com/gui/babylon.gui.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <!-- <script src="https://cdn.jsdelivr.net/gh/vast-engineering/jquery-popup-overlay@2/jquery.popupoverlay.min.js"></script> -->
+
+    <style>
+      html,
+      body {
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      #renderCanvas {
+        width: 100%;
+        height: 100%;
+        touch-action: none;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- <div id="sceneTypes">
+      <div id="min-max-button">
+        <i class="fa fa-window-maximize"></i>
+      </div>
+      <img onclick="toggle_scenepanel()" src="img/curtain.png">
+      <h1>Environment</h1>
+    </div>
+    <div id="citysearchbar">
+      <div id="city-scrolldown">
+        <i class="fa fa-window-maximize"></i>
+      </div>
+      <img onclick="toggle_weatherpanel()" src="img/weather.png">
+      <h1>Change Weather by City</h1>
+    </div> -->
+
+    <div id="toggleNightDay">
+      <!-- <img class="nightDay" onclick="changeTimeDay('day')" src="icons/day.png"> -->
+      <i class="fas fa-moon nightDay" id="nightDefault" onclick="changeTimeDay('night')"></i>
+
+
+      <i class="far fa-sun nightDay active" id="dayDefault" onclick="changeTimeDay('day')"></i>
+
+
+    </div>
+
+    <div class="sceneTypesContent" id="upperLeft">
+      <h1 id="titleSceneTypesContent">Environment</h1>
+
+      <div class="column environment" onclick="changeRender('beach', this)">
+        <!-- <img src="./img/beach.jpg" />Coastline -->
+        <i class="fas fa-umbrella-beach"></i>
+        <h1>Beach</h1>
+      </div>
+      <div class="column environment" onclick="changeRender('desert', this)">
+        <i class="fas fa-wind"></i>
+        <h1>Desert</h1>
+        <!-- <img src="./img/desert.jpg" />Desert -->
+      </div>
+      <div class="column environment active" onclick="changeRender('seas', this)">
+        <i class="fas fa-water"></i>
+        <h1>Seas</h1>
+        <!-- <img src="./img/seas.jpeg" />High Seas -->
+      </div>
+      <div class="column environment" onclick="changeRender('museum', this)">
+        <i class="fas fa-landmark"></i>
+        <h1>Museum</h1>
+        <!-- <img src="./img/museum.jpeg" />Museum -->
+      </div>
+    </div>
+
+    <div class="sceneTypesContent" id="upperRight">
+      <h1 id="titleSceneTypesContent">Weather</h1>
+      <div class="column weather active" onclick="changeWeather('clear', this)" id="sunnyDefault">
+        <i class="far fa-sun"></i>
+        <h1>Clear</h1>
+      </div>
+      <div class="column weather" onclick="changeWeather('cloudy', this)">
+        <i class="fas fa-cloud" ></i>
+        <h1>Cloudy</h1>
+      </div>
+      <div class="column weather" onclick="changeWeather('rainy', this)">
+        <i class="fas fa-cloud-rain"></i>
+        <h1>Rainy</h1>
+      </div>
+      <!-- <div class="weatherContentinfo">
+        <h1>Type a city in the search bar to change the weather of your scene.</h1>
+        <input type="text">
+        <h2>Or customize the weather at your please by clicking below.</h2>
+
+    <div id="weatherContent">
+      <div class="weatherContentinfo">
+        <h1>Customize the weather at your please by clicking below.</h2>
+
+        <h1>Time of Day</h1>
+        <p><span class="weatherSelect" onclick="enableDay()">Day</span>| <span class="weatherSelect" onclick="enableNight()">Night</span></p>
+        <br>
+        <h1>Weather</h1>
+        <p><span class="weatherSelect" onclick="enableSunnyWeather()">Sunny</span> | <span class="weatherSelect" onclick="enableRainyWeather()">Rainy</span> | <span class="weatherSelect" onclick="enableSnowyWeather()">Snow</span> </p>
+
+      </div> -->
+    </div>
+
+    <div id="changeFromPlayground">
+      <!-- <img class="nightDay" onclick="changeTimeDay('day')" src="icons/day.png"> -->
+      <a href="display-mode.html"><p>Change To Focused View</p></a>
+
+
+    </div>
+    <div id="dialog" title="Bronze Age Boat" style="display:none;">
+      <p>The Bronze Age Boat is being reconstructed at NYU Abu Dhabi.</p>
+      <img src="img/reconstruction.jpg">
+      <p>New York University Abu Dhabi and Zayed University are constructing an 18-m Bronze Age ship for display in the central atrium of the Zayed National Museum. The ship will provide visitors with an invaluable example of one of the earliest forms of maritime technology in the Arabian Gulf. The ship will be a reconstruction of a hypothetical trading vessel from the Umm an-Nar period during the late 3rd millennium BC, with internal wooden framing and an outer hull composed of reed bundles coated in bitumen. It will be built by professional shipwrights and students from both universities. The vessel will rely a variety of historical evidence, including archaeological boat remains, iconography, and cuneiform texts from the Bronze Age, and will be constructed of natural, authentic materials that were available in the region at the time.</p>
+      <h1>Reconstruction Process</h1>
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/mRf3-JkwqfU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+    <canvas id="renderCanvas"></canvas>
+    <script src="js/babylon_helper.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/beachscene.js"></script>
+  </body>
+</html>
