@@ -22,10 +22,6 @@
 body {
   font-family: "Gill-Sans";
 }
-
-#renderCanvas {
-  cursor: pointer;
-}
 /* #sceneTypes {
   width: 300px;
   height: 80px;
