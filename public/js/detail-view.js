@@ -51,11 +51,11 @@ window.addEventListener("DOMContentLoaded", async function () {
         var spheresArray = [];
         var glowingMeshArray = [];
         var scene = new BABYLON.Scene(engine);
-        var middleOfBoat = new BABYLON.Vector3(31, 9, 4);
+        var middleOfBoat = new BABYLON.Vector3(31, 5, 4);
 
         // sphere.position = lockedPosition;
         // Camera
-        scene.debugLayer.show();
+        // scene.debugLayer.show();
 
         var camera = new BABYLON.ArcRotateCamera(
             "Camera",
@@ -97,14 +97,8 @@ window.addEventListener("DOMContentLoaded", async function () {
         skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
         skybox.material = skyboxMaterial;
 
-        var markerMaterial = new BABYLON.StandardMaterial("markerMaterial", scene);
-        // markerMaterial.diffuseTexture = new BABYLON.Texture("../icons/plusSideOrange.png", scene);
-        markerMaterial.diffuseColor =  new BABYLON.Color3(0.95, 0.39, 0.13);
-        markerMaterial.pointsCloud = true;
-
         for (var i = 0; i < spherePositions.length; i++) {
-            spheresArray[i] = BABYLON.MeshBuilder.CreateSphere("sphere" + i, { diameter: 0.4, scene });
-            spheresArray[i].material = markerMaterial;
+            spheresArray[i] = BABYLON.MeshBuilder.CreateSphere("sphere" + i, { diameter: 2, scene });
             spheresArray[i].position = spherePositions[i].position;
             spheresArray[i].titleInfo = spherePositions[i].name;
             spheresArray[i].contentInfo = spherePositions[i].text;
@@ -130,7 +124,6 @@ window.addEventListener("DOMContentLoaded", async function () {
                     currentTarget = new BABYLON.Vector3(sphere.position.x, sphere.position.y, sphere.position.z);
                     currentIndex = sphere.indexForGallery;
                     infoTitle.innerHTML = sphere.titleInfo;
-                    markerMaterial.alpha = 0;
                     infoText.innerHTML = sphere.contentInfo;
                     if (spheresArray[index  + 1] != null) {
                         prevDisplayContainer.style.display = "flex";
@@ -219,7 +212,6 @@ window.addEventListener("DOMContentLoaded", async function () {
 
                 }
                 else {
-                    markerMaterial.alpha = 1;
                     camera.radius = Lerp(camera.radius, 30, 0.1);
                 }
             }
@@ -227,11 +219,9 @@ window.addEventListener("DOMContentLoaded", async function () {
                 camera.target = currentTarget;
             }
             for (var i = 0; i < glowingMeshArray.length; i++) {
-                glowMeshAlpha += 0.04;
-                spheresArray[i].scaling = new BABYLON.Vector3(2.5 + Math.sin(glowMeshAlpha / 5), 2.5 + Math.sin(glowMeshAlpha / 5), 2.5 +Math.sin(glowMeshAlpha / 5));
-
-                glowingMeshArray[i].blurHorizontalSize = Math.sin(glowMeshAlpha /5) * 2;
-                glowingMeshArray[i].blurVerticalSize = Math.sin(glowMeshAlpha /5) * 2;
+                glowMeshAlpha += 0.02;
+                glowingMeshArray[i].blurHorizontalSize = Math.sin(glowMeshAlpha / 3);
+                glowingMeshArray[i].blurVerticalSize = Math.sin(glowMeshAlpha / 3);
             }
         });
         // return the created scene
@@ -253,8 +243,4 @@ window.addEventListener("DOMContentLoaded", async function () {
 
 function Lerp(start, end, amount) {
     return (start + (end - start) * amount);
-}
-
-function map(value, x1, y1, x2, y2) { 
-    return (value - x1) * (y2 - x2) / (y1 - x1) + x2;
 }
