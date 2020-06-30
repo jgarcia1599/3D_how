@@ -8,13 +8,32 @@ var prevDayTime = false;
 var mysystem;
 var currentSkyboxName;
 var currentIndex;
-
 var url =
     "https://cdn.rawgit.com/BabylonJS/Extensions/master/DynamicTerrain/dist/babylon.dynamicTerrain.min.js";
 var s = document.createElement("script");
 s.src = url;
 document.head.appendChild(s);
 window.addEventListener("DOMContentLoaded", async function () {
+    //initialize loading screen by creating a div and styling it; taken from https://www.babylonjs-playground.com/#5Y2GIC#39
+    BABYLON.DefaultLoadingScreen.prototype.displayLoadingUI = function () {
+        if (document.getElementById("customLoadingScreenDiv")) {
+            // Do not add a loading screen if there is already one
+            document.getElementById("customLoadingScreenDiv").style.display = "initial";
+            return;
+        }
+        this._loadingDiv = document.createElement("div");
+        this._loadingDiv.id = "customLoadingScreenDiv";
+        this._loadingDiv.innerHTML = "Bronze Age Boat Viewer Is Being Loaded";
+        // document.getElementsByTagName('head')[0].appendChild(customLoadingScreenCss);
+        this._resizeLoadingUI();
+        window.addEventListener("resize", this._resizeLoadingUI);
+        document.body.appendChild(this._loadingDiv);
+    };
+    
+    BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function(){
+        document.getElementById("customLoadingScreenDiv").style.display = "none";
+        console.log("scene is now loaded");
+    }
     // get the canvas DOM element
     var canvas = document.getElementById("renderCanvas");
 
@@ -22,8 +41,9 @@ window.addEventListener("DOMContentLoaded", async function () {
     var engine = new BABYLON.Engine(canvas, true);
 
     var autoRotateSceneCreate = function () {
-        $('#informationContainer').hide();
+        engine.displayLoadingUI();
 
+        $('#informationContainer').hide();
         // create a basic BJS Scene object
         // var spherePositions = [new BABYLON.Vector3(13, 6, 4), new BABYLON.Vector3(12.5, 14, 4), new BABYLON.Vector3(30, 3, 4), new BABYLON.Vector3(49, 5, 4)];
         var spherePositions = [
@@ -51,10 +71,14 @@ window.addEventListener("DOMContentLoaded", async function () {
         var spheresArray = [];
         var glowingMeshArray = [];
         var scene = new BABYLON.Scene(engine);
+<<<<<<< HEAD:js/detail-view.js
+        var middleOfBoat = new BABYLON.Vector3(31, 9, 4);
+=======
         var middleOfBoat = new BABYLON.Vector3(31, 5, 4);
 
         // sphere.position = lockedPosition;
         // Camera
+>>>>>>> master:public/js/detail-view.js
         // scene.debugLayer.show();
 
         var camera = new BABYLON.ArcRotateCamera(
@@ -97,6 +121,16 @@ window.addEventListener("DOMContentLoaded", async function () {
         skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
         skybox.material = skyboxMaterial;
 
+<<<<<<< HEAD:js/detail-view.js
+        var markerMaterial = new BABYLON.StandardMaterial("markerMaterial", scene);
+        // markerMaterial.diffuseTexture = new BABYLON.Texture("../icons/plusSideOrange.png", scene);
+        // markerMaterial.diffuseColor =  new BABYLON.Color3(0.95, 0.39, 0.13);
+        markerMaterial.diffuseColor =  new BABYLON.Color3(1, 1, 1);
+
+        markerMaterial.pointsCloud = true;
+
+=======
+>>>>>>> master:public/js/detail-view.js
         for (var i = 0; i < spherePositions.length; i++) {
             spheresArray[i] = BABYLON.MeshBuilder.CreateSphere("sphere" + i, { diameter: 2, scene });
             spheresArray[i].position = spherePositions[i].position;
@@ -187,6 +221,8 @@ window.addEventListener("DOMContentLoaded", async function () {
         BABYLON.SceneLoader.ImportMesh(null, "dhow/", "dhow_posAdjusted.obj", scene, function (
             meshes
         ) {
+            //remove loading screen when mesh if rendered in the scene
+            engine.hideLoadingUI();
             //postioning of meshes
             for (mesh in meshes) {
                 var dhow = meshes[mesh];
@@ -238,9 +274,41 @@ window.addEventListener("DOMContentLoaded", async function () {
         engine.resize();
     });
 });
-
-
-
 function Lerp(start, end, amount) {
     return (start + (end - start) * amount);
+<<<<<<< HEAD:js/detail-view.js
+}
+
+var scene_toggle_counter = 0;
+var scene_options_showed = 1;
+
+function toggle_scenepanel(){
+  console.log("toggle scene pannel");
+  console.log(scene_toggle_counter )
+
+  if (scene_toggle_counter == 0){
+    if ($('#leafletMapContainer').style.bottom > 0) {
+        $('#leafletMapContainer').style.bottom = "-100px";
+    }
+    else {
+        $('#leafletMapContainer').animate({ bottom: '+=' + (window.screen.height - 100) });
+        $('#switchToMap').animate({ bottom: '+=' + (window.screen.height - 150)});
+    }
+    scene_toggle_counter = 1;
+    console.log("okay move right + 350px");
+
+  }
+  else if(scene_toggle_counter ==1){
+    $('#leafletMapContainer').animate({ bottom: '-=' +  window.screen.height  });
+    $('#switchToMap').animate({ bottom: '-=' + window.screen.height });
+
+    scene_toggle_counter = 0;
+    scene_options_showed = 0;
+
+    console.log("okay move right - 350px");
+
+  }
+
+=======
+>>>>>>> master:public/js/detail-view.js
 }
