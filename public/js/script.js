@@ -1035,7 +1035,6 @@ window.addEventListener("DOMContentLoaded", async function () {
 //     button.addClass("fa fa-window-minimize");
 //   }
 // });
-
 function changeRender(sceneName, e) {
   isRaining = false;
   weatherState = "clear";
