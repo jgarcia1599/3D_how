@@ -955,6 +955,11 @@ window.addEventListener("DOMContentLoaded", async function () {
     return scene;
   };
 
+<<<<<<< HEAD
+=======
+  
+
+>>>>>>> origin
   // call the createScene function
   var seasScene = createScene(true, weatherState);
 
@@ -989,7 +994,12 @@ window.addEventListener("DOMContentLoaded", async function () {
     // }
 
     else if (state == "museum") {
+<<<<<<< HEAD
       museumScene.render();
+=======
+      museumScene.render()
+      // autoRotateScene.render();
+>>>>>>> origin
     }
   });
 
@@ -1007,6 +1017,11 @@ window.addEventListener("DOMContentLoaded", async function () {
   // https://www.babylonjs-playground.com/#L76FB1#49
 });
 
+<<<<<<< HEAD
+=======
+//UI Code: Added By Steven
+
+>>>>>>> origin
 function changeRender(sceneName, e) {
   isRaining = false;
   weatherState = "clear";
@@ -1065,6 +1080,7 @@ function changeWeather(weather, e) {
   }
   e.className = "column weather active";
 }
+<<<<<<< HEAD
 
 
 
@@ -1112,5 +1128,7 @@ function Lerp(start, end, amount) {
 
 
 
+=======
+>>>>>>> origin
 // https://www.babylonjs-playground.com/#L76FB1#120
 
