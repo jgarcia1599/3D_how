@@ -55,7 +55,7 @@ window.addEventListener("DOMContentLoaded", async function () {
             {
                 name: 'Mast',
                 text: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Itaque libero labore est. Adipisci, doloribus modi? Facere sunt doloribus at perspiciatis asperiores odit. Eum autem consectetur quis ab nisi incidunt necessitatibus',
-                position: new BABYLON.Vector3(12.5, 14, 4)
+                position: new BABYLON.Vector3(9, 16, 4)
             },
             {
                 name: 'Deck',
@@ -72,7 +72,11 @@ window.addEventListener("DOMContentLoaded", async function () {
         var glowingMeshArray = [];
         var scene = new BABYLON.Scene(engine);
         var middleOfBoat = new BABYLON.Vector3(31, 9, 4);
-        // scene.debugLayer.show();
+
+//         scene.debugLayer.show();
+//         var middleOfBoat = new BABYLON.Vector3(31, 5, 4);
+
+
 
         var camera = new BABYLON.ArcRotateCamera(
             "Camera",
@@ -210,7 +214,7 @@ window.addEventListener("DOMContentLoaded", async function () {
 
         });
 
-        BABYLON.SceneLoader.ImportMesh(null, "dhow/", "dhow_posAdjusted.obj", scene, function (
+        BABYLON.SceneLoader.ImportMesh(null, "dhow/", "boat_remeshed.obj", scene, function (
             meshes
         ) {
             //remove loading screen when mesh if rendered in the scene
@@ -219,6 +223,13 @@ window.addEventListener("DOMContentLoaded", async function () {
             for (mesh in meshes) {
                 var dhow = meshes[mesh];
                 meshes[mesh].rotation.x = (3 * Math.PI) / 2;
+                meshes[mesh].position.x = 31;
+                meshes[mesh].position.z = 4;
+                meshes[mesh].scaling.x = 0.2;
+                meshes[mesh].scaling.y = 0.2;
+                meshes[mesh].scaling.z = 0.2;
+
+                // meshes[mesh].scale.x = 0.2;
 
                 scene.registerBeforeRender(function () {
                 });
