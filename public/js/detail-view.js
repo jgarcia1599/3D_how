@@ -71,19 +71,12 @@ window.addEventListener("DOMContentLoaded", async function () {
         var spheresArray = [];
         var glowingMeshArray = [];
         var scene = new BABYLON.Scene(engine);
-<<<<<<< HEAD:js/detail-view.js
-        var middleOfBoat = new BABYLON.Vector3(31, 9, 4);
-<<<<<<< HEAD:js/detail-view.js
         scene.debugLayer.show();
-=======
-=======
         var middleOfBoat = new BABYLON.Vector3(31, 5, 4);
 
         // sphere.position = lockedPosition;
         // Camera
->>>>>>> master:public/js/detail-view.js
         // scene.debugLayer.show();
->>>>>>> 47401f8d025f899aaaa963dcbcbfe5dbb79c6f5c:public/js/detail-view.js
 
         var camera = new BABYLON.ArcRotateCamera(
             "Camera",
@@ -125,16 +118,12 @@ window.addEventListener("DOMContentLoaded", async function () {
         skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
         skybox.material = skyboxMaterial;
 
-<<<<<<< HEAD:js/detail-view.js
         var markerMaterial = new BABYLON.StandardMaterial("markerMaterial", scene);
         // markerMaterial.diffuseTexture = new BABYLON.Texture("../icons/plusSideOrange.png", scene);
         // markerMaterial.diffuseColor =  new BABYLON.Color3(0.95, 0.39, 0.13);
         markerMaterial.diffuseColor =  new BABYLON.Color3(1, 1, 1);
 
         markerMaterial.pointsCloud = true;
-
-=======
->>>>>>> master:public/js/detail-view.js
         for (var i = 0; i < spherePositions.length; i++) {
             spheresArray[i] = BABYLON.MeshBuilder.CreateSphere("sphere" + i, { diameter: 2, scene });
             spheresArray[i].position = spherePositions[i].position;
@@ -287,39 +276,38 @@ window.addEventListener("DOMContentLoaded", async function () {
 });
 function Lerp(start, end, amount) {
     return (start + (end - start) * amount);
-<<<<<<< HEAD:js/detail-view.js
+// <<<<<<< HEAD:js/detail-view.js
 }
 
-var scene_toggle_counter = 0;
-var scene_options_showed = 1;
+// var scene_toggle_counter = 0;
+// var scene_options_showed = 1;
 
-function toggle_scenepanel(){
-  console.log("toggle scene pannel");
-  console.log(scene_toggle_counter )
+// function toggle_scenepanel(){
+//   console.log("toggle scene pannel");
+//   console.log(scene_toggle_counter )
 
-  if (scene_toggle_counter == 0){
-    if ($('#leafletMapContainer').style.bottom > 0) {
-        $('#leafletMapContainer').style.bottom = "-100px";
-    }
-    else {
-        $('#leafletMapContainer').animate({ bottom: '+=' + (window.screen.height - 100) });
-        $('#switchToMap').animate({ bottom: '+=' + (window.screen.height - 150)});
-    }
-    scene_toggle_counter = 1;
-    console.log("okay move right + 350px");
+//   if (scene_toggle_counter == 0){
+//     if ($('#leafletMapContainer').style.bottom > 0) {
+//         $('#leafletMapContainer').style.bottom = "-100px";
+//     }
+//     else {
+//         $('#leafletMapContainer').animate({ bottom: '+=' + (window.screen.height - 100) });
+//         $('#switchToMap').animate({ bottom: '+=' + (window.screen.height - 150)});
+//     }
+//     scene_toggle_counter = 1;
+//     console.log("okay move right + 350px");
 
-  }
-  else if(scene_toggle_counter ==1){
-    $('#leafletMapContainer').animate({ bottom: '-=' +  window.screen.height  });
-    $('#switchToMap').animate({ bottom: '-=' + window.screen.height });
+//   }
+//   else if(scene_toggle_counter ==1){
+//     $('#leafletMapContainer').animate({ bottom: '-=' +  window.screen.height  });
+//     $('#switchToMap').animate({ bottom: '-=' + window.screen.height });
 
-    scene_toggle_counter = 0;
-    scene_options_showed = 0;
+//     scene_toggle_counter = 0;
+//     scene_options_showed = 0;
 
-    console.log("okay move right - 350px");
+//     console.log("okay move right - 350px");
 
-  }
+//   }
 
-=======
->>>>>>> master:public/js/detail-view.js
-}
+// =======
+// >>>>>>> master:public/js/detail-view.js

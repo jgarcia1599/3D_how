@@ -30,7 +30,7 @@ window.addEventListener("DOMContentLoaded", async function () {
 
     // create a basic BJS Scene object
     var scene = new BABYLON.Scene(engine);
-    // scene.debugLayer.show();
+    scene.debugLayer.show();
 
     // Camera
     var camera = new BABYLON.ArcRotateCamera(
@@ -124,11 +124,15 @@ window.addEventListener("DOMContentLoaded", async function () {
       //postioning of meshes
       for (mesh in meshes) {
         boat.push(mesh);
+
+
         //mesh positioning
         var dhow = meshes[mesh];
         meshes[mesh].rotation.x = (3 * Math.PI) / 2;
         waterMaterial.addToRenderList(meshes[mesh]);
         // meshes[mesh].rotation.z = 120;
+
+
         // Boat's Action Manager Stuff 
         meshes[mesh].actionManager = new BABYLON.ActionManager(scene);
         meshes[mesh].actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickUpTrigger, function () {
@@ -163,14 +167,14 @@ window.addEventListener("DOMContentLoaded", async function () {
           timeofDay = dayTime;
           //check time of day
           if (timeofDay == false) {
-
+            console.log(meshes[mesh].position.x);
             groundMaterial.diffuseColor = new BABYLON.Color3(0.02, 0.03, 0.17);
             groundMaterial.emissiveColor = new BABYLON.Color3(0.02, 0.03, 0.17);
             if (currentSkyboxName != "textures/nightSkyboxClear/clearNight") {
               changeSkybox("textures/nightSkyboxClear/clearNight", skybox);
               skybox.dispose();
             }
-            console.log(meshes[mesh].position.y);
+            console.log("sdasdasdasdadsdasdasdsaadsads");
             //assign rain ps to mysystem var
             if (weatherState == "rainy" && isRaining == false) {
               
@@ -481,6 +485,7 @@ window.addEventListener("DOMContentLoaded", async function () {
         let i = 0;
 
         scene.registerBeforeRender(function () {
+          console.log("helloooo");
           var x = meshes[mesh].position.x;
           var z = meshes[mesh].position.z;
           var waterHeight = getWaterHeightAtCoordinates(x, z, waterMaterial);
@@ -951,6 +956,7 @@ window.addEventListener("DOMContentLoaded", async function () {
     return scene;
   };
 
+
   // call the createScene function
   var seasScene = createScene(true, weatherState);
 
@@ -958,15 +964,15 @@ window.addEventListener("DOMContentLoaded", async function () {
 
   var desertScene = desertSceneCreate(dayTime, weatherState);
 
-
   var museumScene = museumSceneCreate();
   // var autoRotateScene = autoRotateSceneCreate();
   // run the render loop
   engine.runRenderLoop(function () {
+
     if (state == "seas") {
       seasScene.render();
     }
-    
+
     else if (state == "beach") {
       beachScene.render();
     }
@@ -974,67 +980,16 @@ window.addEventListener("DOMContentLoaded", async function () {
     else if (state == "desert") {
       desertScene.render();
     }
+
     else if (state == "museum") {
       museumScene.render();
     }
-  });
 
-  // the canvas/window resize event handler
+  });
   window.addEventListener("resize", function () {
     engine.resize();
   });
-
-  //Useful playgrounds and resources:
-  // https://playground.babylonjs.com/#6QWN8D#5
-  //https://www.gamefromscratch.com/page/BabylonJS-Tutorial-Series.aspx
-  // https://www.babylonjs-playground.com/#IW99H0
-
-  // For Wateranimation
-  // https://www.babylonjs-playground.com/#L76FB1#49
 });
-// var scene_toggle_counter = 0;
-// var scene_options_showed = 1;
-
-// function toggle_scenepanel(){
-//   console.log("toggle scene pannel");
-//   console.log(scene_toggle_counter )
-
-//   if (scene_toggle_counter == 0){
-//     $('#sceneTypes').animate({ left: '+=340px'  });
-//     scene_toggle_counter = 1;
-//     console.log("okay move right + 350px");
-
-//   }
-//   else if(scene_toggle_counter ==1){
-//     $('#sceneTypes').animate({ left: '-=340px'  });
-//     scene_toggle_counter = 0;
-//     scene_options_showed = 0;
-
-//     console.log("okay move right - 350px");
-
-//   }
-
-// }
-
-//hide panel at the beginning
-// $("#sceneTypesContent").slideToggle();
-// $("#sceneTypesContent").slideToggle();
-// $("#min-max-button").click(function() {
-//   console.log("clicked");
-//   $("#sceneTypesContent").slideToggle();
-//   // $("sceneTypesContent").css('display','flex');
-//   var button = $(this).find("i");
-//   if (button.hasClass("fa fa-window-minimize")) {
-//     console.log("he");
-//     scene_options_showed = 1;
-//     button.removeClass("fas fa-window-minimize");
-//     button.addClass("fa fa-window-maximize");
-//   } else if (button.hasClass("fa fa-window-maximize")) {
-//     button.removeClass("fas fa-window-maximize");
-
-//     button.addClass("fa fa-window-minimize");
-//   }
-// });
 
 function changeRender(sceneName, e) {
   isRaining = false;
@@ -1095,6 +1050,8 @@ function changeWeather(weather, e) {
   e.className = "column weather active";
 }
 
+
+
 //Weather stuff
 
 function enableSunnyWeather(){
@@ -1124,54 +1081,9 @@ function enableNight(){
 
 }
 
-//Weather UI;
-// Based on Steven's UI
-
-// var toggle_counter = 1;
-// var options_showed = 0;
-// function toggle_weatherpanel(){
-//   console.log("toggle");
-//   console.log(toggle_counter)
-
-//   if (toggle_counter == 0){
-//     $('#citysearchbar').animate({ left: '+=350px'  });
-//     toggle_counter = 1;
-//     console.log("lalalalala");
-
-//   }
-//   else if(toggle_counter ==1){
-//     $('#citysearchbar').animate({ left: '-=350px'  });
-//     toggle_counter = 0;
-//     options_showed = 0;
-
-//   }
-// }
-
-
-// $("#city-scrolldown").click(function() {
-//   console.log("clicked weather stuff");
-//   $("#weatherContent").slideToggle();
-//   var button = $(this).find("i");
-//   if (button.hasClass("fa fa-window-minimize")) {
-//     //options have been showed, we can hide the panel
-//     options_showed = 1;
-//     console.log("he");
-//     button.removeClass("fas fa-window-minimize");
-//     button.addClass("fa fa-window-maximize");
-//   } else if (button.hasClass("fa fa-window-maximize")) {
-//     button.removeClass("fas fa-window-maximize");
-
-//     button.addClass("fa fa-window-minimize");
-//   }
-// });
-
-//Central Panel Stuff
-
-
-
-
 
 function rain(scene) {
+  console.log("rain created!");
   BABYLON.ParticleHelper.CreateAsync("rain", scene, false).then((set) => {
     set.start();
   });
@@ -1181,5 +1093,4 @@ function rain(scene) {
 function Lerp(start, end, amount) {
   return (start + (end - start) * amount);
 }
-// https://www.babylonjs-playground.com/#L76FB1#120
 
