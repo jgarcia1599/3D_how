@@ -167,7 +167,6 @@ window.addEventListener("DOMContentLoaded", async function () {
           timeofDay = dayTime;
           //check time of day
           if (timeofDay == false) {
-            light.intensity = 0.4;
 
             groundMaterial.diffuseColor = new BABYLON.Color3(0.02, 0.03, 0.17);
             groundMaterial.emissiveColor = new BABYLON.Color3(0.02, 0.03, 0.17);
@@ -178,6 +177,7 @@ window.addEventListener("DOMContentLoaded", async function () {
             console.log("raining now");
             //assign rain ps to mysystem var
             if (weatherState == "rainy" && isRaining == false) {
+              
               new BABYLON.ParticleHelper.CreateAsync("rain", scene).then((systems) => {
                 systems.start();
                 systems.emitter = new BABYLON.Vector3(-1, -10000, 3);
@@ -205,6 +205,8 @@ window.addEventListener("DOMContentLoaded", async function () {
                 mysystem = systems;
               });
               isRaining = true;
+              light.intensity = 0.8;
+
               if (currentSkyboxName != "textures/overcastAndRainy/overcast") {
                 // skybox.dispose();
                 // skyboxMaterial.dispose();
@@ -219,6 +221,7 @@ window.addEventListener("DOMContentLoaded", async function () {
             //kill msystem var/the rain
             if (weatherState == "clear") {
               isRaining = false;
+              light.intensity = 1.0;
               if (mysystem != null) {
                 mysystem.dispose();
               }
@@ -517,7 +520,6 @@ window.addEventListener("DOMContentLoaded", async function () {
           }
 
           if (timeofDay == true) {
-            light.intensity = 1.0;
             // groundMaterial.emissiveColor = new BABYLON.Color3(0.7, 0.6, 0.5);
             groundMaterial.diffuseColor = new BABYLON.Color3(0.7, 0.6, 0.5);
             groundMaterial.emissiveColor = new BABYLON.Color3(0.7, 0.6, 0.5);
@@ -530,11 +532,14 @@ window.addEventListener("DOMContentLoaded", async function () {
                 changeSkybox("textures/overcastAndRainy/overcast", skybox);
                 skybox.dispose();
               }
+              light.intensity = 0.8;
+
               isRaining = true;
             }
             //kill msystem var/the rain
             if (weatherState == "clear") {
               isRaining = false;
+              light.intensity = 1.0;
               if (mysystem != null) {
                 mysystem.dispose();
               }
