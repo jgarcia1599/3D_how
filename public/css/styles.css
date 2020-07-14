@@ -22,10 +22,6 @@
 body {
   font-family: "Gill-Sans";
 }
-
-#renderCanvas {
-  cursor: pointer;
-}
 /* #sceneTypes {
   width: 300px;
   height: 80px;
@@ -354,7 +350,10 @@ text-decoration: none;
   margin-bottom: 17px;
 }
 
+<<<<<<< HEAD:css/styles.css
 <<<<<<< HEAD
+=======
+>>>>>>> 47401f8d025f899aaaa963dcbcbfe5dbb79c6f5c:public/css/styles.css
 /* #informationContainer #lessThan .fa-less-than {
   position: absolute;
   bottom: 10px;
@@ -424,6 +423,10 @@ text-decoration: none;
     top: 100%;
     left: 0;
   }
+<<<<<<< HEAD:css/styles.css
 }
 =======
 >>>>>>> origin
+=======
+}
+>>>>>>> 47401f8d025f899aaaa963dcbcbfe5dbb79c6f5c:public/css/styles.css
