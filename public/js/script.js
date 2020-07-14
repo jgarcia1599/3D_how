@@ -30,7 +30,7 @@ window.addEventListener("DOMContentLoaded", async function () {
 
     // create a basic BJS Scene object
     var scene = new BABYLON.Scene(engine);
-    scene.debugLayer.show();
+    // scene.debugLayer.show();
 
     // Camera
     var camera = new BABYLON.ArcRotateCamera(
@@ -955,11 +955,6 @@ window.addEventListener("DOMContentLoaded", async function () {
     return scene;
   };
 
-<<<<<<< HEAD:js/script.js
-<<<<<<< HEAD
-=======
-  
-=======
   var autoRotateSceneCreate = function () {
     // create a basic BJS Scene object
     // var spherePositions = [new BABYLON.Vector3(13, 6, 4), new BABYLON.Vector3(12.5, 14, 4), new BABYLON.Vector3(30, 3, 4), new BABYLON.Vector3(49, 5, 4)];
@@ -1102,9 +1097,6 @@ window.addEventListener("DOMContentLoaded", async function () {
     // return the created scene
     return scene;
   };
->>>>>>> 47401f8d025f899aaaa963dcbcbfe5dbb79c6f5c:public/js/script.js
-
->>>>>>> origin
   // call the createScene function
   var seasScene = createScene(true, weatherState);
 
@@ -1139,15 +1131,8 @@ window.addEventListener("DOMContentLoaded", async function () {
     // }
 
     else if (state == "museum") {
-<<<<<<< HEAD:js/script.js
-<<<<<<< HEAD
-      museumScene.render();
-=======
       museumScene.render()
-=======
->>>>>>> 47401f8d025f899aaaa963dcbcbfe5dbb79c6f5c:public/js/script.js
-      // autoRotateScene.render();
->>>>>>> origin
+
     }
   });
 
@@ -1164,12 +1149,6 @@ window.addEventListener("DOMContentLoaded", async function () {
   // For Wateranimation
   // https://www.babylonjs-playground.com/#L76FB1#49
 });
-
-<<<<<<< HEAD
-=======
-//UI Code: Added By Steven
-<<<<<<< HEAD:js/script.js
-=======
 // var scene_toggle_counter = 0;
 // var scene_options_showed = 1;
 
@@ -1213,10 +1192,6 @@ window.addEventListener("DOMContentLoaded", async function () {
 //     button.addClass("fa fa-window-minimize");
 //   }
 // });
-
->>>>>>> 47401f8d025f899aaaa963dcbcbfe5dbb79c6f5c:public/js/script.js
-
->>>>>>> origin
 function changeRender(sceneName, e) {
   isRaining = false;
   weatherState = "clear";
@@ -1275,10 +1250,6 @@ function changeWeather(weather, e) {
   }
   e.className = "column weather active";
 }
-<<<<<<< HEAD:js/script.js
-<<<<<<< HEAD
-=======
->>>>>>> 47401f8d025f899aaaa963dcbcbfe5dbb79c6f5c:public/js/script.js
 
 
 
@@ -1311,11 +1282,6 @@ function enableNight(){
 
 }
 
-<<<<<<< HEAD:js/script.js
-
-function rain(scene) {
-  console.log("rain created!");
-=======
 //Weather UI;
 // Based on Steven's UI
 
@@ -1364,7 +1330,6 @@ function rain(scene) {
 
 
 function rain(scene) {
->>>>>>> 47401f8d025f899aaaa963dcbcbfe5dbb79c6f5c:public/js/script.js
   BABYLON.ParticleHelper.CreateAsync("rain", scene, false).then((set) => {
     set.start();
   });
@@ -1374,13 +1339,5 @@ function rain(scene) {
 function Lerp(start, end, amount) {
   return (start + (end - start) * amount);
 }
-
-
-
-<<<<<<< HEAD:js/script.js
-=======
->>>>>>> origin
-=======
->>>>>>> 47401f8d025f899aaaa963dcbcbfe5dbb79c6f5c:public/js/script.js
 // https://www.babylonjs-playground.com/#L76FB1#120
 
