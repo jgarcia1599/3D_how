@@ -16,7 +16,25 @@ var s = document.createElement("script");
 s.src = url;
 document.head.appendChild(s);
 window.addEventListener("DOMContentLoaded", async function () {
+  BABYLON.DefaultLoadingScreen.prototype.displayLoadingUI = function () {
+    if (document.getElementById("customLoadingScreenDiv")) {
+        // Do not add a loading screen if there is already one
+        document.getElementById("customLoadingScreenDiv").style.display = "initial";
+        return;
+    }
+    this._loadingDiv = document.createElement("div");
+    this._loadingDiv.id = "customLoadingScreenDiv";
+    this._loadingDiv.innerHTML = "Bronze Age Boat Viewer Is Being Loaded";
+    // document.getElementsByTagName('head')[0].appendChild(customLoadingScreenCss);
+    this._resizeLoadingUI();
+    window.addEventListener("resize", this._resizeLoadingUI);
+    document.body.appendChild(this._loadingDiv);
+};
 
+BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function(){
+    document.getElementById("customLoadingScreenDiv").style.display = "none";
+    console.log("scene is now loaded");
+}
   // get the canvas DOM element
   var canvas = document.getElementById("renderCanvas");
 
@@ -25,6 +43,8 @@ window.addEventListener("DOMContentLoaded", async function () {
   
   // createScene function that creates and return the scene
   var createScene = function (timeofDay, currentWeather) {
+    engine.displayLoadingUI();
+
     var timeofDay = dayTime;
     weatherState = "clear";
 
@@ -160,6 +180,7 @@ window.addEventListener("DOMContentLoaded", async function () {
           var z = meshes[mesh].position.z;
           var waterHeight = getWaterHeightAtCoordinates(x, z, waterMaterial);
           meshes[mesh].position.y = waterHeight - 35;
+
           timeofDay = dayTime;
           //check time of day
           if (timeofDay == false) {
@@ -267,7 +288,7 @@ window.addEventListener("DOMContentLoaded", async function () {
         //lower the boat as it was floating above the water
       }
     });
-    console.log(i);
+    console.log('hoioo');
 
     
 
@@ -276,7 +297,16 @@ window.addEventListener("DOMContentLoaded", async function () {
     waterMaterial.addToRenderList(skybox);
 
     var getWaterHeightAtCoordinates = function (x, z, waterMaterial) {
+
       var time = waterMaterial._lastTime / 100000;
+      console.log(time);
+      // engine.hideLoadingUI();
+
+      if (time > 0.008) {
+        engine.hideLoadingUI();
+
+      }
+
       return (
         Math.abs(
           Math.sin(x / 0.05 + time * waterMaterial.waveSpeed) *
@@ -643,8 +673,8 @@ window.addEventListener("DOMContentLoaded", async function () {
       "textures/sandTexture.jpg",
       scene
     );
-    groundMaterial.diffuseTexture.uScale = 20.0;
-    groundMaterial.diffuseTexture.vScale = 20.0;
+    groundMaterial.diffuseTexture.uScale = 14.0;
+    groundMaterial.diffuseTexture.vScale = 14.0;
 
 
     var ground = BABYLON.Mesh.CreateGroundFromHeightMap(
@@ -737,7 +767,7 @@ window.addEventListener("DOMContentLoaded", async function () {
 
         scene.registerBeforeRender(function () {
           meshes[mesh].position.z = 5;
-          meshes[mesh].position.y = -25;
+          meshes[mesh].position.y = -22;
           timeofDay = dayTime;
           //check time of day
           if (timeofDay == false) {

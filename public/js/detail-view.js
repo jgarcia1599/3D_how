@@ -216,7 +216,6 @@ window.addEventListener("DOMContentLoaded", async function () {
             meshes
         ) {
             //remove loading screen when mesh if rendered in the scene
-            engine.hideLoadingUI();
             //postioning of meshes
             for (mesh in meshes) {
                 var dhow = meshes[mesh];
@@ -226,6 +225,7 @@ window.addEventListener("DOMContentLoaded", async function () {
                 meshes[mesh].scaling.x = 0.2;
                 meshes[mesh].scaling.y = 0.2;
                 meshes[mesh].scaling.z = 0.2;
+                engine.hideLoadingUI();
 
                 // meshes[mesh].scale.x = 0.2;
 
