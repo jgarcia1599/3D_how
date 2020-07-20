@@ -302,7 +302,7 @@ BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function(){
       console.log(time);
       // engine.hideLoadingUI();
 
-      if (time > 0.008) {
+      if (time > 0.01) {
         engine.hideLoadingUI();
 
       }
