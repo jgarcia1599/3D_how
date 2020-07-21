@@ -106,7 +106,7 @@ BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function(){
     waterMaterial.colorBlendFactor = 0;
     waterMaterial.windDirection = new BABYLON.Vector2(1, 1);
     waterMaterial.colorBlendFactor = 0.3;
-    waterMaterial.waterColor = new BABYLON.Color3(0, 0.1, 0.21);
+    waterMaterial.waterColor = new BABYLON.Color3(0, 0.1, 0.19);
 
     // Water mesh
     var waterMesh = BABYLON.Mesh.CreateGround(
@@ -143,6 +143,8 @@ BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function(){
       "textures/normalSand.png",
       scene
     );
+    dunesMaterial.specularPower = 128.0;
+    dunesMaterial.specularColor = new BABYLON.Color3(0.0, 0.0, 0.0, 1.0);
     dunesMaterial.bumpTexture.uScale = 80.0;
     dunesMaterial.bumpTexture.vScale = 80.0;
     dunes.material = dunesMaterial;
@@ -230,6 +232,7 @@ BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function(){
 
     ground.position.y = -140;
     ground.material = groundMaterial;
+    ground.setEnabled(false);
     //shoreline object mesh
     var shoreLineTexture = new BABYLON.StandardMaterial("groundMaterial", scene);
     shoreLineTexture.diffuseTexture = new BABYLON.Texture(
@@ -238,7 +241,8 @@ BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function(){
     );
     shoreLineTexture.diffuseTexture.uScale = 20.0;
     shoreLineTexture.diffuseTexture.vScale = 20.0;
-
+    shoreLineTexture.specularPower = 128.0;
+    shoreLineTexture.specularColor = new BABYLON.Color3(0.0, 0.0, 0.0, 1.0);
     var shoreline = BABYLON.Mesh.CreateGroundFromHeightMap(
       "ground",
       "heightmap/heightmapBeach.jpg",
@@ -270,7 +274,7 @@ BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function(){
           //check time of day
           if (state == "seas") {
             // ground.dispose();
-            ground.setEnabled(true);
+            ground.setEnabled(false);
             shoreline.setEnabled(false);
             dunes.setEnabled(false);
             renderBeach(ground);
@@ -419,11 +423,11 @@ BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function(){
 
       return (
         Math.abs(
-          Math.sin(x / 0.05 + time * waterMaterial.waveSpeed) *
+          Math.sin(x / 0.05 + time * waterMaterial.waveSpeed - 0.28) *
           waterMaterial.waveHeight *
           waterMaterial.windDirection.x *
           5.0 +
-          Math.cos(z / 0.05 + time * waterMaterial.waveSpeed) *
+          Math.cos(z / 0.05 + time * waterMaterial.waveSpeed - 0.28) *
           waterMaterial.waveHeight *
           waterMaterial.windDirection.y *
           5.0
@@ -462,7 +466,7 @@ BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function(){
         waterMaterial.waveHeight = 0.3;
         waterMaterial.bumpHeight = 0.1;
         waterMaterial.waveLength = 0.1;
-        waterMaterial.waveSpeed = 5.0;
+        waterMaterial.waveSpeed = 2.0;
         waterMaterial.windDirection = new BABYLON.Vector2(1, 1);
         waterMaterial.colorBlendFactor = 0.2;
         waterMaterial.waterColor = new BABYLON.Color3(0, 0.1, 0.4);
@@ -486,8 +490,6 @@ BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function(){
     // return the created scene
     return scene;
   };
-
-
 
   var desertSceneCreate = function (timeofDay, currentWeather) {
     // create a basic BJS Scene object
@@ -1118,12 +1120,6 @@ BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function(){
   };
   // call the createScene function
   var seasScene = createScene(true, weatherState);
-
-  // var beachScene = beachSceneCreate(dayTime, weatherState);
-
-  var desertScene = desertSceneCreate(dayTime, weatherState);
-
-
   var museumScene = museumSceneCreate();
   // var autoRotateScene = autoRotateSceneCreate();
   // run the render loop
