@@ -46,14 +46,13 @@ body {
 
 
 .sceneTypesContent {
-  width: 160px;
   position: absolute;
   top: 10px;
   background: #3f3f3f;
   border-radius: 11px;
-  color: #f4f1d0;
+  color: #ffffff;
   padding: 10px;
-  box-shadow: 2px 2px 2px #111;
+  /* box-shadow: 1px 1px 1px #111; */
 }
 
 #upperLeft {
@@ -85,15 +84,15 @@ body {
   font-size: 25px;
 }
 .sceneTypesContent h1 {
-  /* margin-left: 75px;
-   */
-   text-align: center;
+  text-align: center;
+   font-family: "Gill-Sans";
+   font-weight: 100;
 }
-#titleSceneTypesContent {
+.titleSceneTypesContent {
   text-align: center !important;
   margin-left: 0px;
-  font-family: "Gill-Sans-Bold";
-  font-size: 20px;
+  font-size: 22px;
+  font-weight: 700;
   margin-bottom: 0px;
 }
 .sceneTypesContent .column img {
@@ -117,7 +116,7 @@ body {
   top: 10px;
   background: #111;
   border-radius: 20px;
-  color: #f4f1d0;
+  color: #ffffff;
   text-align: center;
   z-index: 2;
   right: -340px;
@@ -148,7 +147,7 @@ body {
   top: 55px;
   background: #111;
   border-radius: 0 0 20px 20px;
-  color: #f4f1d0;
+  color: #ffffff;
   text-align: center;
   display: flex;
   flex-wrap: wrap;
@@ -165,7 +164,7 @@ body {
   z-index: 4;
   background: #111;
   border-radius: 20px 0px 0px 20px;
-    color: #f4f1d0;
+    color: #ffffff;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -219,7 +218,6 @@ body {
   width: 110px;
   border-radius: 10px;
   background-color: #111;
-  text-align: center;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
@@ -229,7 +227,7 @@ body {
 #toggleNightDay i {
   font-size: 30px;
   cursor: pointer;
-  color: #f4f1d0;
+  color: #ffffff;
 }
 
 .changeFromPlayground {
@@ -237,7 +235,7 @@ body {
   bottom: 40%;
   /* transform: translate(-50%, -50%); */
   width: 110px;
-  background-color: #f4f1d0;
+  background-color: #ffffff;
   text-align: center;
   color: #111;
   height: 110px;
@@ -261,7 +259,7 @@ text-decoration: none;
 
 #rightChangeFromPlayground i {
   font-size: 40px;
-  margin-top: 10px;
+  margin-top: 14px;
 }
 
 #leftChangeFromPlayground {
@@ -281,7 +279,7 @@ text-decoration: none;
   transform: translate(-50%);  
   width: 130px;
   border-radius: 10px 10px 0px 0px;
-    background-color: #f4f1d0;
+    background-color: #ffffff;
   text-align: center;
 }
 
@@ -301,7 +299,7 @@ text-decoration: none;
   top: 10px;
   left: 10px;
   font-size: 24px;
-  color: #f4f1d0;
+  color: #ffffff;
   margin: 0;
   cursor: pointer;
 } 
@@ -313,7 +311,7 @@ text-decoration: none;
   bottom: 0px;
   left: 5px;
   font-size: 20px;
-  color: #f4f1d0;
+  color: #ffffff;
   margin: 0;
   cursor: pointer;
   align-items: center;
@@ -327,7 +325,7 @@ text-decoration: none;
   bottom: 0px;
   right: 5px;
   font-size: 20px;
-  color: #f4f1d0;
+  color: #ffffff;
   margin: 0;
   cursor: pointer;
   align-items: center;
@@ -349,11 +347,6 @@ text-decoration: none;
 #greaterThan p {
   margin-bottom: 17px;
 }
-
-<<<<<<< HEAD:css/styles.css
-<<<<<<< HEAD
-=======
->>>>>>> 47401f8d025f899aaaa963dcbcbfe5dbb79c6f5c:public/css/styles.css
 /* #informationContainer #lessThan .fa-less-than {
   position: absolute;
   bottom: 10px;
@@ -423,10 +416,15 @@ text-decoration: none;
     top: 100%;
     left: 0;
   }
-<<<<<<< HEAD:css/styles.css
 }
-=======
->>>>>>> origin
-=======
+@media screen and (max-width: 700px) {
+  .changeFromPlayground {
+    bottom: 30%;
+  }
 }
->>>>>>> 47401f8d025f899aaaa963dcbcbfe5dbb79c6f5c:public/css/styles.css
+
+@media screen and (max-width: 400px) {
+  .changeFromPlayground {
+    bottom: 20%;
+  }
+}

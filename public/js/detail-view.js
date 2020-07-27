@@ -71,11 +71,10 @@ window.addEventListener("DOMContentLoaded", async function () {
         var spheresArray = [];
         var glowingMeshArray = [];
         var scene = new BABYLON.Scene(engine);
+        // sphere.position = lockedPosition;
+        // Camera
+        // scene.debugLayer.show();
         var middleOfBoat = new BABYLON.Vector3(31, 9, 4);
-
-//         scene.debugLayer.show();
-//         var middleOfBoat = new BABYLON.Vector3(31, 5, 4);
-
 
 
         var camera = new BABYLON.ArcRotateCamera(
@@ -124,7 +123,6 @@ window.addEventListener("DOMContentLoaded", async function () {
         markerMaterial.diffuseColor =  new BABYLON.Color3(1, 1, 1);
 
         markerMaterial.pointsCloud = true;
-
         for (var i = 0; i < spherePositions.length; i++) {
             spheresArray[i] = BABYLON.MeshBuilder.CreateSphere("sphere" + i, { diameter: 0.4, scene });
             spheresArray[i].material = markerMaterial;
@@ -218,7 +216,6 @@ window.addEventListener("DOMContentLoaded", async function () {
             meshes
         ) {
             //remove loading screen when mesh if rendered in the scene
-            engine.hideLoadingUI();
             //postioning of meshes
             for (mesh in meshes) {
                 var dhow = meshes[mesh];
@@ -228,6 +225,7 @@ window.addEventListener("DOMContentLoaded", async function () {
                 meshes[mesh].scaling.x = 0.2;
                 meshes[mesh].scaling.y = 0.2;
                 meshes[mesh].scaling.z = 0.2;
+                engine.hideLoadingUI();
 
                 // meshes[mesh].scale.x = 0.2;
 
@@ -284,34 +282,32 @@ function Lerp(start, end, amount) {
     return (start + (end - start) * amount);
 }
 
-var scene_toggle_counter = 0;
-var scene_options_showed = 1;
+// var scene_toggle_counter = 0;
+// var scene_options_showed = 1;
 
-function toggle_scenepanel(){
-  console.log("toggle scene pannel");
-  console.log(scene_toggle_counter )
+// function toggle_scenepanel(){
+//   console.log("toggle scene pannel");
+//   console.log(scene_toggle_counter )
 
-  if (scene_toggle_counter == 0){
-    if ($('#leafletMapContainer').style.bottom > 0) {
-        $('#leafletMapContainer').style.bottom = "-100px";
-    }
-    else {
-        $('#leafletMapContainer').animate({ bottom: '+=' + (window.screen.height - 100) });
-        $('#switchToMap').animate({ bottom: '+=' + (window.screen.height - 150)});
-    }
-    scene_toggle_counter = 1;
-    console.log("okay move right + 350px");
+//   if (scene_toggle_counter == 0){
+//     if ($('#leafletMapContainer').style.bottom > 0) {
+//         $('#leafletMapContainer').style.bottom = "-100px";
+//     }
+//     else {
+//         $('#leafletMapContainer').animate({ bottom: '+=' + (window.screen.height - 100) });
+//         $('#switchToMap').animate({ bottom: '+=' + (window.screen.height - 150)});
+//     }
+//     scene_toggle_counter = 1;
+//     console.log("okay move right + 350px");
 
-  }
-  else if(scene_toggle_counter ==1){
-    $('#leafletMapContainer').animate({ bottom: '-=' +  window.screen.height  });
-    $('#switchToMap').animate({ bottom: '-=' + window.screen.height });
+//   }
+//   else if(scene_toggle_counter ==1){
+//     $('#leafletMapContainer').animate({ bottom: '-=' +  window.screen.height  });
+//     $('#switchToMap').animate({ bottom: '-=' + window.screen.height });
 
-    scene_toggle_counter = 0;
-    scene_options_showed = 0;
+//     scene_toggle_counter = 0;
+//     scene_options_showed = 0;
 
-    console.log("okay move right - 350px");
+//     console.log("okay move right - 350px");
 
-  }
-
-}
+//   }
