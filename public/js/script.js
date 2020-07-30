@@ -10,17 +10,25 @@ var isRaining = false;
 var prevDayTime = false;
 var mysystem;
 var currentSkyboxName;
+// model to be diplayed in playgroun
+var boat_model_name = "dhow_2.obj"
 
-var url =
-  "https://cdn.rawgit.com/BabylonJS/Extensions/master/DynamicTerrain/dist/babylon.dynamicTerrain.min.js";
+
+var url = "https://cdn.rawgit.com/BabylonJS/Extensions/master/DynamicTerrain/dist/babylon.dynamicTerrain.min.js";
+
 var s = document.createElement("script");
+
 s.src = url;
+
 document.head.appendChild(s);
+
 window.addEventListener("DOMContentLoaded", async function () {
   BABYLON.DefaultLoadingScreen.prototype.displayLoadingUI = function () {
     if (document.getElementById("customLoadingScreenDiv")) {
         // Do not add a loading screen if there is already one
         document.getElementById("customLoadingScreenDiv").style.display = "initial";
+
+        //  
         return;
     }
     this._loadingDiv = document.createElement("div");
@@ -42,15 +50,22 @@ BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function(){
   // load the 3D engine
   var engine = new BABYLON.Engine(canvas, true);
   
+  
   // createScene function that creates and return the scene
   var createScene = function (timeofDay, currentWeather) {
     engine.displayLoadingUI();
+
 
     var timeofDay = dayTime;
     weatherState = "clear";
 
     // create a basic BJS Scene object
     var scene = new BABYLON.Scene(engine);
+
+    engine.setStencilBuffer(true);
+
+    scene.setRenderingAutoClearDepthStencil(0, true, true, true);
+    scene.setRenderingAutoClearDepthStencil(1, false, false, false);
     // scene.debugLayer.show();
 
     // Camera
@@ -62,8 +77,8 @@ BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function(){
       new BABYLON.Vector3(30, 5, 0),
       scene
     );
-    camera.lowerRadiusLimit = 1;
-    camera.upperRadiusLimit = 40;
+    // camera.lowerRadiusLimit = 1;
+    // camera.upperRadiusLimit = 40;
     camera.rotationOffset=0;
     camera.attachControl(canvas, true);
     var renderer = scene.enableDepthRenderer();
@@ -88,6 +103,7 @@ BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function(){
     skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
     skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
     skybox.material = skyboxMaterial;
+    
     //Water mesh and water material added to the scene
     var waterMaterial = new BABYLON.WaterMaterial(
       "waterMaterial",
@@ -109,16 +125,18 @@ BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function(){
     waterMaterial.waterColor = new BABYLON.Color3(0, 0.1, 0.19);
 
     // Water mesh
-    var waterMesh = BABYLON.Mesh.CreateGround(
-      "waterMesh",
-      1024,
-      1024,
-      32,
-      scene,
-      false
-    );
+    // Water mesh
+    var waterMesh = BABYLON.Mesh.CreateGround("waterMesh", 1024, 1024, 32, scene, false);
     waterMesh.material = waterMaterial;
-    // waterMesh.setEnabled(false);
+    waterMesh.renderingGroupId = 1;
+
+    waterMesh.onBeforeRenderObservable.add(() => {
+        engine.setStencilMask(0x00);
+        engine.setStencilFunction(BABYLON.Engine.NOTEQUAL);
+        engine.setStencilFunctionReference(1);
+    });
+
+
     //sand dunes ground 
     var dunesMaterial = new BABYLON.StandardMaterial("groundMaterial", scene);
     dunesMaterial.diffuseTexture = new BABYLON.Texture(
@@ -151,7 +169,13 @@ BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function(){
     dunes.position.y = -8;
     dunes.position.y = -15;
 
-    dunes.setEnabled(false);
+    dunes.onBeforeRenderObservable.add(() => {
+      engine.setStencilMask(0x00);
+      engine.setStencilFunction(BABYLON.Engine.NOTEQUAL);
+      engine.setStencilFunctionReference(1);
+  });
+
+    // dunes.setEnabled(false);
 
     var particleSystem = new BABYLON.ParticleSystem("particles", 4000, scene);
     particleSystem.textureMask = new BABYLON.Color4(0.1, 0.8, 0.8, 1.0);
@@ -257,18 +281,35 @@ BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function(){
     shoreline.material = shoreLineTexture;
     shoreline.setEnabled(false);
     var boat = []
-    BABYLON.SceneLoader.ImportMesh(null, "dhow/", "dhow_2.obj", scene, function(meshes) {
+    BABYLON.SceneLoader.ImportMesh(null, "dhow/", boat_model_name, scene, function(meshes) {
       //postioning of meshes
-      for (mesh in meshes) {
-        boat.push(mesh);
+      for (mesh of meshes) {
+
         //mesh positioning
-        var dhow = meshes[mesh];
-        meshes[mesh].rotation.x = (3 * Math.PI) / 2;
-        waterMaterial.addToRenderList(meshes[mesh]);
+        var dhow = mesh;
+        dhow.rotation.x = (3 * Math.PI) / 2;
+        waterMaterial.addToRenderList(dhow);
+
+        //separate materials to fix boat floating issue thanks to : 
+        // https://forum.babylonjs.com/t/float-on-water-material/1800/22
+        console.log("Hiiiii")
+        dhow.onBeforeRenderObservable.add(() => {
+          console.log("Before render observable")
+          engine.setStencilOperationPass(BABYLON.Engine.REPLACE);
+          engine.setStencilMask(0xFF);
+          engine.setStencilFunction(BABYLON.Engine.ALWAYS);
+          engine.setStencilFunctionReference(1);
+        });
+
+        dhow.onAfterRenderObservable.add(() => {
+            console.log("after render observable")
+            engine.setStencilFunctionReference(0);
+        });
+
 
         scene.registerBeforeRender(function () {
-          var x = meshes[mesh].position.x;
-          var z = meshes[mesh].position.z;
+          var x = dhow.position.x;
+          var z = dhow.position.z;
           var waterHeight = getWaterHeightAtCoordinates(x, z, waterMaterial);
           timeofDay = dayTime;
           //check time of day
@@ -279,7 +320,11 @@ BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function(){
             dunes.setEnabled(false);
             renderBeach(ground);
             particleSystem.stop();
-            meshes[mesh].position.y = waterHeight - 35;
+            // value we started wth before scaling
+            dhow.position.y = waterHeight - 35;
+
+            //value tested with boat_remeshed.obj
+            // meshes[mesh].position.y = waterHeight;
           }
 
           if (state == "desert") {
@@ -289,7 +334,7 @@ BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function(){
             dunes.setEnabled(true);
             renderBeach(ground);
             particleSystem.start();
-            meshes[mesh].position.y = -37;
+            dhow.position.y = -37;
           }
 
           else if (state == "beach") {
@@ -300,7 +345,7 @@ BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function(){
             shoreline.setEnabled(true);
             renderBeach(ground);
             particleSystem.stop();
-            meshes[mesh].position.y = waterHeight - 35;
+            dhow.position.y = waterHeight - 35;
           }
           if (timeofDay == false) {
             light.intensity = 0.6;
@@ -357,33 +402,11 @@ BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function(){
 
           prevState = state;
 
-          // Work on fixing boat inside water issue, dont delete
-
-          // var size = meshes[mesh].getBoundingInfo().boundingBox.extendSize;
-          // console.log("Size: ",size);
-
-
-          // // waterMesh.subMeshes = [];
-          // var verticesCount = waterMesh.getTotalVertices();
-          // console.log("Vertices\n",verticesCount);
-
-
-          // var transparent_material = BABYLON
-
-          // if (waterMesh.intersectsMesh(meshes[mesh],false)){
-          //   console.log("Boat is inside water");
-          //   waterMesh.material.waterColor = new BABYLON.Color4(1, 0, 0, 1,0);
-          // }
-          // else{
-          //   waterMesh.material.waterColor = new BABYLON.Color3(0, 0.1, 0.21);
-
-          // }
-
         });
-        //lower the boat as it was floating above the water
       }
     });
     
+
 
     // Configure water material
     waterMaterial.addToRenderList(ground);
@@ -428,7 +451,7 @@ BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function(){
 
     // Default Environment
     function renderBeach(localGroundMaterial) {
-      console.log(localGroundMaterial);
+      // console.log(localGroundMaterial);
       if (state == "beach") {
         waterMesh.position.y = 0;
         waterMaterial.windForce = -10;
@@ -473,8 +496,8 @@ BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function(){
       new BABYLON.Vector3(-18, 3, -13),
       scene
     );
-    camera.lowerRadiusLimit = 1;
-    camera.upperRadiusLimit = 40;
+    // camera.lowerRadiusLimit = 1;
+    // camera.upperRadiusLimit = 40;
     camera.attachControl(canvas, true);
     var renderer = scene.enableDepthRenderer();
 
@@ -493,13 +516,20 @@ BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function(){
 
 
 
-    BABYLON.SceneLoader.ImportMesh(null, "dhow/", "dhow_2.obj", scene, function (
+    BABYLON.SceneLoader.ImportMesh(null, "dhow/", boat_model_name, scene, function (
       meshes
     ) {
       //postioning of meshes
       for (mesh in meshes) {
         //mesh positioning
         var dhow = meshes[mesh];
+
+
+        //scaling tested with boat_remeshed.obj
+        // var scale_factor = 0.1;
+        // meshes[mesh].scaling = new BABYLON.Vector3(scale_factor, scale_factor, scale_factor);
+
+
         meshes[mesh].rotation.x = (3 * Math.PI) / 2;
 
         meshes[mesh].actionManager = new BABYLON.ActionManager(scene);
@@ -568,10 +598,6 @@ BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function(){
         meshes[mesh].actionManager = new BABYLON.ActionManager(scene);
         // Resources: https://www.babylonjs-playground.com/#XCPP9Y#13
 
-        ////////// RAY CAST TO FIND WATER HEIGHT ////////////
-        //var angle = 0;
-        let i = 0;
-
         scene.registerBeforeRender(function () {
           var x = meshes[mesh].position.x;
 
@@ -604,57 +630,8 @@ BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function(){
     engine.resize();
   });
 
-  //Useful playgrounds and resources:
-  // https://playground.babylonjs.com/#6QWN8D#5
-  //https://www.gamefromscratch.com/page/BabylonJS-Tutorial-Series.aspx
-  // https://www.babylonjs-playground.com/#IW99H0
-
-  // For Wateranimation
-  // https://www.babylonjs-playground.com/#L76FB1#49
 });
-// var scene_toggle_counter = 0;
-// var scene_options_showed = 1;
 
-// function toggle_scenepanel(){
-//   console.log("toggle scene pannel");
-//   console.log(scene_toggle_counter )
-
-//   if (scene_toggle_counter == 0){
-//     $('#sceneTypes').animate({ left: '+=340px'  });
-//     scene_toggle_counter = 1;
-//     console.log("okay move right + 350px");
-
-//   }
-//   else if(scene_toggle_counter ==1){
-//     $('#sceneTypes').animate({ left: '-=340px'  });
-//     scene_toggle_counter = 0;
-//     scene_options_showed = 0;
-
-//     console.log("okay move right - 350px");
-
-//   }
-
-// }
-
-//hide panel at the beginning
-// $("#sceneTypesContent").slideToggle();
-// $("#sceneTypesContent").slideToggle();
-// $("#min-max-button").click(function() {
-//   console.log("clicked");
-//   $("#sceneTypesContent").slideToggle();
-//   // $("sceneTypesContent").css('display','flex');
-//   var button = $(this).find("i");
-//   if (button.hasClass("fa fa-window-minimize")) {
-//     console.log("he");
-//     scene_options_showed = 1;
-//     button.removeClass("fas fa-window-minimize");
-//     button.addClass("fa fa-window-maximize");
-//   } else if (button.hasClass("fa fa-window-maximize")) {
-//     button.removeClass("fas fa-window-maximize");
-
-//     button.addClass("fa fa-window-minimize");
-//   }
-// });
 function changeRender(sceneName, e) {
   isRaining = false;
   weatherState = "clear";
@@ -743,52 +720,6 @@ function enableNight(){
 
 }
 
-//Weather UI;
-// Based on Steven's UI
-
-// var toggle_counter = 1;
-// var options_showed = 0;
-// function toggle_weatherpanel(){
-//   console.log("toggle");
-//   console.log(toggle_counter)
-
-//   if (toggle_counter == 0){
-//     $('#citysearchbar').animate({ left: '+=350px'  });
-//     toggle_counter = 1;
-//     console.log("lalalalala");
-
-//   }
-//   else if(toggle_counter ==1){
-//     $('#citysearchbar').animate({ left: '-=350px'  });
-//     toggle_counter = 0;
-//     options_showed = 0;
-
-//   }
-// }
-
-
-// $("#city-scrolldown").click(function() {
-//   console.log("clicked weather stuff");
-//   $("#weatherContent").slideToggle();
-//   var button = $(this).find("i");
-//   if (button.hasClass("fa fa-window-minimize")) {
-//     //options have been showed, we can hide the panel
-//     options_showed = 1;
-//     console.log("he");
-//     button.removeClass("fas fa-window-minimize");
-//     button.addClass("fa fa-window-maximize");
-//   } else if (button.hasClass("fa fa-window-maximize")) {
-//     button.removeClass("fas fa-window-maximize");
-
-//     button.addClass("fa fa-window-minimize");
-//   }
-// });
-
-//Central Panel Stuff
-
-
-
-
 
 function rain(scene) {
   BABYLON.ParticleHelper.CreateAsync("rain", scene, false).then((set) => {
@@ -797,8 +728,18 @@ function rain(scene) {
 }
 
 
+
 function Lerp(start, end, amount) {
   return (start + (end - start) * amount);
 }
 // https://www.babylonjs-playground.com/#L76FB1#120
 
+ //Useful playgrounds and resources:
+  // https://playground.babylonjs.com/#6QWN8D#5
+  //https://www.gamefromscratch.com/page/BabylonJS-Tutorial-Series.aspx
+  // https://www.babylonjs-playground.com/#IW99H0
+
+  // For Wateranimation
+  // https://www.babylonjs-playground.com/#L76FB1#49
+
+// OLD VERSION: https://github.com/jgarcia1599/3D_how/blob/d071b4eba217f5191141cc51d7ca69053db80b52/js/script.js
