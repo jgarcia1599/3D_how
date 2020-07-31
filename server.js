@@ -1,10 +1,13 @@
 // create express web server
-var express = require('express'); 
-var app = express();
+const express = require('express'); 
+const app = express();
+const router = require('./routes.js')
+
 //choose port
-var port = 3000;
-var server = app.listen(process.env.PORT || port);
-// use static files to serve to client that reside on public folder
-app.use(express.static('public'));
+const port = 3000;
+const server = app.listen(process.env.PORT || port);
+
+
+app.use('',router)
 
 console.log('Server Running in Port: ',port);

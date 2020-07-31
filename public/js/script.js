@@ -77,8 +77,8 @@ BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function(){
       new BABYLON.Vector3(30, 5, 0),
       scene
     );
-    // camera.lowerRadiusLimit = 1;
-    // camera.upperRadiusLimit = 40;
+    camera.lowerRadiusLimit = 1;
+    camera.upperRadiusLimit = 40;
     camera.rotationOffset=0;
     camera.attachControl(canvas, true);
     var renderer = scene.enableDepthRenderer();
@@ -496,8 +496,8 @@ BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function(){
       new BABYLON.Vector3(-18, 3, -13),
       scene
     );
-    // camera.lowerRadiusLimit = 1;
-    // camera.upperRadiusLimit = 40;
+    camera.lowerRadiusLimit = 1;
+    camera.upperRadiusLimit = 40;
     camera.attachControl(canvas, true);
     var renderer = scene.enableDepthRenderer();
 
