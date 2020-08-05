@@ -48,14 +48,14 @@ window.addEventListener("DOMContentLoaded", async function () {
         // var spherePositions = [new BABYLON.Vector3(13, 6, 4), new BABYLON.Vector3(12.5, 14, 4), new BABYLON.Vector3(30, 3, 4), new BABYLON.Vector3(49, 5, 4)];
         var spherePositions = [
             {
-                name: 'Hull',
-                text: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Itaque libero labore est. Adipisci, doloribus modi? Facere sunt doloribus at perspiciatis asperiores odit. Eum autem consectetur quis ab nisi incidunt necessitatibus',
-                position: new BABYLON.Vector3(13, 6, 4)
-            },
-            {
                 name: 'Mast',
                 text: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Itaque libero labore est. Adipisci, doloribus modi? Facere sunt doloribus at perspiciatis asperiores odit. Eum autem consectetur quis ab nisi incidunt necessitatibus',
                 position: new BABYLON.Vector3(9, 16, 4)
+            },
+            {
+                name: 'Hull',
+                text: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Itaque libero labore est. Adipisci, doloribus modi? Facere sunt doloribus at perspiciatis asperiores odit. Eum autem consectetur quis ab nisi incidunt necessitatibus',
+                position: new BABYLON.Vector3(13, 6, 4)
             },
             {
                 name: 'Deck',
