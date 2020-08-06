@@ -8,13 +8,32 @@ var prevDayTime = false;
 var mysystem;
 var currentSkyboxName;
 var currentIndex;
-
 var url =
     "https://cdn.rawgit.com/BabylonJS/Extensions/master/DynamicTerrain/dist/babylon.dynamicTerrain.min.js";
 var s = document.createElement("script");
 s.src = url;
 document.head.appendChild(s);
 window.addEventListener("DOMContentLoaded", async function () {
+    //initialize loading screen by creating a div and styling it; taken from https://www.babylonjs-playground.com/#5Y2GIC#39
+    BABYLON.DefaultLoadingScreen.prototype.displayLoadingUI = function () {
+        if (document.getElementById("customLoadingScreenDiv")) {
+            // Do not add a loading screen if there is already one
+            document.getElementById("customLoadingScreenDiv").style.display = "initial";
+            return;
+        }
+        this._loadingDiv = document.createElement("div");
+        this._loadingDiv.id = "customLoadingScreenDiv";
+        this._loadingDiv.innerHTML = "Bronze Age Boat Viewer Is Being Loaded";
+        // document.getElementsByTagName('head')[0].appendChild(customLoadingScreenCss);
+        this._resizeLoadingUI();
+        window.addEventListener("resize", this._resizeLoadingUI);
+        document.body.appendChild(this._loadingDiv);
+    };
+    
+    BABYLON.DefaultLoadingScreen.prototype.hideLoadingUI = function(){
+        document.getElementById("customLoadingScreenDiv").style.display = "none";
+        console.log("scene is now loaded");
+    }
     // get the canvas DOM element
     var canvas = document.getElementById("renderCanvas");
 
@@ -22,20 +41,21 @@ window.addEventListener("DOMContentLoaded", async function () {
     var engine = new BABYLON.Engine(canvas, true);
 
     var autoRotateSceneCreate = function () {
-        $('#informationContainer').hide();
+        engine.displayLoadingUI();
 
+        $('#informationContainer').hide();
         // create a basic BJS Scene object
         // var spherePositions = [new BABYLON.Vector3(13, 6, 4), new BABYLON.Vector3(12.5, 14, 4), new BABYLON.Vector3(30, 3, 4), new BABYLON.Vector3(49, 5, 4)];
         var spherePositions = [
             {
+                name: 'Mast',
+                text: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Itaque libero labore est. Adipisci, doloribus modi? Facere sunt doloribus at perspiciatis asperiores odit. Eum autem consectetur quis ab nisi incidunt necessitatibus',
+                position: new BABYLON.Vector3(9, 16, 4)
+            },
+            {
                 name: 'Hull',
                 text: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Itaque libero labore est. Adipisci, doloribus modi? Facere sunt doloribus at perspiciatis asperiores odit. Eum autem consectetur quis ab nisi incidunt necessitatibus',
                 position: new BABYLON.Vector3(13, 6, 4)
-            },
-            {
-                name: 'Mast',
-                text: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Itaque libero labore est. Adipisci, doloribus modi? Facere sunt doloribus at perspiciatis asperiores odit. Eum autem consectetur quis ab nisi incidunt necessitatibus',
-                position: new BABYLON.Vector3(12.5, 14, 4)
             },
             {
                 name: 'Deck',
@@ -51,11 +71,11 @@ window.addEventListener("DOMContentLoaded", async function () {
         var spheresArray = [];
         var glowingMeshArray = [];
         var scene = new BABYLON.Scene(engine);
-        var middleOfBoat = new BABYLON.Vector3(31, 5, 4);
-
         // sphere.position = lockedPosition;
         // Camera
         // scene.debugLayer.show();
+        var middleOfBoat = new BABYLON.Vector3(31, 9, 4);
+
 
         var camera = new BABYLON.ArcRotateCamera(
             "Camera",
@@ -97,8 +117,15 @@ window.addEventListener("DOMContentLoaded", async function () {
         skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
         skybox.material = skyboxMaterial;
 
+        var markerMaterial = new BABYLON.StandardMaterial("markerMaterial", scene);
+        // markerMaterial.diffuseTexture = new BABYLON.Texture("../icons/plusSideOrange.png", scene);
+        // markerMaterial.diffuseColor =  new BABYLON.Color3(0.95, 0.39, 0.13);
+        markerMaterial.diffuseColor =  new BABYLON.Color3(1, 1, 1);
+
+        markerMaterial.pointsCloud = true;
         for (var i = 0; i < spherePositions.length; i++) {
-            spheresArray[i] = BABYLON.MeshBuilder.CreateSphere("sphere" + i, { diameter: 2, scene });
+            spheresArray[i] = BABYLON.MeshBuilder.CreateSphere("sphere" + i, { diameter: 0.4, scene });
+            spheresArray[i].material = markerMaterial;
             spheresArray[i].position = spherePositions[i].position;
             spheresArray[i].titleInfo = spherePositions[i].name;
             spheresArray[i].contentInfo = spherePositions[i].text;
@@ -124,6 +151,7 @@ window.addEventListener("DOMContentLoaded", async function () {
                     currentTarget = new BABYLON.Vector3(sphere.position.x, sphere.position.y, sphere.position.z);
                     currentIndex = sphere.indexForGallery;
                     infoTitle.innerHTML = sphere.titleInfo;
+                    markerMaterial.alpha = 0;
                     infoText.innerHTML = sphere.contentInfo;
                     if (spheresArray[index  + 1] != null) {
                         prevDisplayContainer.style.display = "flex";
@@ -184,13 +212,22 @@ window.addEventListener("DOMContentLoaded", async function () {
 
         });
 
-        BABYLON.SceneLoader.ImportMesh(null, "dhow/", "dhow_posAdjusted.obj", scene, function (
+        BABYLON.SceneLoader.ImportMesh(null, "dhow/", "boat_remeshed.obj", scene, function (
             meshes
         ) {
+            //remove loading screen when mesh if rendered in the scene
             //postioning of meshes
             for (mesh in meshes) {
                 var dhow = meshes[mesh];
                 meshes[mesh].rotation.x = (3 * Math.PI) / 2;
+                meshes[mesh].position.x = 31;
+                meshes[mesh].position.z = 4;
+                meshes[mesh].scaling.x = 0.2;
+                meshes[mesh].scaling.y = 0.2;
+                meshes[mesh].scaling.z = 0.2;
+                engine.hideLoadingUI();
+
+                // meshes[mesh].scale.x = 0.2;
 
                 scene.registerBeforeRender(function () {
                 });
@@ -212,6 +249,7 @@ window.addEventListener("DOMContentLoaded", async function () {
 
                 }
                 else {
+                    markerMaterial.alpha = 1;
                     camera.radius = Lerp(camera.radius, 30, 0.1);
                 }
             }
@@ -219,9 +257,11 @@ window.addEventListener("DOMContentLoaded", async function () {
                 camera.target = currentTarget;
             }
             for (var i = 0; i < glowingMeshArray.length; i++) {
-                glowMeshAlpha += 0.02;
-                glowingMeshArray[i].blurHorizontalSize = Math.sin(glowMeshAlpha / 3);
-                glowingMeshArray[i].blurVerticalSize = Math.sin(glowMeshAlpha / 3);
+                glowMeshAlpha += 0.04;
+                spheresArray[i].scaling = new BABYLON.Vector3(2.5 + Math.sin(glowMeshAlpha / 5), 2.5 + Math.sin(glowMeshAlpha / 5), 2.5 +Math.sin(glowMeshAlpha / 5));
+
+                glowingMeshArray[i].blurHorizontalSize = Math.sin(glowMeshAlpha /5) * 2;
+                glowingMeshArray[i].blurVerticalSize = Math.sin(glowMeshAlpha /5) * 2;
             }
         });
         // return the created scene
@@ -238,9 +278,36 @@ window.addEventListener("DOMContentLoaded", async function () {
         engine.resize();
     });
 });
-
-
-
 function Lerp(start, end, amount) {
     return (start + (end - start) * amount);
 }
+
+// var scene_toggle_counter = 0;
+// var scene_options_showed = 1;
+
+// function toggle_scenepanel(){
+//   console.log("toggle scene pannel");
+//   console.log(scene_toggle_counter )
+
+//   if (scene_toggle_counter == 0){
+//     if ($('#leafletMapContainer').style.bottom > 0) {
+//         $('#leafletMapContainer').style.bottom = "-100px";
+//     }
+//     else {
+//         $('#leafletMapContainer').animate({ bottom: '+=' + (window.screen.height - 100) });
+//         $('#switchToMap').animate({ bottom: '+=' + (window.screen.height - 150)});
+//     }
+//     scene_toggle_counter = 1;
+//     console.log("okay move right + 350px");
+
+//   }
+//   else if(scene_toggle_counter ==1){
+//     $('#leafletMapContainer').animate({ bottom: '-=' +  window.screen.height  });
+//     $('#switchToMap').animate({ bottom: '-=' + window.screen.height });
+
+//     scene_toggle_counter = 0;
+//     scene_options_showed = 0;
+
+//     console.log("okay move right - 350px");
+
+//   }

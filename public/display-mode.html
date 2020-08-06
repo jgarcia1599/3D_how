@@ -2,6 +2,7 @@
 <html>
 
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
   <link rel="stylesheet" href="css/styles.css" />
   <title>Bronze Age Boat</title>
@@ -50,15 +51,15 @@ Online tutorial: https://www.youtube.com/watch?v=OXXkyWku2PY -->
   </style>
 
 <body>
-  <div id="changeFromPlayground">
-    <a href="index.html">
+  <div id="leftChangeFromPlayground" class="changeFromPlayground">
+    <a href="/">
+      <img src="img/playground.png">
       <p>Change To Playground View</p>
     </a>
   </div>
 
   <div class="sceneTypesContent" id="informationContainer">
     <i class="fas fa-search-minus" aria-hidden="true" id="backToLargeView"></i>
-
     <h1 id="partName">The Hull</h1>
     <p id="partText">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Itaque libero labore est. Adipisci,
       doloribus modi? Facere sunt doloribus at perspiciatis asperiores odit. Eum autem consectetur quis ab nisi incidunt
@@ -69,11 +70,13 @@ Online tutorial: https://www.youtube.com/watch?v=OXXkyWku2PY -->
     </div>
     <div id="greaterThan">
       <i class="fas fa-less-than"></i>
-
       <p id="nextDisplay"></p>
-
     </div>
-
+  </div>
+  <div id="switchToMap" onclick="toggle_scenepanel()">
+    <p>View Map</p>
+  </div>
+  <div id="leafletMapContainer">
 
   </div>
   <!-- <div id="dialog" title="Bronze Age Boat" style="display:none;">
@@ -85,7 +88,6 @@ Online tutorial: https://www.youtube.com/watch?v=OXXkyWku2PY -->
   <canvas id="renderCanvas"></canvas>
   <script src="js/babylon_helper.js"></script>
   <script src="js/detail-view.js"></script>
-  <script src="js/beachscene.js"></script>
 </body>
 
 </html>
