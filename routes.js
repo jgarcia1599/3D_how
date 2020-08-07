@@ -11,5 +11,8 @@ router.get('/', function (req, res) {
 router.get('/displaymode', function (req, res) {
   res.sendFile(__dirname+'/public/display-mode.html');
 })
+router.get('/materialsmap', function (req, res) {
+  res.sendFile(__dirname+'/public/materialsmap.html');
+})
 
 module.exports = router;
