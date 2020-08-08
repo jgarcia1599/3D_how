@@ -51,21 +51,21 @@ body {
   background: #3f3f3f;
   border-radius: 11px;
   color: #ffffff;
-  padding: 10px;
+  padding: 12px;
   /* box-shadow: 1px 1px 1px #111; */
 }
 
 #upperLeft {
   left: 10px;
-  height: 195px;
-  width: 160px;
+  /* height: 195px;
+  width: 160px; */
 }
 
 #upperRight {
   right: 10px;
-  height: 125px;
-  width: 140px;
-
+  /* height: 125px;
+  width: 140px; */
+  min-width: 100px;
 
 }
 
@@ -80,20 +80,50 @@ body {
 }
 .sceneTypesContent i {
   float: left;
-  margin-left: 20px;
+  margin-left: 10%;
   font-size: 25px;
 }
 .sceneTypesContent h1 {
   text-align: center;
    font-family: "Gill-Sans";
    font-weight: 100;
-}
+   margin-bottom: 8%;
+   margin-top: 2%;
+  }
 .titleSceneTypesContent {
   text-align: center !important;
   margin-left: 0px;
-  font-size: 22px;
+  /* font-size: 22px; */
   font-weight: 700;
   margin-bottom: 0px;
+}
+
+.titleSceneTypesContent {
+  font-size: 22px;
+}
+@media screen and (min-width: 320px) {
+  .titleSceneTypesContent {
+    font-size: calc(20px + 4 * ((100vw - 320px) / 680));
+  }
+}
+@media screen and (min-width: 1000px) {
+  .titleSceneTypesContent {
+    font-size: 26px;
+  }
+}
+
+.column h1 {
+  font-size: 14px;
+}
+@media screen and (min-width: 320px) {
+  .column h1 {
+    font-size: calc(16px + 4 * ((100vw - 320px) / 680));
+  }
+}
+@media screen and (min-width: 1000px) {
+  .column h1{
+    font-size: 20px;
+  }
 }
 .sceneTypesContent .column img {
   width: 130px;
@@ -234,11 +264,9 @@ body {
   position: absolute;
   bottom: 40%;
   /* transform: translate(-50%, -50%); */
-  width: 110px;
   background-color: #ffffff;
   text-align: center;
   color: #111;
-  height: 110px;
 }
 
 .changeFromPlayground a {
@@ -248,8 +276,8 @@ text-decoration: none;
 .changeFromPlayground p {
   color: #111;
   font-size: 15px;
-  margin: auto;
   width: 90px;
+  margin: 10px;
 }
 
 .changeFromPlayground img{
@@ -258,9 +286,38 @@ text-decoration: none;
 }
 
 #rightChangeFromPlayground i {
-  font-size: 40px;
+  /* font-size: 40px; */
   margin-top: 14px;
 }
+
+.changeFromPlayground i {
+  font-size: 34px;
+}
+@media screen and (min-width: 320px) {
+  .changeFromPlayground i {
+    font-size: calc(34 + 4 * ((100vw - 320px) / 680));
+  }
+}
+@media screen and (min-width: 1000px) {
+  .changeFromPlayground i {
+    font-size: 44px;
+  }
+}
+
+.changeFromPlayground p{
+  width: 90px;
+}
+@media screen and (min-width: 320px) {
+  .changeFromPlayground p {
+    width: calc(70px + 4 * ((100vw - 320px) / 680));
+  }
+}
+@media screen and (min-width: 1000px) {
+  .changeFromPlayground p {
+    width: 110px;
+  }
+}
+
 
 #leftChangeFromPlayground {
   left: 0px;
@@ -288,12 +345,25 @@ text-decoration: none;
 }
 
 #informationContainer {
-    right: 8%;
-    top: 14%;
-    height: 370px;
-    width: 20%;
+  right: 9%;
+  top: 12%;
+  height: 70%;
+  width: 40%;
+  max-width: 300px;
+  max-height: 250px;
 }
 
+
+@media screen and (max-width: 550px) {
+  #toggleNightDay {
+    bottom: 0;
+    top: auto;
+  }
+  
+  #informationContainer {
+    right: 2%;
+  }
+}
 #informationContainer #backToLargeView{
   position: absolute;
   top: 10px;
@@ -347,6 +417,8 @@ text-decoration: none;
 #greaterThan p {
   margin-bottom: 17px;
 }
+
+
 /* #informationContainer #lessThan .fa-less-than {
   position: absolute;
   bottom: 10px;
@@ -405,7 +477,7 @@ text-decoration: none;
   bottom: -100%;
   background-color: red;
 }
-
+/* 
 @media screen and (min-width: 200px) and (max-width: 767px) and (orientation: portrait) {
   html {
     transform: rotate(-90deg);
@@ -416,7 +488,7 @@ text-decoration: none;
     top: 100%;
     left: 0;
   }
-}
+} */
 @media screen and (max-width: 700px) {
   .changeFromPlayground {
     bottom: 30%;
