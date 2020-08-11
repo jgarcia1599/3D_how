@@ -45,7 +45,39 @@ for (var i=0;i<materials_data.length;i++){
     console.log(materials_data[i].name)
     var materialmarker =  L.marker([materials_data[i].lat, materials_data[i].long]).addTo(mymap);
     materialmarker.bindPopup(`<b style="text-align:center;">${materials_data[i].name}</b><br>${materials_data[i].description}`)
-
-
-    var material_to_boat_line = L.polyline([[boat_marker.getLatLng().lat,boat_marker.getLatLng().lng],[materials_data[i].lat,materials_data[i].long]], {color: '#f0912b'}).addTo(mymap);
 }
+$(document).ready(function(){
+
+
+    animate();
+})
+
+var requestAnimationFrame = window.requestAnimationFrame       ||
+                            window.webkitRequestAnimationFrame ||
+                            window.mozRequestAnimationFrame    ||
+                            window.msRequestAnimationFrame; 
+var time = 0;
+var fps = 2; //frames per second to determine how many frames I want per second   
+
+
+const animate = () => {
+    //use set timeout function to slowdown animation frame.
+    setTimeout(function(){
+        requestAnimationFrame(animate)
+        draw()
+    },1000 / fps)
+    
+  }
+
+var i = 0;
+const draw = () => {
+    if(i<materials_data.length){
+        console.log("hII");
+        console.log(materials_data[i].name)
+        // var materialmarker =  L.marker([materials_data[i].lat, materials_data[i].long]).addTo(mymap);
+        // materialmarker.bindPopup(`<b style="text-align:center;">${materials_data[i].name}</b><br>${materials_data[i].description}`)
+        var material_to_boat_line = L.polyline([[boat_marker.getLatLng().lat,boat_marker.getLatLng().lng],[materials_data[i].lat,materials_data[i].long]], {color: '#f0912b'}).addTo(mymap);
+        i++;
+    }
+}
+console.log("HHDHDHDHDHDH");
